@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "156239168054",
+    "firebase_url": "https://grocy-6c5b5.firebaseio.com",
+    "project_id": "grocy-6c5b5",
+    "storage_bucket": "grocy-6c5b5.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:156239168054:android:2ce3f5910bc6bde6264e97",
+        "android_client_info": {
+          "package_name": "com.example.grocy"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "156239168054-lviqnvjmi8i9ma004qbnu2ktbsuj6jhl.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.grocy",
+            "certificate_hash": "727913f188ecaf0235047bbfb1ae0490ce092cc5"
+          }
+        },
+        {
+          "client_id": "156239168054-3hl2poifi3a8vlmi415hqpok8p8hirp6.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAtEdI3CH7_yo2_CzFWEWR78aifXttbh10"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "156239168054-3hl2poifi3a8vlmi415hqpok8p8hirp6.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

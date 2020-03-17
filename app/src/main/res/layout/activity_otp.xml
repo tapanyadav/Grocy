@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".OtpActivity">
+
+    <EditText
+        android:id="@+id/editText5"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:ems="10"
+        android:inputType="number" />
+
+    <TextView
+        android:id="@+id/textView7"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="your identity!"
+        android:textSize="18sp" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Enter your OTP"
+        android:textSize="30sp"
+        tools:layout_editor_absoluteX="71dp"
+        tools:layout_editor_absoluteY="225dp" />
+
+    <ImageView
+        android:id="@+id/imageView4"
+        android:layout_width="109dp"
+        android:layout_height="142dp"
+        app:srcCompat="@drawable/logo"
+        tools:layout_editor_absoluteX="151dp"
+        tools:layout_editor_absoluteY="46dp" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="We sent you a code to verify "
+        android:textSize="18sp"
+        tools:layout_editor_absoluteX="71dp"
+        tools:layout_editor_absoluteY="300dp" />
+
+    <TextView
+        android:id="@+id/textView6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Enter your OTP code here"
+        android:textColor="#673AB7"
+        android:textSize="22sp"
+        tools:layout_editor_absoluteX="71dp"
+        tools:layout_editor_absoluteY="387dp" />
+
+    <EditText
+        android:id="@+id/editText2"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:ems="10"
+        android:inputType="number"
+        tools:layout_editor_absoluteX="279dp"
+        tools:layout_editor_absoluteY="447dp" />
+
+    <EditText
+        android:id="@+id/editText3"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:ems="10"
+        android:inputType="number"
+        tools:layout_editor_absoluteX="142dp"
+        tools:layout_editor_absoluteY="447dp" />
+
+    <EditText
+        android:id="@+id/editText6"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:ems="10"
+        android:inputType="number"
+        tools:layout_editor_absoluteX="210dp"
+        tools:layout_editor_absoluteY="447dp" />
+
+    <TextView
+        android:id="@+id/textView8"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="I didn't receive a code!"
+        android:textSize="18sp"
+        tools:layout_editor_absoluteX="77dp"
+        tools:layout_editor_absoluteY="552dp" />
+
+    <Button
+        android:id="@+id/button2"
+        android:layout_width="147dp"
+        android:layout_height="52dp"
+        android:background="@drawable/background_adult"
+        android:text="Verify"
+        android:textColor="#FBF9F9"
+        android:textSize="24sp"
+        tools:layout_editor_absoluteX="117dp"
+        tools:layout_editor_absoluteY="639dp" />
+
+</RelativeLayout>
