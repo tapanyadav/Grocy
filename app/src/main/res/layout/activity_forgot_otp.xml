@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".OtpActivity">
+    tools:context=".ForgotOtpActivity">
 
     <ImageView
         android:id="@+id/imageView3"
@@ -23,23 +23,23 @@
         android:layout_marginTop="30dp"
         android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/textView6"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:text="Enter your OTP"
-        android:layout_marginBottom="20dp"
-        android:textSize="32sp" />
+        <TextView
+            android:id="@+id/textView6"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="20dp"
+            android:text="Enter your OTP"
+            android:textSize="32sp" />
 
-    <TextView
-        android:id="@+id/textView5"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginBottom="30dp"
-        android:text="@string/otp_info"
-        android:textSize="20sp" />
+        <TextView
+            android:id="@+id/textView5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="30dp"
+            android:text="@string/otp_info"
+            android:textSize="20sp" />
 
         <TextView
             android:id="@+id/textView7"
@@ -112,13 +112,13 @@
             android:textSize="20sp" />
 
         <Button
-            android:id="@+id/otp_login_btn"
+            android:id="@+id/otp_login_forgot_btn"
             android:layout_width="281dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="10dp"
             android:background="@drawable/background_adult"
-            android:text="Sign up"
+            android:text="Next"
             android:textColor="#FFFFFF"
             android:textSize="16sp" />
     </LinearLayout>

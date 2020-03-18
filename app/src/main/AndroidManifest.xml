@@ -9,7 +9,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".ResetPassActivity"></activity>
+        <activity android:name=".ForgotOtpActivity"></activity>
+        <activity android:name=".ResetPassActivity" />
         <activity android:name=".ForgetActivity" />
         <activity android:name=".OtpActivity" />
         <activity android:name=".RegisterActivity" />

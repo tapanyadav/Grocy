@@ -9,175 +9,166 @@
 
     <ImageView
         android:id="@+id/imageView2"
-        android:layout_width="wrap_content"
-        android:layout_height="150dp"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginStart="100dp"
-        android:layout_marginTop="0dp"
-        android:layout_marginEnd="100dp"
+        android:layout_width="180dp"
+        android:layout_height="180dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp"
         app:srcCompat="@drawable/logo" />
 
-    <TextView
-        android:id="@+id/textName"
-        android:layout_width="378dp"
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/imageView2"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginStart="40dp"
+        android:layout_below="@id/imageView2"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="41dp"
+            android:layout_marginTop="10dp"
+            android:text="Name"
+            android:textColor="@color/mainAppColor"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+
+        <EditText
+            android:id="@+id/reg_nameText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="41dp"
+            android:layout_marginEnd="41dp"
+            android:drawableStart="@drawable/icon_user"
+            android:drawablePadding="15dp"
+            android:ems="10"
+            android:hint="Enter your name"
+            android:inputType="textPassword" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="41dp"
+            android:layout_marginTop="5dp"
+            android:text="Email"
+            android:textColor="@color/mainAppColor"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+        <EditText
+            android:id="@+id/reg_emailText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="41dp"
+            android:layout_marginEnd="41dp"
+            android:drawableStart="@drawable/icon_mail"
+            android:drawablePadding="15dp"
+            android:ems="10"
+            android:hint="Enter your email"
+            android:inputType="textEmailAddress" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="41dp"
+            android:layout_marginTop="5dp"
+            android:text="Password"
+            android:textColor="@color/mainAppColor"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+        <EditText
+            android:id="@+id/reg_passText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="41dp"
+            android:layout_marginEnd="41dp"
+            android:drawableStart="@drawable/icon_pass"
+            android:drawablePadding="15dp"
+            android:ems="10"
+            android:hint="Enter your password"
+            android:inputType="textPassword" />
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="41dp"
+            android:layout_marginTop="5dp"
+            android:text="Phone number"
+            android:textColor="@color/mainAppColor"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+        <EditText
+            android:id="@+id/reg_NumText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="41dp"
+            android:layout_marginEnd="41dp"
+            android:drawableStart="@drawable/icon_phone"
+            android:drawablePadding="15dp"
+            android:ems="10"
+            android:hint="Enter your phone number"
+            android:inputType="textPassword" />
+
+        <CheckBox
+            android:id="@+id/checkBox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="10dp"
+            android:text="Accept the Terms and Conditions" />
+
+        <Button
+            android:id="@+id/btnRegNext"
+            android:layout_width="281dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginStart="25dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="25dp"
+            android:background="@drawable/background_adult"
+            android:text="NEXT"
+            android:textColor="#FFFFFF"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/textViewSignReg"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/linearLayout"
         android:layout_marginTop="10dp"
-        android:layout_marginEnd="50dp"
-        android:textStyle="bold"
-        android:textColor="#FFFFFF"
-        android:textSize="16sp"
-        android:text="NAME"
-        />
-
-    <EditText
-        android:id="@+id/Name"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/textName"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginStart="25dp"
-        android:layout_marginEnd="25dp"
-        android:layout_marginTop="5dp"
-        android:background="@drawable/background_adult"
-        android:ems="10"
-        android:inputType="textPersonName"
-        android:text="Tapan Yadav" />
+        android:layout_toEndOf="@id/textViewReg"
+        android:text="Sign in "
+        android:textColor="@color/mainAppColor"
+        android:textSize="18sp"
+        android:textStyle="bold" />
 
     <TextView
-        android:id="@+id/textEmail"
+        android:id="@+id/textViewReg"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/Name"
-        android:layout_marginTop="20dp"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginStart="40dp"
-        android:layout_marginEnd="50dp"
-        android:textStyle="bold"
-        android:textColor="@color/TextColor"
-        android:textSize="16sp"
-        android:text="E-MAIL" />
-
-    <EditText
-        android:id="@+id/email"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/textEmail"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginStart="25dp"
-        android:layout_marginEnd="25dp"
-        android:ems="10"
-        android:layout_marginTop="5dp"
-        android:background="@drawable/background_adult"
-        android:inputType="textEmailAddress" />
-
-    <TextView
-        android:id="@+id/textPass"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/email"
-        android:layout_marginTop="20dp"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginStart="40dp"
-        android:layout_marginEnd="50dp"
-        android:textStyle="bold"
-        android:textColor="@color/TextColor"
-        android:textSize="16sp"
-        android:text="PASSWORD" />
-
-    <EditText
-        android:id="@+id/Pass"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/textPass"
-        android:ems="10"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginStart="25dp"
-        android:layout_marginEnd="25dp"
-        android:layout_marginTop="5dp"
-        android:background="@drawable/background_adult"
-        android:inputType="textPassword" />
-
-    <TextView
-        android:id="@+id/textPhone"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/Pass"
-        android:layout_marginTop="20dp"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginStart="40dp"
-        android:layout_marginEnd="50dp"
-        android:textStyle="bold"
-        android:textColor="#FFFFFF"
-        android:textSize="16sp"
-        android:text="MOBILE NUMBER" />
-
-    <EditText
-        android:id="@+id/Phone"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/textPhone"
-        android:ems="10"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginStart="25dp"
-        android:layout_marginEnd="25dp"
-        android:layout_marginTop="5dp"
-        android:background="@drawable/background_adult"
-        android:inputType="phone"
-        />
+        android:layout_below="@id/linearLayout"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="5dp"
+        android:text="Already have an account?"
+        android:textColor="#807E7E"
+        android:textSize="18sp"
+        android:textStyle="bold" />
 
     <View
-        android:id="@+id/view"
-        android:layout_width="320dp"
-        android:layout_height="1dp"
-        android:layout_below="@+id/Phone"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginEnd="20dp"
-        android:visibility="visible"
-        android:background="?android:attr/listDivider"/>
-
-    <CheckBox
-        android:id="@+id/checkBox"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/view"
-        android:layout_marginTop="10dp"
-        android:text="Accept the Terms and Conditions"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginStart="25dp"
-        android:layout_marginEnd="50dp"
-        />
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/checkBox"
-        android:text="NEXT"
-        android:layout_marginTop="20dp"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginStart="25dp"
-        android:layout_marginEnd="25dp"
-        android:textColor="#FFFFFF"
-        android:textStyle="bold"
-        android:background="@drawable/background_adult"
-        />
+        android:id="@+id/view1"
+        android:layout_width="50dp"
+        android:layout_height="2dp"
+        android:layout_below="@+id/textViewSignReg"
+        android:layout_alignEnd="@id/textViewSignReg"
+        android:layout_marginTop="1dp"
+        android:background="@color/mainAppColor"
+        android:visibility="visible" />
 
 
 </RelativeLayout>
