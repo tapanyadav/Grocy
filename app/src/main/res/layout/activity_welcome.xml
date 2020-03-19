@@ -27,6 +27,7 @@
             android:layout_gravity="center_horizontal"
             android:layout_marginBottom="2dp"
             android:text="Grocy"
+            android:textAlignment="center"
             android:textColor="#373737"
             android:textSize="42sp"
             android:textStyle="bold" />
