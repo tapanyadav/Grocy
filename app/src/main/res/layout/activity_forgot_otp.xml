@@ -45,14 +45,14 @@
             android:id="@+id/textView7"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="62dp"
+            android:layout_marginStart="20dp"
             android:layout_marginEnd="20dp"
             android:layout_marginBottom="10dp"
             android:text="Enter your OTP code here"
             android:textSize="20sp" />
 
         <LinearLayout
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="10dp"
@@ -61,8 +61,9 @@
             <EditText
                 android:layout_width="60dp"
                 android:layout_height="60dp"
-                android:layout_marginStart="52dp"
                 android:background="#30000000"
+                android:inputType="number"
+                android:textAlignment="center"
                 android:focusable="true" />
 
             <EditText
@@ -70,7 +71,9 @@
                 android:layout_width="60dp"
                 android:layout_height="60dp"
                 android:layout_marginStart="32dp"
+                android:inputType="number"
                 android:background="#30000000"
+                android:textAlignment="center"
                 android:focusable="true" />
 
             <EditText
@@ -78,7 +81,9 @@
                 android:layout_width="60dp"
                 android:layout_height="60dp"
                 android:layout_marginStart="32dp"
+                android:inputType="number"
                 android:background="#30000000"
+                android:textAlignment="center"
                 android:focusable="true" />
 
             <EditText
@@ -86,8 +91,8 @@
                 android:layout_width="60dp"
                 android:layout_height="60dp"
                 android:layout_marginStart="32dp"
-                android:layout_marginRight="20dp"
                 android:background="#30000000"
+                android:inputType="number"
                 android:focusable="true" />
 
         </LinearLayout>

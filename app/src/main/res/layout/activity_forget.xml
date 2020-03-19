@@ -27,6 +27,8 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:layout_marginBottom="28dp"
+            android:paddingStart="10dp"
+            android:textAlignment="center"
             android:text="It's okay! Reset your password"
             android:textSize="28sp" />
 
@@ -36,6 +38,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:layout_marginBottom="26dp"
+            android:paddingStart="10dp"
             android:text="Enter the email or mobile number associated with this account"
             android:textAlignment="center"
             android:textSize="18sp" />
