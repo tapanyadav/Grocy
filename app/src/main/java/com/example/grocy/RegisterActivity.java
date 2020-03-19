@@ -32,7 +32,7 @@ public class RegisterActivity extends AppCompatActivity {
         textRegLogIn = findViewById(R.id.textViewSignReg);
         btnSignUp = findViewById(R.id.btnRegNext);
 
-        //make terms nd conditions text clickable 36-64
+        //make terms nd conditions text clickable 36-65
 
         String text = "Accept the Terms and Conditions";
 

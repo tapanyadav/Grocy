@@ -44,7 +44,7 @@
             android:drawablePadding="15dp"
             android:ems="10"
             android:hint="Enter your name"
-            android:inputType="textPassword" />
+            android:inputType="textPersonName" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -55,7 +55,6 @@
             android:textColor="@color/mainAppColor"
             android:textSize="20sp"
             android:textStyle="bold" />
-
         <EditText
             android:id="@+id/reg_emailText"
             android:layout_width="match_parent"
@@ -67,7 +66,6 @@
             android:ems="10"
             android:hint="Enter your email"
             android:inputType="textEmailAddress" />
-
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -111,7 +109,7 @@
             android:drawablePadding="15dp"
             android:ems="10"
             android:hint="Enter your phone number"
-            android:inputType="textPassword" />
+            android:inputType="textPhonetic" />
 
         <CheckBox
             android:id="@+id/checkBox"
@@ -159,16 +157,6 @@
         android:textColor="#807E7E"
         android:textSize="18sp"
         android:textStyle="bold" />
-
-    <View
-        android:id="@+id/view1"
-        android:layout_width="50dp"
-        android:layout_height="2dp"
-        android:layout_below="@+id/textViewSignReg"
-        android:layout_alignEnd="@id/textViewSignReg"
-        android:layout_marginTop="1dp"
-        android:background="@color/mainAppColor"
-        android:visibility="visible" />
 
 
 </RelativeLayout>

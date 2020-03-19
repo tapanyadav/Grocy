@@ -74,9 +74,9 @@
         <TextView
             android:id="@+id/textForgotPass"
             android:layout_width="wrap_content"
-            android:layout_height="20dp"
+            android:layout_height="wrap_content"
             android:layout_gravity="end"
-            android:layout_marginTop="24dp"
+            android:layout_marginTop="22dp"
             android:layout_marginEnd="40dp"
             android:autoLink="all"
             android:clickable="true"
@@ -124,7 +124,7 @@
 
     <LinearLayout
         android:id="@+id/linearLayout2"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/textOr"
         android:layout_centerHorizontal="true"
@@ -134,7 +134,6 @@
             android:id="@+id/btnLoginGoogle"
             android:layout_width="45dp"
             android:layout_height="45dp"
-            android:layout_marginStart="165dp"
             android:layout_marginTop="10dp"
             android:layout_marginBottom="10dp"
             app:srcCompat="@drawable/logo_google" />
@@ -174,17 +173,6 @@
         android:textColor="#807E7E"
         android:textSize="18sp"
         android:textStyle="bold" />
-
-    <View
-        android:id="@+id/view1"
-        android:layout_width="60dp"
-        android:layout_height="2dp"
-        android:layout_below="@+id/textViewSignReg"
-        android:layout_alignEnd="@id/textViewSignReg"
-        android:layout_marginTop="1.5dp"
-        android:layout_marginBottom="10dp"
-        android:background="@color/mainAppColor"
-        android:visibility="visible" />
 
 
 </RelativeLayout>
