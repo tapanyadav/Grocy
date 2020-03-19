@@ -94,6 +94,7 @@
                 android:layout_marginStart="32dp"
                 android:background="#30000000"
                 android:inputType="number"
+                android:textAlignment="center"
                 android:focusable="true" />
 
         </LinearLayout>
