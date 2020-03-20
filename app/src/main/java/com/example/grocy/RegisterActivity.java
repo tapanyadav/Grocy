@@ -8,12 +8,17 @@ import android.text.Spanned;
 import android.text.TextPaint;
 import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.HashMap;
+
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 public class RegisterActivity extends AppCompatActivity {
@@ -21,6 +26,13 @@ public class RegisterActivity extends AppCompatActivity {
     TextView textRegLogIn;
     Button btnSignUp;
     CheckBox cb;
+    EditText name;
+    EditText email;
+    EditText pass;
+    EditText phone;
+
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,6 +43,11 @@ public class RegisterActivity extends AppCompatActivity {
         cb = findViewById(R.id.checkBox);
         textRegLogIn = findViewById(R.id.textViewSignReg);
         btnSignUp = findViewById(R.id.btnRegNext);
+
+        name=findViewById(R.id.reg_nameText);
+        email=findViewById(R.id.reg_emailText);
+        pass=findViewById(R.id.reg_passText);
+        phone=findViewById(R.id.reg_NumText);
 
         //make terms nd conditions text clickable 36-65
 
@@ -65,6 +82,9 @@ public class RegisterActivity extends AppCompatActivity {
         cb.setMovementMethod(LinkMovementMethod.getInstance());
 
 
+
+
+
         textRegLogIn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -75,9 +95,29 @@ public class RegisterActivity extends AppCompatActivity {
         btnSignUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(RegisterActivity.this, OtpActivity.class);
-                startActivity(intent);
+              //Getting Text from Fields
+                String uName=name.getText().toString();
+                String uEmail=email.getText().toString();
+                String uPass=pass.getText().toString();
+                String uPhone=phone.getText().toString();
+                String phone_number="+91"+uPhone;
+                System.out.println(phone_number);
+
+                HashMap<String,String> hm=new HashMap<>();
+                hm.put("uName",uName);
+                hm.put("uEmail",uEmail);
+                hm.put("uPass",uPass);
+                hm.put("phone_number",phone_number);
+
+                Intent otp_intent=new Intent(RegisterActivity.this,OtpActivity.class);
+                otp_intent.putExtra("hm",hm);
+                System.out.println("Hello");
+                startActivity(otp_intent);
             }
         });
+
     }
+
+
+
 }
