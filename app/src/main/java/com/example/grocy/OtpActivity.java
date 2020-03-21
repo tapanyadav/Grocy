@@ -27,6 +27,8 @@ import java.util.concurrent.TimeUnit;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import static java.lang.Thread.sleep;
+
 public class OtpActivity extends AppCompatActivity {
 
     private static final String TAG ="OTP ACTIVITY" ;
@@ -63,7 +65,7 @@ public class OtpActivity extends AppCompatActivity {
         et6=findViewById(R.id.et6);
         mAuth = FirebaseAuth.getInstance();
         mCurrentUser=mAuth.getCurrentUser();
-         hm=(HashMap)getIntent().getSerializableExtra("hm");
+        hm=(HashMap)getIntent().getSerializableExtra("hm");
 
         mCallbacks = new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
             @Override
@@ -83,6 +85,19 @@ public class OtpActivity extends AppCompatActivity {
                 // Update the UI and attempt sign in with the phone credential
                 //updateUI(STATE_VERIFY_SUCCESS, credential);
                 // [END_EXCLUDE]
+                String str=credential.getSmsCode();
+                et1.setText(""+str.charAt(0));
+                et2.setText(""+str.charAt(1));
+                et3.setText(""+str.charAt(2));
+                et4.setText(""+str.charAt(3));
+                et5.setText(""+str.charAt(4));
+                et6.setText(""+str.charAt(5));
+
+                try {
+                    sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
                 signInWithPhoneAuthCredential(credential);
             }
 
@@ -152,6 +167,7 @@ public class OtpActivity extends AppCompatActivity {
                     Toast toast = Toast.makeText(OtpActivity.this, "Verification Code is wrong", Toast.LENGTH_SHORT);
 
                     toast.show();
+
                 }
 
             }
@@ -161,6 +177,7 @@ public class OtpActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
+                PhoneAuthProvider.getInstance().verifyPhoneNumber(hm.get("phone_number"),60, TimeUnit.SECONDS,OtpActivity.this,mCallbacks);
                 Toast.makeText(OtpActivity.this, "Code is resend!", Toast.LENGTH_SHORT).show();
             }
         });
@@ -181,9 +198,11 @@ public class OtpActivity extends AppCompatActivity {
                             Intent intent=new Intent(OtpActivity.this,MainActivity.class);
                             startActivity(intent);
                             // ...
+
+
                         } else {
                             // Sign in failed, display a message and update the UI
-                            System.out.println("jcssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssskkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk");
+                            //System.out.println("jcssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssskkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk");
                             Log.w("TAG", "signInWithCredential:failure", task.getException());
                             Toast.makeText(OtpActivity.this,task.getException().getMessage(),Toast.LENGTH_LONG).show();
                             if (task.getException() instanceof FirebaseAuthInvalidCredentialsException) {
@@ -192,5 +211,7 @@ public class OtpActivity extends AppCompatActivity {
                         }
                     }
                 });
+
+
     }
 }
