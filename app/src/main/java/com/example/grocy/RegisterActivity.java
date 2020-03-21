@@ -26,13 +26,7 @@ public class RegisterActivity extends AppCompatActivity {
     TextView textRegLogIn;
     Button btnSignUp;
     CheckBox cb;
-    EditText name;
-    EditText email;
-    EditText pass;
-    EditText phone;
-
-
-
+    EditText name,email,pass,phone;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,7 +37,6 @@ public class RegisterActivity extends AppCompatActivity {
         cb = findViewById(R.id.checkBox);
         textRegLogIn = findViewById(R.id.textViewSignReg);
         btnSignUp = findViewById(R.id.btnRegNext);
-
         name=findViewById(R.id.reg_nameText);
         email=findViewById(R.id.reg_emailText);
         pass=findViewById(R.id.reg_passText);
@@ -80,9 +73,6 @@ public class RegisterActivity extends AppCompatActivity {
 
         cb.setText(ss);
         cb.setMovementMethod(LinkMovementMethod.getInstance());
-
-
-
 
 
         textRegLogIn.setOnClickListener(new View.OnClickListener() {

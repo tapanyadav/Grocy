@@ -32,12 +32,7 @@ import static java.lang.Thread.sleep;
 public class OtpActivity extends AppCompatActivity {
 
     private static final String TAG ="OTP ACTIVITY" ;
-    EditText et1;
-    EditText et2;
-    EditText et3;
-    EditText et4;
-    EditText et5;
-    EditText et6;
+    EditText et1,et2,et3,et4,et5,et6;
 
     Button btnOtpLogin;
     private FirebaseAuth mAuth;
@@ -167,7 +162,6 @@ public class OtpActivity extends AppCompatActivity {
                     Toast toast = Toast.makeText(OtpActivity.this, "Verification Code is wrong", Toast.LENGTH_SHORT);
 
                     toast.show();
-
                 }
 
             }
@@ -202,7 +196,7 @@ public class OtpActivity extends AppCompatActivity {
 
                         } else {
                             // Sign in failed, display a message and update the UI
-                            //System.out.println("jcssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssskkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk");
+                            System.out.println("Sign in  failed");
                             Log.w("TAG", "signInWithCredential:failure", task.getException());
                             Toast.makeText(OtpActivity.this,task.getException().getMessage(),Toast.LENGTH_LONG).show();
                             if (task.getException() instanceof FirebaseAuthInvalidCredentialsException) {
@@ -211,7 +205,5 @@ public class OtpActivity extends AppCompatActivity {
                         }
                     }
                 });
-
-
     }
 }
