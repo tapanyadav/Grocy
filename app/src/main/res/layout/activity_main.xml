@@ -15,5 +15,15 @@
         android:text="Prashant Kumar Bhardwaj"
         android:textSize="36sp" />
 
+    <Button
+        android:id="@+id/btnlogOut"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:background="@drawable/background_adult"
+        android:text="Log Out"
+
+        android:textColor="#FFFFFF" />
+
 
 </RelativeLayout>

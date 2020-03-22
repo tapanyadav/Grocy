@@ -64,19 +64,23 @@
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:background="#30000000"
+                android:maxLength="1"
+                android:maxLines="1"
                 android:inputType="number"
                 android:textAlignment="center"
                 android:focusable="true" />
 
             <EditText
                 android:id="@+id/et2"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:background="#30000000"
-            android:inputType="number"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
                 android:layout_marginStart="20dp"
-            android:textAlignment="center"
-            android:focusable="true" />
+                android:background="#30000000"
+                android:focusable="true"
+                android:inputType="number"
+                android:maxLength="1"
+                android:maxLines="1"
+                android:textAlignment="center" />
 
             <EditText
                 android:id="@+id/et3"
@@ -84,6 +88,8 @@
                 android:layout_height="40dp"
                 android:background="#30000000"
                 android:inputType="number"
+                android:maxLength="1"
+                android:maxLines="1"
                 android:layout_marginStart="20dp"
                 android:textAlignment="center"
                 android:focusable="true" />
@@ -94,6 +100,8 @@
                 android:layout_height="40dp"
                 android:layout_marginStart="20dp"
                 android:inputType="number"
+                android:maxLength="1"
+                android:maxLines="1"
                 android:background="#30000000"
                 android:textAlignment="center"
                 android:focusable="true" />
@@ -104,6 +112,8 @@
                 android:layout_height="40dp"
                 android:layout_marginStart="20dp"
                 android:inputType="number"
+                android:maxLength="1"
+                android:maxLines="1"
                 android:background="#30000000"
                 android:textAlignment="center"
                 android:focusable="true" />
@@ -112,6 +122,8 @@
                 android:id="@+id/et6"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
+                android:maxLength="1"
+                android:maxLines="1"
                 android:layout_marginStart="20dp"
                 android:background="#30000000"
                 android:inputType="number"
@@ -147,6 +159,7 @@
             android:layout_marginTop="10dp"
             android:background="@drawable/background_adult"
             android:text="Sign up"
+            android:enabled="false"
             android:textColor="#FFFFFF"
             android:textSize="16sp" />
     </LinearLayout>

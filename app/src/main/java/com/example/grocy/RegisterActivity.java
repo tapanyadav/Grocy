@@ -6,9 +6,9 @@ import android.os.Bundle;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.TextPaint;
+import android.text.TextUtils;
 import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -16,22 +16,27 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.util.HashMap;
-
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
 
 public class RegisterActivity extends AppCompatActivity {
 
     TextView textRegLogIn;
     Button btnSignUp;
     CheckBox cb;
-    EditText name,email,pass,phone;
+    EditText name, email, pass, confPass;
+    private FirebaseAuth mAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
+        mAuth = FirebaseAuth.getInstance();
 
         // TextView textView = findViewById(R.id.text_view);
         cb = findViewById(R.id.checkBox);
@@ -40,7 +45,7 @@ public class RegisterActivity extends AppCompatActivity {
         name=findViewById(R.id.reg_nameText);
         email=findViewById(R.id.reg_emailText);
         pass=findViewById(R.id.reg_passText);
-        phone=findViewById(R.id.reg_NumText);
+        confPass = findViewById(R.id.reg_ConfPassText);
 
         //make terms nd conditions text clickable 36-65
 
@@ -80,6 +85,7 @@ public class RegisterActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent=new Intent(RegisterActivity.this,LoginActivity.class);
                 startActivity(intent);
+                finish();
             }
         });
         btnSignUp.setOnClickListener(new View.OnClickListener() {
@@ -89,24 +95,66 @@ public class RegisterActivity extends AppCompatActivity {
                 String uName=name.getText().toString();
                 String uEmail=email.getText().toString();
                 String uPass=pass.getText().toString();
-                String uPhone=phone.getText().toString();
-                String phone_number="+91"+uPhone;
-                System.out.println(phone_number);
+                String uConfirmPass = confPass.getText().toString();
+                // String phone_number="+91"+uPhone;
+                // System.out.println(phone_number);
 
-                HashMap<String,String> hm=new HashMap<>();
+              /*  HashMap<String,String> hm=new HashMap<>();
                 hm.put("uName",uName);
                 hm.put("uEmail",uEmail);
                 hm.put("uPass",uPass);
                 hm.put("phone_number",phone_number);
 
-                Intent otp_intent=new Intent(RegisterActivity.this,OtpActivity.class);
+
                 otp_intent.putExtra("hm",hm);
-                System.out.println("Hello");
-                startActivity(otp_intent);
+               */
+                if (!TextUtils.isEmpty(uName) && !TextUtils.isEmpty(uEmail) & !TextUtils.isEmpty(uPass) & !TextUtils.isEmpty(uConfirmPass)) {
+
+                    if (uPass.equals(uConfirmPass)) {
+
+
+                        mAuth.createUserWithEmailAndPassword(uEmail, uPass).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                            @Override
+                            public void onComplete(@NonNull Task<AuthResult> task) {
+
+                                if (task.isSuccessful()) {
+
+                                    Intent setupIntent = new Intent(RegisterActivity.this, NumberActivity.class);
+                                    startActivity(setupIntent);
+                                    finish();
+                                    // Toast.makeText(RegisterActivity.this, " Otp sent!", Toast.LENGTH_SHORT).show();
+
+                                } else {
+
+                                    String errorMessage = task.getException().getMessage();
+                                    Toast.makeText(RegisterActivity.this, "Error : " + errorMessage, Toast.LENGTH_LONG).show();
+
+                                }
+
+                            }
+                        });
+                    } else {
+                        Toast.makeText(RegisterActivity.this, "Password and Confirm Password Field doesn't match.", Toast.LENGTH_LONG).show();
+                    }
+                }
             }
         });
 
     }
+  /*  @Override
+    protected void onStart() {
+        super.onStart();
+
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+        if(currentUser != null){
+
+            Intent mainIntent = new Intent(RegisterActivity.this, MainActivity.class);
+            startActivity(mainIntent);
+            finish();
+
+        }
+
+    }*/
 
 
 
