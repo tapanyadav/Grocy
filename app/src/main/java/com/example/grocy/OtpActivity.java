@@ -20,6 +20,8 @@ import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.PhoneAuthCredential;
 import com.google.firebase.auth.PhoneAuthProvider;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.HashMap;
 import java.util.concurrent.TimeUnit;
@@ -38,6 +40,9 @@ public class OtpActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private FirebaseUser mCurrentUser;
     HashMap<String,String> hm;
+    DatabaseReference database;
+
+    DatabaseReference myRef;
 
 
     private boolean mVerificationInProgress = false;
@@ -187,10 +192,16 @@ public class OtpActivity extends AppCompatActivity {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d("TAG", "signInWithCredential:success");
 
+                            FirebaseUser user=FirebaseAuth.getInstance().getCurrentUser();
                             mCurrentUser = task.getResult().getUser();
+                            String uid=user.getUid();
+                            database=FirebaseDatabase.getInstance().getReference().child("Users").child(uid);
+                            HashMap<String,String> umap=new HashMap<>();
 
+                            database.setValue(hm);
                             Intent intent=new Intent(OtpActivity.this,MainActivity.class);
                             startActivity(intent);
+
                             // ...
 
 
@@ -205,5 +216,7 @@ public class OtpActivity extends AppCompatActivity {
                         }
                     }
                 });
+
+
     }
 }
