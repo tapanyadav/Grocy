@@ -2,12 +2,17 @@ package com.example.grocy;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -22,10 +27,8 @@ import com.google.firebase.auth.PhoneAuthCredential;
 import com.google.firebase.auth.PhoneAuthProvider;
 
 import java.util.HashMap;
+import java.util.Objects;
 import java.util.concurrent.TimeUnit;
-
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 
 public class OtpActivity extends AppCompatActivity {
 
@@ -37,13 +40,47 @@ public class OtpActivity extends AppCompatActivity {
     private FirebaseUser mCurrentUser;
     HashMap<String,String> hm;
 
-
     private boolean mVerificationInProgress = false;
     private String mVerificationId;
     private PhoneAuthProvider.ForceResendingToken mResendToken;
     private PhoneAuthProvider.OnVerificationStateChangedCallbacks mCallbacks;
 
     TextView tvResend;
+    private TextWatcher forgotTextWatcher = new TextWatcher() {
+
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+        }
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            String et1Input = et1.getText().toString().trim();
+            String et2Input = et2.getText().toString().trim();
+            String et3Input = et3.getText().toString().trim();
+            String et4Input = et4.getText().toString().trim();
+            String et5Input = et5.getText().toString().trim();
+            String et6Input = et6.getText().toString().trim();
+            if (et1Input.length() == 1)
+                et2.requestFocus();
+            if (et2Input.length() == 1)
+                et3.requestFocus();
+            if (et3Input.length() == 1)
+                et4.requestFocus();
+            if (et4Input.length() == 1)
+                et5.requestFocus();
+            if (et5Input.length() == 1)
+                et6.requestFocus();
+            btnOtpLogin.setEnabled(!et1Input.isEmpty() && !et2Input.isEmpty() && !et3Input.isEmpty() && !et4Input.isEmpty() && !et5Input.isEmpty() && !et6Input.isEmpty());
+        }
+
+        @Override
+        public void afterTextChanged(Editable s) {
+
+        }
+    };
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,9 +93,19 @@ public class OtpActivity extends AppCompatActivity {
         et4=findViewById(R.id.et4);
         et5=findViewById(R.id.et5);
         et6=findViewById(R.id.et6);
+        btnOtpLogin = findViewById(R.id.otp_login_btn);
+        tvResend = findViewById(R.id.textViewResend);
+
         mAuth = FirebaseAuth.getInstance();
         mCurrentUser=mAuth.getCurrentUser();
          hm=(HashMap)getIntent().getSerializableExtra("hm");
+
+        et1.addTextChangedListener(forgotTextWatcher);
+        et2.addTextChangedListener(forgotTextWatcher);
+        et3.addTextChangedListener(forgotTextWatcher);
+        et4.addTextChangedListener(forgotTextWatcher);
+        et5.addTextChangedListener(forgotTextWatcher);
+        et6.addTextChangedListener(forgotTextWatcher);
 
         mCallbacks = new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
             @Override
@@ -130,10 +177,7 @@ public class OtpActivity extends AppCompatActivity {
             }
         };
 
-        btnOtpLogin = findViewById(R.id.otp_login_btn);
-        tvResend = findViewById(R.id.textViewResend);
-
-        PhoneAuthProvider.getInstance().verifyPhoneNumber(hm.get("phone_number"),60, TimeUnit.SECONDS,OtpActivity.this,mCallbacks);
+        PhoneAuthProvider.getInstance().verifyPhoneNumber(Objects.requireNonNull(hm.get("phone_number")), 60, TimeUnit.SECONDS, OtpActivity.this, mCallbacks);
 
         btnOtpLogin.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -143,6 +187,7 @@ public class OtpActivity extends AppCompatActivity {
                 try {
                     PhoneAuthCredential credential = PhoneAuthProvider.getCredential(mVerificationId, code);
                     signInWithPhoneAuthCredential(credential);
+
                 }catch (Exception e){
                     Toast toast = Toast.makeText(OtpActivity.this, "Verification Code is wrong", Toast.LENGTH_SHORT);
 
@@ -159,8 +204,9 @@ public class OtpActivity extends AppCompatActivity {
                 Toast.makeText(OtpActivity.this, "Code is resend!", Toast.LENGTH_SHORT).show();
             }
         });
-    }
 
+
+    }
 
     private void signInWithPhoneAuthCredential(PhoneAuthCredential credential) {
         mAuth.signInWithCredential(credential)
@@ -175,6 +221,7 @@ public class OtpActivity extends AppCompatActivity {
 
                             Intent intent=new Intent(OtpActivity.this,MainActivity.class);
                             startActivity(intent);
+                            finish();
                             // ...
                         } else {
                             // Sign in failed, display a message and update the UI
@@ -188,4 +235,6 @@ public class OtpActivity extends AppCompatActivity {
                     }
                 });
     }
+
+
 }

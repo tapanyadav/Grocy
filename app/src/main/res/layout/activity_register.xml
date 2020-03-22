@@ -94,22 +94,22 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="41dp"
             android:layout_marginTop="5dp"
-            android:text="Phone number"
+            android:text="Confirm Password"
             android:textColor="@color/mainAppColor"
             android:textSize="20sp"
             android:textStyle="bold" />
 
         <EditText
-            android:id="@+id/reg_NumText"
+            android:id="@+id/reg_ConfPassText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="41dp"
             android:layout_marginEnd="41dp"
-            android:drawableStart="@drawable/icon_phone"
+            android:drawableStart="@drawable/icon_pass"
             android:drawablePadding="15dp"
             android:ems="10"
-            android:hint="Enter your phone number"
-            android:inputType="number" />
+            android:hint="Enter your password again"
+            android:inputType="textPassword" />
 
         <CheckBox
             android:id="@+id/checkBox"

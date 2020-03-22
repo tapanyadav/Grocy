@@ -8,10 +8,14 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+
 public class WelcomeActivity extends AppCompatActivity {
 
     Button btnLogin,btnSignUp;
     TextView tvSkip;
+    private FirebaseAuth mAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -20,12 +24,14 @@ public class WelcomeActivity extends AppCompatActivity {
         btnLogin=findViewById(R.id.btnLogin);
         btnSignUp=findViewById(R.id.btnSignup);
         tvSkip = findViewById(R.id.textViewSkip);
+        mAuth = FirebaseAuth.getInstance();
 
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent=new Intent(WelcomeActivity.this,LoginActivity.class);
                 startActivity(intent);
+                finish();
             }
         });
 
@@ -34,6 +40,7 @@ public class WelcomeActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent=new Intent(WelcomeActivity.this,RegisterActivity.class);
                 startActivity(intent);
+                finish();
             }
         });
         tvSkip.setOnClickListener(new View.OnClickListener() {
@@ -44,6 +51,29 @@ public class WelcomeActivity extends AppCompatActivity {
                 finish();
             }
         });
+
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+
+        if (currentUser != null) {
+
+            sendToMain();
+
+        }
+
+
+    }
+
+    private void sendToMain() {
+
+        Intent mainIntent = new Intent(WelcomeActivity.this, MainActivity.class);
+        startActivity(mainIntent);
+        finish();
 
     }
 }
