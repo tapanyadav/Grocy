@@ -1,5 +1,7 @@
 package com.example.grocy;
 
+import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -16,6 +18,7 @@ public class WelcomeActivity extends AppCompatActivity {
     Button btnLogin,btnSignUp;
     TextView tvSkip;
     private FirebaseAuth mAuth;
+    private ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,26 +32,32 @@ public class WelcomeActivity extends AppCompatActivity {
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                showProgress();
                 Intent intent=new Intent(WelcomeActivity.this,LoginActivity.class);
                 startActivity(intent);
                 finish();
+                progressDialog.dismiss();
             }
         });
 
         btnSignUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                showProgress();
                 Intent intent=new Intent(WelcomeActivity.this,RegisterActivity.class);
                 startActivity(intent);
                 finish();
+                progressDialog.dismiss();
             }
         });
         tvSkip.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                showProgress();
                 Intent intent = new Intent(WelcomeActivity.this, MainActivity.class);
                 startActivity(intent);
                 finish();
+                progressDialog.dismiss();
             }
         });
 
@@ -75,5 +84,15 @@ public class WelcomeActivity extends AppCompatActivity {
         startActivity(mainIntent);
         finish();
 
+    }
+
+    private void showProgress() {
+        Context context;
+        progressDialog = new ProgressDialog(WelcomeActivity.this);
+        progressDialog.show();
+        progressDialog.setContentView(R.layout.process_dialog);
+        progressDialog.getWindow().setBackgroundDrawableResource(
+                android.R.color.transparent
+        );
     }
 }

@@ -1,5 +1,7 @@
 package com.example.grocy;
 
+import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -31,6 +33,7 @@ public class RegisterActivity extends AppCompatActivity {
     CheckBox cb;
     EditText name, email, pass, confPass;
     private FirebaseAuth mAuth;
+    ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,7 +94,7 @@ public class RegisterActivity extends AppCompatActivity {
         btnSignUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-              //Getting Text from Fields
+                //Getting Text from Fields
                 String uName=name.getText().toString();
                 String uEmail=email.getText().toString();
                 String uPass=pass.getText().toString();
@@ -110,8 +113,9 @@ public class RegisterActivity extends AppCompatActivity {
                */
                 if (!TextUtils.isEmpty(uName) && !TextUtils.isEmpty(uEmail) & !TextUtils.isEmpty(uPass) & !TextUtils.isEmpty(uConfirmPass)) {
 
-                    if (uPass.equals(uConfirmPass)) {
 
+                    if (uPass.equals(uConfirmPass)) {
+                        showProgress();
 
                         mAuth.createUserWithEmailAndPassword(uEmail, uPass).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                             @Override
@@ -131,6 +135,7 @@ public class RegisterActivity extends AppCompatActivity {
 
                                 }
 
+                                progressDialog.dismiss();
                             }
                         });
                     } else {
@@ -140,6 +145,16 @@ public class RegisterActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    private void showProgress() {
+        Context context;
+        progressDialog = new ProgressDialog(RegisterActivity.this);
+        progressDialog.show();
+        progressDialog.setContentView(R.layout.process_dialog);
+        progressDialog.getWindow().setBackgroundDrawableResource(
+                android.R.color.transparent
+        );
     }
   /*  @Override
     protected void onStart() {

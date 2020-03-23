@@ -1,5 +1,7 @@
 package com.example.grocy;
 
+import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -48,6 +50,10 @@ public class LoginActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private GoogleSignInClient mGoogleSignInClient;
 
+    //progress bar
+    // private ProgressBar loginProgress;
+    ProgressDialog progressDialog;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,6 +68,9 @@ public class LoginActivity extends AppCompatActivity {
         btnLoginFacebook = findViewById(R.id.btnLoginFacebook);
         etLogEmail = findViewById(R.id.login_email);
         etLogPass = findViewById(R.id.login_password);
+        //loginProgress = findViewById(R.id.loginProgress);
+        // Drawable draw=getDrawable(R.drawable.custom_progess);
+        //loginProgress.setProgressDrawable(draw);
 
         textForgotPass.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -91,7 +100,9 @@ public class LoginActivity extends AppCompatActivity {
                 String loginPass = etLogPass.getText().toString();
 
                 if (!TextUtils.isEmpty(loginEmail) && !TextUtils.isEmpty(loginPass)) {
+                    //loginProgress.setVisibility(View.VISIBLE);
 
+                    showProgress();
                     mAuth.signInWithEmailAndPassword(loginEmail, loginPass).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
@@ -109,7 +120,8 @@ public class LoginActivity extends AppCompatActivity {
 
 
                             }
-
+                            // loginProgress.setVisibility(View.INVISIBLE);
+                            progressDialog.dismiss();
                         }
                     });
 
@@ -161,6 +173,16 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    private void showProgress() {
+        Context context;
+        progressDialog = new ProgressDialog(LoginActivity.this);
+        progressDialog.show();
+        progressDialog.setContentView(R.layout.process_dialog);
+        progressDialog.getWindow().setBackgroundDrawableResource(
+                android.R.color.transparent
+        );
     }
 
     private void createRequest() {

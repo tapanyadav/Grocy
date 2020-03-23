@@ -1,5 +1,7 @@
 package com.example.grocy;
 
+import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -13,6 +15,7 @@ import java.util.HashMap;
 public class NumberActivity extends AppCompatActivity {
     Button buttonSendOTP;
     EditText editTextNumber;
+    private ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,6 +28,7 @@ public class NumberActivity extends AppCompatActivity {
         buttonSendOTP.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                showProgress();
                 String uPhone = editTextNumber.getText().toString();
                 String phone_number = "+91" + uPhone;
                 System.out.println(phone_number);
@@ -37,9 +41,20 @@ public class NumberActivity extends AppCompatActivity {
                 System.out.println("Hello");
                 startActivity(otp_intent);
                 finish();
+                progressDialog.dismiss();
             }
         });
 
 
+    }
+
+    private void showProgress() {
+        Context context;
+        progressDialog = new ProgressDialog(NumberActivity.this);
+        progressDialog.show();
+        progressDialog.setContentView(R.layout.process_dialog);
+        progressDialog.getWindow().setBackgroundDrawableResource(
+                android.R.color.transparent
+        );
     }
 }
