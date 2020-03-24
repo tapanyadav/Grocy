@@ -7,15 +7,24 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.FirebaseFirestore;
+
 import java.util.HashMap;
+import java.util.Map;
 
 public class NumberActivity extends AppCompatActivity {
     Button buttonSendOTP;
     EditText editTextNumber;
     private ProgressDialog progressDialog;
+
+    FirebaseFirestore fStore;
+    String userID;
+    private FirebaseAuth mAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,6 +34,9 @@ public class NumberActivity extends AppCompatActivity {
         buttonSendOTP = findViewById(R.id.btnSendOtp);
         editTextNumber = findViewById(R.id.reg_NumText);
 
+        mAuth = FirebaseAuth.getInstance();
+        fStore = FirebaseFirestore.getInstance();
+
         buttonSendOTP.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -33,15 +45,21 @@ public class NumberActivity extends AppCompatActivity {
                 String phone_number = "+91" + uPhone;
                 System.out.println(phone_number);
 
+                Map<String, Object> phone = new HashMap<>();
+                phone.put("pNumber", phone_number);
+
+                userID = mAuth.getCurrentUser().getUid();
+                fStore.collection("Users").document(userID).update(phone);
+
                 HashMap<String, String> hm = new HashMap<>();
                 hm.put("phone_number", phone_number);
-
                 Intent otp_intent = new Intent(NumberActivity.this, OtpActivity.class);
                 otp_intent.putExtra("hm", hm);
                 System.out.println("Hello");
                 startActivity(otp_intent);
                 finish();
                 progressDialog.dismiss();
+                Toast.makeText(NumberActivity.this, "Otp sent!", Toast.LENGTH_SHORT).show();
             }
         });
 

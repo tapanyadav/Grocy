@@ -117,6 +117,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="10dp"
+            android:checked="false"
             android:text="Accept the Terms and Conditions" />
 
         <Button

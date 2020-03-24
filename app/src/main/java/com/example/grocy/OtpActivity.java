@@ -1,7 +1,6 @@
 package com.example.grocy;
 
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
@@ -202,7 +201,7 @@ public class OtpActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                showProgress();
+
 
                 String code=et1.getText().toString()+et2.getText().toString()+et3.getText().toString()+et4.getText().toString()+et5.getText().toString()+et6.getText().toString();
                 try {
@@ -214,7 +213,6 @@ public class OtpActivity extends AppCompatActivity {
 
                     toast.show();
                 }
-                progressDialog.dismiss();
             }
         });
 
@@ -230,6 +228,7 @@ public class OtpActivity extends AppCompatActivity {
     }
 
     private void signInWithPhoneAuthCredential(PhoneAuthCredential credential) {
+        showProgress();
         mAuth.signInWithCredential(credential)
                 .addOnCompleteListener(OtpActivity.this, new OnCompleteListener<AuthResult>() {
                     @Override
@@ -252,13 +251,13 @@ public class OtpActivity extends AppCompatActivity {
                             if (task.getException() instanceof FirebaseAuthInvalidCredentialsException) {
                                 // The verification code entered was invalid
                             }
+                            progressDialog.dismiss();
                         }
                     }
                 });
     }
 
     private void showProgress() {
-        Context context;
         progressDialog = new ProgressDialog(OtpActivity.this);
         progressDialog.show();
         progressDialog.setContentView(R.layout.process_dialog);

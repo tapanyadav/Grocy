@@ -1,7 +1,6 @@
 package com.example.grocy;
 
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -176,7 +175,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void showProgress() {
-        Context context;
+        //Context context;
         progressDialog = new ProgressDialog(LoginActivity.this);
         progressDialog.show();
         progressDialog.setContentView(R.layout.process_dialog);
