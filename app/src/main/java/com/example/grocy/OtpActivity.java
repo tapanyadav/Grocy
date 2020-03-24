@@ -1,5 +1,6 @@
 package com.example.grocy;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
@@ -30,6 +31,8 @@ import java.util.HashMap;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
+import static java.lang.Thread.sleep;
+
 public class OtpActivity extends AppCompatActivity {
 
     private static final String TAG ="OTP ACTIVITY" ;
@@ -44,6 +47,7 @@ public class OtpActivity extends AppCompatActivity {
     private String mVerificationId;
     private PhoneAuthProvider.ForceResendingToken mResendToken;
     private PhoneAuthProvider.OnVerificationStateChangedCallbacks mCallbacks;
+    ProgressDialog progressDialog;
 
     TextView tvResend;
     private TextWatcher forgotTextWatcher = new TextWatcher() {
@@ -100,12 +104,7 @@ public class OtpActivity extends AppCompatActivity {
         mCurrentUser=mAuth.getCurrentUser();
          hm=(HashMap)getIntent().getSerializableExtra("hm");
 
-        et1.addTextChangedListener(forgotTextWatcher);
-        et2.addTextChangedListener(forgotTextWatcher);
-        et3.addTextChangedListener(forgotTextWatcher);
-        et4.addTextChangedListener(forgotTextWatcher);
-        et5.addTextChangedListener(forgotTextWatcher);
-        et6.addTextChangedListener(forgotTextWatcher);
+
 
         mCallbacks = new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
             @Override
@@ -120,11 +119,24 @@ public class OtpActivity extends AppCompatActivity {
                 // [START_EXCLUDE silent]
                 mVerificationInProgress = false;
                 // [END_EXCLUDE]
-
+//123456
                 // [START_EXCLUDE silent]
                 // Update the UI and attempt sign in with the phone credential
                 //updateUI(STATE_VERIFY_SUCCESS, credential);
                 // [END_EXCLUDE]
+                String str = credential.getSmsCode();
+                et1.setText("" + str.charAt(0));
+                et2.setText("" + str.charAt(1));
+                et3.setText("" + str.charAt(2));
+                et4.setText("" + str.charAt(3));
+                et5.setText("" + str.charAt(4));
+                et6.setText("" + str.charAt(5));
+
+                try {
+                    sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
                 signInWithPhoneAuthCredential(credential);
             }
 
@@ -169,6 +181,12 @@ public class OtpActivity extends AppCompatActivity {
                 // Save verification ID and resending token so we can use them later
                 mVerificationId = verificationId;
                 mResendToken = token;
+                et1.addTextChangedListener(forgotTextWatcher);
+                et2.addTextChangedListener(forgotTextWatcher);
+                et3.addTextChangedListener(forgotTextWatcher);
+                et4.addTextChangedListener(forgotTextWatcher);
+                et5.addTextChangedListener(forgotTextWatcher);
+                et6.addTextChangedListener(forgotTextWatcher);
 
                 // [START_EXCLUDE]
                 // Update UI
@@ -183,6 +201,8 @@ public class OtpActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
+
+
                 String code=et1.getText().toString()+et2.getText().toString()+et3.getText().toString()+et4.getText().toString()+et5.getText().toString()+et6.getText().toString();
                 try {
                     PhoneAuthCredential credential = PhoneAuthProvider.getCredential(mVerificationId, code);
@@ -193,7 +213,6 @@ public class OtpActivity extends AppCompatActivity {
 
                     toast.show();
                 }
-
             }
         });
 
@@ -209,6 +228,7 @@ public class OtpActivity extends AppCompatActivity {
     }
 
     private void signInWithPhoneAuthCredential(PhoneAuthCredential credential) {
+        showProgress();
         mAuth.signInWithCredential(credential)
                 .addOnCompleteListener(OtpActivity.this, new OnCompleteListener<AuthResult>() {
                     @Override
@@ -231,10 +251,36 @@ public class OtpActivity extends AppCompatActivity {
                             if (task.getException() instanceof FirebaseAuthInvalidCredentialsException) {
                                 // The verification code entered was invalid
                             }
+                            progressDialog.dismiss();
                         }
                     }
                 });
     }
 
+    private void showProgress() {
+        progressDialog = new ProgressDialog(OtpActivity.this);
+        progressDialog.show();
+        progressDialog.setContentView(R.layout.process_dialog);
+        progressDialog.getWindow().setBackgroundDrawableResource(
+                android.R.color.transparent
+        );
+    }
 
+    @Override
+    public void onBackPressed() {
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
+        user.delete()
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) {
+                            Log.d(TAG, "User account deleted.");
+
+                        }
+                    }
+                });
+    }
 }
+
+

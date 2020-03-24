@@ -77,4 +77,10 @@
             android:textSize="16sp" />
 
     </LinearLayout>
+
+    <ProgressBar
+        style="@style/Widget.AppCompat.ProgressBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:indeterminate="true" />
 </RelativeLayout>

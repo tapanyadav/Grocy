@@ -1,5 +1,7 @@
 package com.example.grocy;
 
+import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -20,6 +22,7 @@ public class ForgetActivity extends AppCompatActivity {
     Button btnForgotPass;
     EditText editTextEmailInput;
     private FirebaseAuth mAuth;
+    private ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +37,8 @@ public class ForgetActivity extends AppCompatActivity {
             public void onClick(View v) {
 
                 String userEmail = editTextEmailInput.getText().toString();
+
+                showProgress();
                 if (TextUtils.isEmpty(userEmail)) {
                     Toast.makeText(ForgetActivity.this, "Please enter valid email address!", Toast.LENGTH_SHORT).show();
                 } else {
@@ -53,10 +58,21 @@ public class ForgetActivity extends AppCompatActivity {
                                 }
                             });
                 }
+                progressDialog.dismiss();
 
             }
         });
 
 
+    }
+
+    private void showProgress() {
+        Context context;
+        progressDialog = new ProgressDialog(ForgetActivity.this);
+        progressDialog.show();
+        progressDialog.setContentView(R.layout.process_dialog);
+        progressDialog.getWindow().setBackgroundDrawableResource(
+                android.R.color.transparent
+        );
     }
 }
