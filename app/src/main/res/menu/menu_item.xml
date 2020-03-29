@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/orders"
+        android:icon="@drawable/ic_library_books_black_24dp"
+        android:title="Your Orders" />
+
+    <item
+        android:id="@+id/about"
+        android:icon="@drawable/ic_person_outline_black_24dp"
+        android:title="About" />
+
+    <item
+        android:id="@+id/feedback"
+        android:icon="@drawable/ic_feedback_black_24dp"
+        android:title="Feedback" />
+
+    <item
+        android:id="@+id/log_out"
+        android:icon="@drawable/ic_sentiment_dissatisfied_black_24dp"
+        android:title="Log Out" />
+
+</menu>

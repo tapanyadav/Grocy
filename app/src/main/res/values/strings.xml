@@ -2,11 +2,13 @@
     <string name="app_name">Grocy</string>
     <string name="reset_info">We have sent a code on your mobile number</string>
 
-    <string name="otp_info">We sent you a code to verify
-    your number</string>
-
+    <string name="otp_info">We sent you a code to verify your number</string>
     //fb
     <string name="facebook_app_id">669474713828202</string>
     <string name="fb_login_protocol_scheme">fb669474713828202</string>
+    //nav
+    <string name="openNavDrawer">Navigation Drawer Open</string>
+    <string name="closeNavDrawer">Navigation Drawer Close</string>
 
+    //test
 </resources>
