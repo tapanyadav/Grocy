@@ -89,11 +89,11 @@
 
         <Button
             android:id="@+id/login_btn"
+
             android:layout_width="281dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="20dp"
-            android:background="@drawable/background_adult"
             android:text="LOGIN"
             android:textColor="#FFFFFF"
             android:textSize="16sp" />

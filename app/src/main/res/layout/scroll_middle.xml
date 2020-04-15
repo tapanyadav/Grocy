@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<HorizontalScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:scrollbars="none"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <com.google.android.material.button.MaterialButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            app:cornerRadius="10dp"
+            android:text="Filters"
+            android:textColor="#000"
+            android:alpha="0.6"
+            android:textSize="14sp"
+            app:iconTint="#000"
+            app:iconPadding="8dp"
+            app:icon="@drawable/icon_filter"
+            android:textAllCaps="false"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"/>
+
+        <com.google.android.material.button.MaterialButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            app:cornerRadius="10dp"
+            android:text="Ratings"
+            android:textColor="#000"
+            android:alpha="0.6"
+            android:textSize="14sp"
+            app:iconTint="#000"
+            app:iconPadding="8dp"
+            app:icon="@drawable/icon_rating"
+            android:textAllCaps="false"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"/>
+
+        <com.google.android.material.button.MaterialButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:cornerRadius="10dp"
+            android:layout_marginStart="10dp"
+            android:text="Cost"
+            android:textColor="#000"
+            android:alpha="0.6"
+            android:textSize="14sp"
+            app:iconTint="#000"
+            app:iconPadding="8dp"
+            app:icon="@drawable/icon_down"
+            app:iconGravity="end"
+            android:textAllCaps="false"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"/>
+
+        <com.google.android.material.button.MaterialButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:cornerRadius="10dp"
+            android:layout_marginStart="10dp"
+            android:text="Fastest Delivery"
+            android:textColor="#000"
+            android:alpha="0.6"
+            android:textSize="14sp"
+            app:iconTint="#000"
+            app:iconPadding="8dp"
+            app:icon="@drawable/icon_bike"
+            android:textAllCaps="false"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"/>
+
+    </LinearLayout>
+
+</HorizontalScrollView>
