@@ -1,7 +1,7 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+    <style name="AppTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/mainAppColor</item>
@@ -15,5 +15,14 @@
             <item name="android:background">@android:color/transparent</item>
         </style>
         -->
+
+    <style name="MtButtonStyle" parent="Widget.MaterialComponents.Button">
+        <item name="materialThemeOverlay">@style/GreenButtonThemeOverlay</item>
+    </style>
+
+    <style name="GreenButtonThemeOverlay">
+        <item name="colorPrimary">@color/white</item>
+        <item name="android:background">@drawable/background_signup</item>
+    </style>
 
 </resources>
