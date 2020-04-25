@@ -16,6 +16,8 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:targetApi="m">
+        <activity android:name=".FeaturedAllActivity"></activity>
+        <activity android:name=".EmailSentActivity" />
         <activity android:name=".NumberActivity" />
         <activity android:name=".ForgetActivity" />
         <activity android:name=".OtpActivity" />

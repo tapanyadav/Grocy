@@ -4,7 +4,10 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
+import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -39,9 +42,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     //navigation drawer
     DrawerLayout drawerLayout;
     NavigationView navigationView;
-    BottomSheetDialog bottomSheetDialog;
-    TextView toolbarTitle;
+    BottomSheetDialog bottomSheetDialog,bottomSheetDialogFilter;
+    TextView toolbarTitle,textViewFeaturedAll;
     private Toolbar toolbar;
+    EditText editTextSearch;
+    ImageButton imageButtonFilter;
 
     //adapters
 
@@ -73,7 +78,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 //    private String[] myNameStoreHorizontalTryList=new String[]{"Tyagi Store","Gupta Store","Chotu Store"};
 
 
-    @SuppressLint("RestrictedApi")
+    @SuppressLint({"RestrictedApi", "ClickableViewAccessibility"})
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -89,6 +94,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         recyclerViewFea=findViewById(R.id.recycler_featured);
         recyclerViewShop=findViewById(R.id.recycler_shops);
         recyclerViewHorizontal=findViewById(R.id.recycler_horizontalShops);
+        editTextSearch=findViewById(R.id.etSearch);
+        imageButtonFilter=findViewById(R.id.image_button_filter);
+        textViewFeaturedAll=findViewById(R.id.tv_content_featured_all);
        // recyclerViewTryHorizontal=findViewById(R.id.recycler_horizontalShopsTry);
 
         imageModelArrayList = eatFruits();
@@ -136,6 +144,32 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     @Override
                     public void onClick(View v) {
                         bottomSheetDialog.dismiss();
+                    }
+                });
+            }
+        });
+
+        textViewFeaturedAll.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent=new Intent(MainActivity.this,FeaturedAllActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        imageButtonFilter.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                bottomSheetDialogFilter = new BottomSheetDialog(MainActivity.this);
+                //View bottomSheetView=LayoutInflater.from(new ContextThemeWrapper(getApplicationContext(),R.style.AppTheme)).inflate(R.layout.content_dialog_bottom_sheet, (LinearLayout)findViewById(R.id.bottomSheetLayout));
+                bottomSheetDialogFilter.setContentView(R.layout.content_filter_bottom_sheet);
+                bottomSheetDialogFilter.show();
+                bottomSheetDialogFilter.setCanceledOnTouchOutside(false);
+                ImageView ivBottomClose = bottomSheetDialogFilter.findViewById(R.id.imageView_close);
+                ivBottomClose.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        bottomSheetDialogFilter.dismiss();
                     }
                 });
             }
