@@ -5,6 +5,8 @@ import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Build;
@@ -12,8 +14,6 @@ import android.os.Bundle;
 import android.provider.Settings;
 import android.util.Log;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -45,34 +45,27 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.LocationCallback;
-import com.google.android.gms.maps.CameraUpdate;
-import com.google.android.gms.maps.CameraUpdateFactory;
-import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.libraries.places.api.Places;
 import com.google.android.libraries.places.api.model.Place;
-import com.google.android.libraries.places.api.model.TypeFilter;
 import com.google.android.libraries.places.api.net.PlacesClient;
 import com.google.android.libraries.places.widget.Autocomplete;
 import com.google.android.libraries.places.widget.AutocompleteActivity;
-import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
-import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
 import com.google.android.libraries.places.widget.model.AutocompleteActivityMode;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
-import com.google.android.material.checkbox.MaterialCheckBox;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
+import java.util.Locale;
 import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private static final int AUTOCOMPLETE_REQUEST_CODE = 1;
     private FirebaseAuth mAuth;
-
-    //private static final int REQUEST_CODE_LOCATION_PERMISSION = 1;
 
     //location
     public static final int REQUEST_CODE = 9001;
@@ -80,13 +73,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public static final String TAG = "Map";
     public static final int GPS_REQUEST_CODE = 903;
 
-    private final double TAJ_LAT= 27.175402;
-    private final double TAJ_LNG= 78.042121;
-    private boolean mLocationPermissionGranted;
-
     private FusedLocationProviderClient fusedLocationProviderClient;
-    private LocationCallback locationCallback;
-    private GoogleMap mGoogleMap;
 
     boolean providerEnabled;
 
@@ -107,6 +94,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     //AutoCompleteTextView autoCompleteTextViewLocation;
     Double lng;
     Double lat;
+    String finalAddress;
 
     //adapters
 
@@ -139,6 +127,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     TextView textViewCurrentLocationDialog;
 
+    String setUserLiveLocation;
+    String setUserCustomLocation;
+
+
 
     @SuppressLint({"RestrictedApi", "ClickableViewAccessibility"})
     @Override
@@ -162,8 +154,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         textViewFeaturedAll=findViewById(R.id.tv_content_featured_all);
        // recyclerViewTryHorizontal=findViewById(R.id.recycler_horizontalShopsTry);
 
-
-
+        setUserCustomLocation = getIntent().getStringExtra("userEnterLocation");
+        setUserLiveLocation = getIntent().getStringExtra("userLiveLocation");
 
 
         imageModelArrayList = eatFruits();
@@ -194,11 +186,42 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         navigationView.setNavigationItemSelectedListener(this);
         navigationView.bringToFront();
         toolbar.setNavigationIcon(R.drawable.icon_menu);
+
         Objects.requireNonNull(getSupportActionBar()).setDefaultDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         navigationView.setCheckedItem(R.id.orders);
-        toolbarTitle = (TextView) findViewById(R.id.loc_text_toolbar);
 
+        toolbarTitle = findViewById(R.id.loc_text_toolbar);
+
+        fusedLocationProviderClient.getLastLocation().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                Location location = task.getResult();
+                if (location != null) {
+                    Geocoder geocoder = new Geocoder(this, Locale.getDefault());
+                    try {
+                        List<Address> addressList = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
+
+                        if (addressList != null) {
+                            Address address = addressList.get(0);
+
+                            finalAddress = address.getAddressLine(0) + address.getLocality();
+                            toolbarTitle.setText(finalAddress);
+                            Toast.makeText(this, "f:" + finalAddress, Toast.LENGTH_SHORT).show();
+
+                        }
+
+                        assert addressList != null;
+                        for (Address address : addressList) {
+                            Log.d(TAG, "geoLocate: Address" + address.getAddressLine(address.getMaxAddressLineIndex()));
+                        }
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            } else {
+                Toast.makeText(this, "Error", Toast.LENGTH_SHORT).show();
+            }
+        });
 
                 if (!Places.isInitialized()) {
                     Places.initialize(MainActivity.this, apiKey);
@@ -206,97 +229,34 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 // Retrieve a PlacesClient (previously initialized - see MainActivity)
                 placesClient = Places.createClient(MainActivity.this);
 
-        toolbarTitle.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                bottomSheetDialog = new BottomSheetDialog(MainActivity.this);
-                //View bottomSheetView=LayoutInflater.from(new ContextThemeWrapper(getApplicationContext(),R.style.AppTheme)).inflate(R.layout.content_dialog_bottom_sheet, (LinearLayout)findViewById(R.id.bottomSheetLayout));
-                bottomSheetDialog.setContentView(R.layout.content_dialog_bottom_sheet);
-                bottomSheetDialog.show();
-                bottomSheetDialog.setCanceledOnTouchOutside(true);
-                textViewCurrentLocationDialog=bottomSheetDialog.findViewById(R.id.textViewCurrentLoc);
+        toolbarTitle.setOnClickListener(v -> {
+            bottomSheetDialog = new BottomSheetDialog(MainActivity.this);
+            //View bottomSheetView=LayoutInflater.from(new ContextThemeWrapper(getApplicationContext(),R.style.AppTheme)).inflate(R.layout.content_dialog_bottom_sheet, (LinearLayout)findViewById(R.id.bottomSheetLayout));
+            bottomSheetDialog.setContentView(R.layout.content_dialog_bottom_sheet);
+            bottomSheetDialog.show();
+            bottomSheetDialog.setCanceledOnTouchOutside(true);
+            textViewCurrentLocationDialog = bottomSheetDialog.findViewById(R.id.textViewCurrentLoc);
 
-                assert textViewCurrentLocationDialog != null;
-                textViewCurrentLocationDialog.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
+            assert textViewCurrentLocationDialog != null;
+            textViewCurrentLocationDialog.setOnClickListener(v12 -> {
 
-                        initGoogleMap();
+                initGoogleMap();
 
-                        if (isGpsEnabled()) {
+                if (isGpsEnabled()) {
+                    Toast.makeText(MainActivity.this, "All set up!", Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(MainActivity.this, MapActivity.class);
+                    startActivity(intent);
+                }
+            });
 
+            editTextLocation = bottomSheetDialog.findViewById(R.id.editTextLoc);
 
-                            fusedLocationProviderClient.getLastLocation().addOnCompleteListener(task -> {
-                                if (task.isSuccessful()) {
-                                    Location location = task.getResult();
-                                    assert location != null;
-                                    lat = location.getLatitude();
-                                    lng = location.getLongitude();
+            assert editTextLocation != null;
+            editTextLocation.setOnClickListener(v1 -> startAutocomplete());
 
-                                } else {
-                                    Toast.makeText(MainActivity.this, "Error", Toast.LENGTH_SHORT).show();
-                                }
-                            });
-
-                            Toast.makeText(MainActivity.this, "All set up!", Toast.LENGTH_SHORT).show();
-                            Intent intent = new Intent(MainActivity.this, MapActivity.class);
-
-                            intent.putExtra("latPass", lat);
-                            intent.putExtra("lngPass", lng);
-
-                            startActivity(intent);
-                        }
-                    }
-                });
-
-                editTextLocation=bottomSheetDialog.findViewById(R.id.editTextLoc);
-
-                assert editTextLocation != null;
-                editTextLocation.setOnClickListener(v1 -> {
-                    startAutocomplete();
-                });
-
-//                autoCompleteTextViewLocation=bottomSheetDialog.findViewById(R.id.autoCompleteLocationView);
-//
-//
-//                String locationName=autoCompleteTextViewLocation.getText().toString();
-//                // Setup Places Client
-//                if (!Places.isInitialized()) {
-//                    Places.initialize(MainActivity.this, apiKey);
-//                }
-//                // Retrieve a PlacesClient (previously initialized - see MainActivity)
-//                placesClient = Places.createClient(MainActivity.this);
-//                final AutocompleteSupportFragment autocompleteSupportFragment =
-//                        (AutocompleteSupportFragment)
-//                                getSupportFragmentManager().findFragmentById(R.id.autocomplete_fragment);
-//
-//                assert autocompleteSupportFragment != null;
-//                autocompleteSupportFragment.setTypeFilter(TypeFilter.ESTABLISHMENT);
-//                autocompleteSupportFragment.setCountry("IN");
-//                autocompleteSupportFragment.setPlaceFields(Arrays.asList(Place.Field.ID,  Place.Field.NAME, Place.Field.LAT_LNG,Place.Field.ADDRESS));
-//
-//
-//                autocompleteSupportFragment.setOnPlaceSelectedListener(
-//                        new PlaceSelectionListener() {
-//                            @Override
-//                            public void onPlaceSelected(Place place) {
-//                                final LatLng latLng = place.getLatLng();
-//
-//                                Toast.makeText(MainActivity.this, ""+latLng.latitude, Toast.LENGTH_SHORT).show();
-//
-//                            }
-//
-//                            @Override
-//                            public void onError(Status status) {
-//                                Toast.makeText(MainActivity.this, ""+status.getStatusMessage(), Toast.LENGTH_SHORT).show();
-//                            }
-//                        });
-
-
-                ImageView ivBottomClose = bottomSheetDialog.findViewById(R.id.imageView_close);
-                assert ivBottomClose != null;
-                ivBottomClose.setOnClickListener(bottomView -> bottomSheetDialog.dismiss());
-            }
+            ImageView ivBottomClose = bottomSheetDialog.findViewById(R.id.imageView_close);
+            assert ivBottomClose != null;
+            ivBottomClose.setOnClickListener(bottomView -> bottomSheetDialog.dismiss());
         });
 
         textViewFeaturedAll.setOnClickListener(tvFeaturedView -> {
@@ -435,15 +395,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     }
 
-    public void onLocationCheckboxClicked(View view) {
-
-        boolean checked = ((MaterialCheckBox) view).isChecked();
-        if (checked){
-            Intent intent=new Intent(this, MapActivity.class);
-            startActivity(intent);
-        }
-
-    }
 
 
     private void initGoogleMap() {
@@ -451,11 +402,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         if (isServicesOk()) {
             if (checkLocationPermission()) {
                 Toast.makeText(this, "All set up!", Toast.LENGTH_SHORT).show();
-//                SupportMapFragment supportMapFragment = (SupportMapFragment) getSupportFragmentManager()
-//                        .findFragmentById(R.id.map_fragment);
 //
-//                assert supportMapFragment != null;
-//                supportMapFragment.getMapAsync( this);
             } else {
                 if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
                         != PackageManager.PERMISSION_GRANTED) {
@@ -494,7 +441,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == REQUEST_CODE && grantResults[0]== PackageManager.PERMISSION_GRANTED){
-            mLocationPermissionGranted=true;
+            boolean mLocationPermissionGranted = true;
             Toast.makeText(this, "Permission Granted", Toast.LENGTH_SHORT).show();
         }else {
             Toast.makeText(this, "Permission not granted", Toast.LENGTH_SHORT).show();
@@ -516,9 +463,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         Intent intent=new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
                         startActivityForResult(intent, GPS_REQUEST_CODE);
                     })
-                    .setNegativeButton("No Thanks",((dialog, which) -> {
-                        dialog.dismiss();
-                    }))
+                    .setNegativeButton("No Thanks", ((dialog, which) -> dialog.dismiss()))
                     .setCancelable(false)
                     .show();
         }
@@ -563,6 +508,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
 
             }else if (resultCode == AutocompleteActivity.RESULT_ERROR){
+                assert data != null;
                 Status status = Autocomplete.getStatusFromIntent(data);
                 assert status.getStatusMessage() != null;
                 Log.i(TAG,status.getStatusMessage());
@@ -570,8 +516,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
             }
         }
-
-
     }
 
 }

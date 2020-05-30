@@ -1,16 +1,9 @@
 package com.example.grocy.activities;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.ContextCompat;
-
 import android.Manifest;
 import android.app.Dialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.location.Location;
 import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
@@ -18,34 +11,27 @@ import android.provider.Settings;
 import android.widget.Button;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
+
 import com.example.grocy.R;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.LocationCallback;
-import com.google.android.gms.maps.CameraUpdate;
-import com.google.android.gms.maps.CameraUpdateFactory;
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.LatLng;
 
-public class StartLocationActivity extends AppCompatActivity implements OnMapReadyCallback {
+public class StartLocationActivity extends AppCompatActivity {
 
     //Location
 
     public static final int REQUEST_CODE = 9001;
     public static final int PLAY_SERVICES_ERROR_CODE = 9002;
-    public static final String TAG = "Map";
     public static final int GPS_REQUEST_CODE = 903;
-
-    private final double TAJ_LAT= 27.175402;
-    private final double TAJ_LNG= 78.042121;
-    private boolean mLocationPermissionGranted;
+    public static final String TAG = "Map";
 
     private FusedLocationProviderClient fusedLocationProviderClient;
-    private LocationCallback locationCallback;
-    private GoogleMap mGoogleMap;
 
     boolean providerEnabled;
 
@@ -57,6 +43,7 @@ public class StartLocationActivity extends AppCompatActivity implements OnMapRea
         Button buttonLocNext = findViewById(R.id.startLocNext);
 
         Button buttonLocation= findViewById(R.id.startLocation);
+        fusedLocationProviderClient = new FusedLocationProviderClient(this);
 
         buttonLocation.setOnClickListener(v -> {
             Intent intent = new Intent(StartLocationActivity.this,MapActivity.class);
@@ -69,11 +56,6 @@ public class StartLocationActivity extends AppCompatActivity implements OnMapRea
         if (isGpsEnabled()){
 
             Toast.makeText(this, "All set up!", Toast.LENGTH_SHORT).show();
-//            SupportMapFragment supportMapFragment= (SupportMapFragment) getSupportFragmentManager()
-//                    .findFragmentById(R.id.map_fragment);
-//
-//            assert supportMapFragment != null;
-//            supportMapFragment.getMapAsync(this);
         }
 
         buttonLocNext.setEnabled(providerEnabled);
@@ -91,11 +73,7 @@ public class StartLocationActivity extends AppCompatActivity implements OnMapRea
         if (isServicesOk()) {
             if (checkLocationPermission()) {
                 Toast.makeText(this, "All set up!", Toast.LENGTH_SHORT).show();
-//                SupportMapFragment supportMapFragment = (SupportMapFragment) getSupportFragmentManager()
-//                        .findFragmentById(R.id.map_fragment);
 //
-//                assert supportMapFragment != null;
-//                supportMapFragment.getMapAsync( this);
             } else {
                 if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
                         != PackageManager.PERMISSION_GRANTED) {
@@ -134,7 +112,7 @@ public class StartLocationActivity extends AppCompatActivity implements OnMapRea
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == REQUEST_CODE && grantResults[0]== PackageManager.PERMISSION_GRANTED){
-            mLocationPermissionGranted=true;
+            //boolean mLocationPermissionGranted = true;
             Toast.makeText(this, "Permission Granted", Toast.LENGTH_SHORT).show();
         }else {
             Toast.makeText(this, "Permission not granted", Toast.LENGTH_SHORT).show();
@@ -156,9 +134,7 @@ public class StartLocationActivity extends AppCompatActivity implements OnMapRea
                         Intent intent=new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
                         startActivityForResult(intent, GPS_REQUEST_CODE);
                     })
-                    .setNegativeButton("No Thanks",((dialog, which) -> {
-                        dialog.dismiss();
-                    }))
+                    .setNegativeButton("No Thanks", ((dialog, which) -> dialog.dismiss()))
                     .setCancelable(false)
                     .show();
         }
@@ -183,25 +159,6 @@ public class StartLocationActivity extends AppCompatActivity implements OnMapRea
         }
     }
 
-    private void getCurrentLocation() {
-        fusedLocationProviderClient.getLastLocation().addOnCompleteListener(task -> {
-            if ( task.isSuccessful()){
-                Location location=task.getResult();
-                gotoLocation(location.getLatitude(),location.getLongitude());
-            }else {
-                Toast.makeText(this, "Error", Toast.LENGTH_SHORT).show();
-            }
-        });
-    }
 
-    private void gotoLocation(double lat,double lng){
-        LatLng latLng=new LatLng(lat,lng);
-        CameraUpdate cameraUpdate= CameraUpdateFactory.newLatLngZoom(latLng,16);
-        mGoogleMap.moveCamera(cameraUpdate);
-    }
 
-    @Override
-    public void onMapReady(GoogleMap googleMap) {
-
-    }
 }
