@@ -1,4 +1,4 @@
-package com.example.grocy;
+package com.example.grocy.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -6,6 +6,8 @@ import android.os.CountDownTimer;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.grocy.R;
 
 public class EmailSentActivity extends AppCompatActivity {
 
@@ -29,7 +31,7 @@ public class EmailSentActivity extends AppCompatActivity {
                 counter--;
             }
             public  void onFinish(){
-                Intent intent=new Intent(EmailSentActivity.this,LoginActivity.class);
+                Intent intent=new Intent(EmailSentActivity.this, LoginActivity.class);
                 startActivity(intent);
                 finish();
             }

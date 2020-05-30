@@ -12,6 +12,7 @@
         <com.google.android.material.appbar.AppBarLayout
             android:id="@+id/app_bar_layout"
             android:layout_width="match_parent"
+            android:background="@null"
             android:layout_height="wrap_content">
 
             <androidx.appcompat.widget.Toolbar
@@ -20,22 +21,32 @@
                 android:layout_height="?attr/actionBarSize"
                 android:background="@android:color/white">
 
-                <TextView
-                    android:id="@+id/loc_text_toolbar"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginStart="20dp"
-                    android:text="Location"
-                    android:textColor="#000"
-                    android:textSize="20sp" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal">
 
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="end|center_vertical"
-                    android:layout_marginEnd="10dp"
-                    android:src="@drawable/icon_location" />
+                    <TextView
+                        android:id="@+id/loc_text_toolbar"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:text="Location an email app might have one activity to show a list of new… ... A task is a collection of activities that users interact with when performing a certain job. ... If the user presses the Back button, that new activity is finished and ... likewise, some launch modes available as flags for an intent "
+                        android:textColor="#000"
+                        android:maxLines="1"
+                        android:ellipsize="end"
+                        android:layout_weight="1"
+                        android:textSize="18sp" />
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="end|center_vertical"
+                        android:layout_marginEnd="10dp"
+                        android:src="@drawable/icon_location" />
+                </LinearLayout>
+
+
             </androidx.appcompat.widget.Toolbar>
         </com.google.android.material.appbar.AppBarLayout>
 

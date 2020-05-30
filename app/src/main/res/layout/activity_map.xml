@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".activities.MapActivity">
+
+    <fragment
+        android:id="@+id/map_fragment"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:layout_margin="8dp"
+        android:name="com.google.android.gms.maps.SupportMapFragment" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Select delivery location"
+        android:textSize="20sp"
+        android:fontFamily="@font/josefin_sans"
+        android:textStyle="bold"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="10dp"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/lightBlue"
+        android:alpha="0.4"
+        android:layout_marginTop="6dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="YOUR LOCATION"
+        android:textSize="12sp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="8dp"/>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="2dp">
+        <TextView
+            android:id="@+id/mapLocation"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Your location"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:textStyle="bold"
+            android:textSize="20sp"
+            android:layout_marginStart="20dp"
+            android:layout_weight="1"/>
+        
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/lightBlue"
+        android:alpha="0.4"
+        android:layout_marginTop="6dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"/>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/mapButtonConfirmLoc"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Confirm Location"
+        android:textAllCaps="false"
+        android:textSize="18sp"
+        android:padding="12dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        app:cornerRadius="8dp"/>
+
+
+
+</LinearLayout>

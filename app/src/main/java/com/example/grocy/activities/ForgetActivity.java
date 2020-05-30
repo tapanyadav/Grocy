@@ -1,4 +1,4 @@
-package com.example.grocy;
+package com.example.grocy.activities;
 
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -14,6 +14,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.grocy.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -38,7 +39,7 @@ public class ForgetActivity extends AppCompatActivity {
         textViewForgotSignIn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent=new Intent(ForgetActivity.this,LoginActivity.class);
+                Intent intent=new Intent(ForgetActivity.this, LoginActivity.class);
                 startActivity(intent);
                 finish();
             }

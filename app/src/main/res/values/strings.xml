@@ -10,5 +10,6 @@
     <string name="openNavDrawer">Navigation Drawer Open</string>
     <string name="closeNavDrawer">Navigation Drawer Close</string>
 
-    //test
+    //map api key
+    <string name="google_maps_api_key">AIzaSyD3RtCpsidRz7EMJiR2EkWrYzoXFuwaUkI</string>
 </resources>

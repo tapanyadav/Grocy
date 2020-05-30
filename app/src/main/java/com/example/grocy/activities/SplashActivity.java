@@ -1,10 +1,12 @@
-package com.example.grocy;
+package com.example.grocy.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.WindowManager;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.grocy.R;
 
 public class SplashActivity extends AppCompatActivity {
 
@@ -19,7 +21,7 @@ public class SplashActivity extends AppCompatActivity {
             public void run(){
                 try{
                     sleep(2000);
-                    Intent intent =new Intent(SplashActivity.this,WelcomeActivity.class);
+                    Intent intent =new Intent(SplashActivity.this, WelcomeActivity.class);
                     startActivity(intent);
                     finish();
                 }catch(Exception e){

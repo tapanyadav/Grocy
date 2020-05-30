@@ -1,4 +1,4 @@
-package com.example.grocy;
+package com.example.grocy.activities;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -15,12 +15,12 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.grocy.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.FirebaseException;
 import com.google.firebase.FirebaseTooManyRequestsException;
-import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.FirebaseUser;
@@ -41,7 +41,7 @@ public class OtpActivity extends AppCompatActivity {
     Button btnOtpLogin;
     private FirebaseAuth mAuth;
     private FirebaseUser mCurrentUser;
-    HashMap<String,String> hm;
+    HashMap hm;
 
     private boolean mVerificationInProgress = false;
     private String mVerificationId;
@@ -108,7 +108,7 @@ public class OtpActivity extends AppCompatActivity {
 
         mCallbacks = new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
             @Override
-            public void onVerificationCompleted(PhoneAuthCredential credential) {
+            public void onVerificationCompleted(@NonNull PhoneAuthCredential credential) {
                 // This callback will be invoked in two situations:
                 // 1 - Instant verification. In some cases the phone number can be instantly
                 //     verified without needing to send or enter a verification code.
@@ -125,6 +125,7 @@ public class OtpActivity extends AppCompatActivity {
                 //updateUI(STATE_VERIFY_SUCCESS, credential);
                 // [END_EXCLUDE]
                 String str = credential.getSmsCode();
+                assert str != null;
                 et1.setText("" + str.charAt(0));
                 et2.setText("" + str.charAt(1));
                 et3.setText("" + str.charAt(2));
@@ -142,7 +143,7 @@ public class OtpActivity extends AppCompatActivity {
 
 
             @Override
-            public void onVerificationFailed(FirebaseException e) {
+            public void onVerificationFailed(@NonNull FirebaseException e) {
                 // This callback is invoked in an invalid request for verification is made,
                 // for instance if the the phone number format is not valid.
                 Log.w(TAG, "onVerificationFailed", e);
@@ -195,24 +196,19 @@ public class OtpActivity extends AppCompatActivity {
             }
         };
 
-        PhoneAuthProvider.getInstance().verifyPhoneNumber(Objects.requireNonNull(hm.get("phone_number")), 60, TimeUnit.SECONDS, OtpActivity.this, mCallbacks);
+        PhoneAuthProvider.getInstance().verifyPhoneNumber((String) Objects.requireNonNull(hm.get("phone_number")), 60, TimeUnit.SECONDS, OtpActivity.this, mCallbacks);
 
-        btnOtpLogin.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        btnOtpLogin.setOnClickListener(v -> {
 
+            String code=et1.getText().toString()+et2.getText().toString()+et3.getText().toString()+et4.getText().toString()+et5.getText().toString()+et6.getText().toString();
+            try {
+                PhoneAuthCredential credential = PhoneAuthProvider.getCredential(mVerificationId, code);
+                signInWithPhoneAuthCredential(credential);
 
+            }catch (Exception e){
+                Toast toast = Toast.makeText(OtpActivity.this, "Verification Code is wrong", Toast.LENGTH_SHORT);
 
-                String code=et1.getText().toString()+et2.getText().toString()+et3.getText().toString()+et4.getText().toString()+et5.getText().toString()+et6.getText().toString();
-                try {
-                    PhoneAuthCredential credential = PhoneAuthProvider.getCredential(mVerificationId, code);
-                    signInWithPhoneAuthCredential(credential);
-
-                }catch (Exception e){
-                    Toast toast = Toast.makeText(OtpActivity.this, "Verification Code is wrong", Toast.LENGTH_SHORT);
-
-                    toast.show();
-                }
+                toast.show();
             }
         });
 
@@ -230,29 +226,26 @@ public class OtpActivity extends AppCompatActivity {
     private void signInWithPhoneAuthCredential(PhoneAuthCredential credential) {
         showProgress();
         mAuth.signInWithCredential(credential)
-                .addOnCompleteListener(OtpActivity.this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            // Sign in success, update UI with the signed-in user's information
-                            Log.d("TAG", "signInWithCredential:success");
+                .addOnCompleteListener(OtpActivity.this, task -> {
+                    if (task.isSuccessful()) {
+                        // Sign in success, update UI with the signed-in user's information
+                        Log.d("TAG", "signInWithCredential:success");
 
-                            mCurrentUser = task.getResult().getUser();
+                        mCurrentUser = Objects.requireNonNull(task.getResult()).getUser();
 
-                            Intent intent=new Intent(OtpActivity.this,MainActivity.class);
-                            startActivity(intent);
-                            finish();
-                            // ...
-                        } else {
-                            // Sign in failed, display a message and update the UI
-                            System.out.println("Sign in  failed");
-                            Log.w("TAG", "signInWithCredential:failure", task.getException());
-                            Toast.makeText(OtpActivity.this,task.getException().getMessage(),Toast.LENGTH_LONG).show();
-                            if (task.getException() instanceof FirebaseAuthInvalidCredentialsException) {
-                                // The verification code entered was invalid
-                            }
-                            progressDialog.dismiss();
+                        Intent intent=new Intent(OtpActivity.this, StartLocationActivity.class);
+                        startActivity(intent);
+                        finish();
+                        // ...
+                    } else {
+                        // Sign in failed, display a message and update the UI
+                        System.out.println("Sign in  failed");
+                        Log.w("TAG", "signInWithCredential:failure", task.getException());
+                        Toast.makeText(OtpActivity.this, Objects.requireNonNull(task.getException()).getMessage(),Toast.LENGTH_LONG).show();
+                        if (task.getException() instanceof FirebaseAuthInvalidCredentialsException) {
+                            // The verification code entered was invalid
                         }
+                        progressDialog.dismiss();
                     }
                 });
     }
@@ -261,7 +254,7 @@ public class OtpActivity extends AppCompatActivity {
         progressDialog = new ProgressDialog(OtpActivity.this);
         progressDialog.show();
         progressDialog.setContentView(R.layout.process_dialog);
-        progressDialog.getWindow().setBackgroundDrawableResource(
+        Objects.requireNonNull(progressDialog.getWindow()).setBackgroundDrawableResource(
                 android.R.color.transparent
         );
     }
@@ -281,6 +274,8 @@ public class OtpActivity extends AppCompatActivity {
                     }
                 });
     }
+
+    //TODO on home pressed
 }
 
 
