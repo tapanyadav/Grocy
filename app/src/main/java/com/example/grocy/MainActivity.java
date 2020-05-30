@@ -2,6 +2,9 @@ package com.example.grocy;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.location.Address;
+import android.location.Geocoder;
+import android.location.Location;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -29,11 +32,18 @@ import com.example.grocy.Models.CategoriesModel;
 import com.example.grocy.Models.FeaturedModel;
 import com.example.grocy.Models.HorizontalModel;
 import com.example.grocy.Models.ShopsModel;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private FirebaseAuth mAuth;
@@ -47,6 +57,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private Toolbar toolbar;
     EditText editTextSearch;
     ImageButton imageButtonFilter;
+    Geocoder geocoder;
+    List<Address> addresses;
+    FusedLocationProviderClient fusedLocationProviderClient;
 
     //adapters
 
@@ -131,6 +144,29 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         navigationView.setCheckedItem(R.id.orders);
         toolbarTitle = (TextView) findViewById(R.id.loc_text_toolbar);
+        fusedLocationProviderClient= LocationServices.getFusedLocationProviderClient(this);
+
+        fusedLocationProviderClient.getLastLocation().addOnCompleteListener(new OnCompleteListener<Location>() {
+            @Override
+            public void onComplete(@NonNull Task<Location> task) {
+                Location location=task.getResult();
+                if(location!=null){
+                    try {
+                        geocoder= new Geocoder(MainActivity.this, Locale.getDefault());
+                        addresses=geocoder.getFromLocation(location.getLatitude(),location.getLongitude(),1);
+
+
+                        String address= addresses.get(0).getAddressLine(0);
+
+                        String fulladdress= address;
+                        toolbarTitle.setText(fulladdress);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+
+                }
+            }
+        });
         toolbarTitle.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
