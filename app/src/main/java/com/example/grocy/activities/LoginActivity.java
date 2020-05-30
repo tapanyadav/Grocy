@@ -1,4 +1,4 @@
-package com.example.grocy;
+package com.example.grocy.activities;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -15,6 +15,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.grocy.R;
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
@@ -74,7 +75,7 @@ public class LoginActivity extends AppCompatActivity {
         textForgotPass.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent=new Intent(LoginActivity.this,ForgetActivity.class);
+                Intent intent=new Intent(LoginActivity.this, ForgetActivity.class);
                 startActivity(intent);
                 finish();
             }

@@ -1,4 +1,4 @@
-package com.example.grocy;
+package com.example.grocy.activities;
 
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.grocy.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -33,7 +34,7 @@ public class WelcomeActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 showProgress();
-                Intent intent=new Intent(WelcomeActivity.this,LoginActivity.class);
+                Intent intent=new Intent(WelcomeActivity.this, LoginActivity.class);
                 startActivity(intent);
                 finish();
                 progressDialog.dismiss();
@@ -44,7 +45,7 @@ public class WelcomeActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 showProgress();
-                Intent intent=new Intent(WelcomeActivity.this,RegisterActivity.class);
+                Intent intent=new Intent(WelcomeActivity.this, RegisterActivity.class);
                 startActivity(intent);
                 finish();
                 progressDialog.dismiss();
@@ -54,7 +55,7 @@ public class WelcomeActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 showProgress();
-                Intent intent = new Intent(WelcomeActivity.this, MainActivity.class);
+                Intent intent = new Intent(WelcomeActivity.this, StartLocationActivity.class);
                 startActivity(intent);
                 finish();
                 progressDialog.dismiss();

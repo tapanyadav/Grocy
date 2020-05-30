@@ -42,7 +42,7 @@
                 android:textStyle="bold"
                 android:textColor="#000"
                 android:fontFamily="@font/kalam_bold"
-                android:textSize="26sp"/>
+                android:textSize="24sp"/>
             <TextView
                 android:id="@+id/tv_type_shop"
                 android:layout_width="wrap_content"
@@ -62,7 +62,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="30% OFF - use code WELCOME30"
-                android:textSize="16sp"
+                android:textSize="14sp"
                 android:textColor="@color/mainAppColor"
                 android:layout_marginTop="3dp"/>
 
@@ -73,8 +73,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="end"
-            android:layout_gravity="center_vertical"
             android:layout_marginEnd="10dp"
+            android:layout_gravity="center_vertical"
             android:orientation="vertical">
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/tv_rating_shop"

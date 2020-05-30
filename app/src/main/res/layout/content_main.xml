@@ -10,21 +10,46 @@
         android:layout_width="match_parent"
         android:orientation="vertical"
         android:layout_height="match_parent"
+        android:layout_marginTop="5dp"
         android:layout_below="@+id/app_bar_layout">
 
-        <com.google.android.material.textfield.TextInputLayout
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-            android:hint="Search for stores">
+            android:background="@drawable/round_corner"
+            android:layout_marginStart="4dp"
+            android:layout_marginEnd="8dp"
+            android:orientation="horizontal">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:layout_width="match_parent"
+                android:id="@+id/etSearch"
+                android:layout_width="0dp"
+                android:layout_height="60dp"
+                android:layout_weight="1"
+                android:background="@android:color/transparent"
+                android:hint="Search for stores"
+                android:gravity="center_vertical"
+                android:fontFamily="@font/josefin_sans"
+                android:textColorHint="#9DC0F9"
+                android:textColor="#659BF6"
+                android:textStyle="bold"
+                android:textSize="22sp"
+                android:maxLines="1"
+                android:inputType="textFilter"
+                android:drawableStart="@drawable/icon_search_new"
+                android:paddingStart="20dp"
+                android:drawablePadding="12dp"/>
+
+            <ImageButton
+                android:id="@+id/image_button_filter"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:drawableStart="@drawable/icon_search"
-                android:drawablePadding="18dp" />
-        </com.google.android.material.textfield.TextInputLayout>
+                android:src="@drawable/icon_filter_new"
+                android:layout_marginEnd="20dp"
+                android:background="@color/white"
+                android:layout_gravity="center_vertical"/>
+        </LinearLayout>
+
 
 
         <LinearLayout
@@ -75,6 +100,7 @@
                 android:layout_marginStart="10dp"/>
 
             <TextView
+                android:id="@+id/tv_content_featured_all"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="See all"
@@ -168,9 +194,9 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recycler_shops"
             android:scrollbars="none"
-            android:filterTouchesWhenObscured="false"
+            android:fitsSystemWindows="true"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_marginTop="10dp"
             android:orientation="vertical"
             android:padding="2dp"/>

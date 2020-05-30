@@ -4,8 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#E92B46"
-    tools:context=".SplashActivity">
+    android:background="@drawable/background_adult"
+    tools:context=".activities.SplashActivity">
 
 
     <ImageView

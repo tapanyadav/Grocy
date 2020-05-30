@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:orientation="horizontal">
+
+        <ImageButton
+            android:id="@+id/ib_back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/icon_back"
+            android:layout_marginStart="20dp"
+            android:alpha="0.9"
+            android:layout_gravity="center_vertical"
+            android:background="#fff"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="28sp"
+            android:text="Featured Shops"
+            android:gravity="center_vertical"
+            android:layout_marginStart="24dp"
+            android:layout_marginBottom="2dp"
+            android:textStyle="bold"
+            android:fontFamily="@font/josefin_sans"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/round_corner"
+        android:layout_marginTop="20dp"
+        android:layout_marginStart="4dp"
+        android:layout_marginEnd="8dp"
+        android:orientation="horizontal">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/etSearch"
+            android:layout_width="0dp"
+            android:layout_height="60dp"
+            android:layout_weight="1"
+            android:background="@android:color/transparent"
+            android:hint="Search for stores"
+            android:gravity="center_vertical"
+            android:fontFamily="@font/josefin_sans"
+            android:textColorHint="#9DC0F9"
+            android:textColor="#659BF6"
+            android:textStyle="bold"
+            android:textSize="22sp"
+            android:maxLines="1"
+            android:inputType="textFilter"
+            android:drawableStart="@drawable/icon_search_new"
+            android:paddingStart="20dp"
+            android:drawablePadding="12dp"/>
+
+        <ImageButton
+            android:id="@+id/image_button_filter_all"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/icon_filter_new"
+            android:layout_marginEnd="20dp"
+            android:background="@color/white"
+            android:layout_gravity="center_vertical"/>
+    </LinearLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycler_featured_all"
+        android:layout_marginTop="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
+
+</LinearLayout>
