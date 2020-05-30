@@ -1,7 +1,5 @@
 package com.example.grocy.activities;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.location.Address;
 import android.location.Geocoder;
@@ -11,6 +9,8 @@ import android.util.Log;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.grocy.R;
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -25,7 +25,6 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
-import java.util.Objects;
 
 public class MapActivity extends AppCompatActivity implements OnMapReadyCallback {
 
@@ -37,8 +36,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     Button buttonMapConfirmLoc;
 
     TextView textViewLocation;
-    Double latValue;
-    Double lngValue;
+    String finalAddress;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,9 +46,6 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
         textViewLocation=findViewById(R.id.mapLocation);
 
-
-        latValue = Objects.requireNonNull(getIntent().getExtras()).getDouble("latPass");
-        lngValue = Objects.requireNonNull(getIntent().getExtras()).getDouble("lngPass");
         SupportMapFragment supportMapFragment= (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map_fragment);
 
@@ -64,6 +59,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
         buttonMapConfirmLoc.setOnClickListener(v -> {
             Intent intent=new Intent(MapActivity.this,MainActivity.class);
+            intent.putExtra("userLiveLocation", finalAddress);
             startActivity(intent);
             finish();
         });
@@ -113,7 +109,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
                             Toast.makeText(this, ""+(address.getAddressLine(0)+address.getLocality()), Toast.LENGTH_SHORT).show();
 
-                            String finalAddress = address.getAddressLine(0)+address.getLocality();
+                            finalAddress = address.getAddressLine(0) + address.getLocality();
                             textViewLocation.setText(finalAddress);
                         }
 

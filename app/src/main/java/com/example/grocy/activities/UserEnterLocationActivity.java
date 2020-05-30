@@ -1,12 +1,12 @@
 package com.example.grocy.activities;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.grocy.R;
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -62,6 +62,7 @@ public class UserEnterLocationActivity extends AppCompatActivity implements OnMa
 
         buttonMapConfirmLoc.setOnClickListener(v -> {
             Intent intent=new Intent(UserEnterLocationActivity.this,MainActivity.class);
+            intent.putExtra("userEnterLocation", userPlaceAddress);
             startActivity(intent);
             finish();
         });
