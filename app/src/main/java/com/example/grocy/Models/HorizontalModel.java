@@ -1,30 +1,42 @@
 package com.example.grocy.Models;
 
 public class HorizontalModel {
-private int imageHorizontalDrawable,imageBackgroundHorizontalDrawable;
-private String text_horizontal_shopName;
 
-    public int getImageHorizontalDrawable() {
-        return imageHorizontalDrawable;
+    private String shopHorizontalBackgroundImage, shopHorizontalImage;
+    private String shopHorizontalName;
+
+    public HorizontalModel() {
+
     }
 
-    public void setImageHorizontalDrawable(int imageHorizontalDrawable) {
-        this.imageHorizontalDrawable = imageHorizontalDrawable;
+    public HorizontalModel(String shopHorizontalBackgroundImage, String shopHorizontalImage, String shopHorizontalName) {
+        this.shopHorizontalBackgroundImage = shopHorizontalBackgroundImage;
+        this.shopHorizontalImage = shopHorizontalImage;
+        this.shopHorizontalName = shopHorizontalName;
     }
 
-    public int getImageBackgroundHorizontalDrawable() {
-        return imageBackgroundHorizontalDrawable;
+    public String getShopHorizontalBackgroundImage() {
+        return shopHorizontalBackgroundImage;
     }
 
-    public void setImageBackgroundHorizontalDrawable(int imageBackgroundHorizontalDrawable) {
-        this.imageBackgroundHorizontalDrawable = imageBackgroundHorizontalDrawable;
+    public void setShopHorizontalBackgroundImage(String shopHorizontalBackgroundImage) {
+        this.shopHorizontalBackgroundImage = shopHorizontalBackgroundImage;
     }
 
-    public String getText_horizontal_shopName() {
-        return text_horizontal_shopName;
+    public String getShopHorizontalImage() {
+        return shopHorizontalImage;
     }
 
-    public void setText_horizontal_shopName(String text_horizontal_shopName) {
-        this.text_horizontal_shopName = text_horizontal_shopName;
+    public void setShopHorizontalImage(String shopHorizontalImage) {
+        this.shopHorizontalImage = shopHorizontalImage;
     }
+
+    public String getShopHorizontalName() {
+        return shopHorizontalName;
+    }
+
+    public void setShopHorizontalName(String shopHorizontalName) {
+        this.shopHorizontalName = shopHorizontalName;
+    }
+
 }

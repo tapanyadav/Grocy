@@ -1,14 +1,13 @@
 package com.example.grocy.activities;
 
+import android.content.Intent;
+import android.os.Bundle;
+import android.widget.ImageButton;
+import android.widget.ImageView;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
-import android.content.Intent;
-import android.os.Bundle;
-import android.view.View;
-import android.widget.ImageButton;
-import android.widget.ImageView;
 
 import com.example.grocy.Adapters.FeaturedAllAdapter;
 import com.example.grocy.Models.FeaturedAllModel;
@@ -35,31 +34,21 @@ public class FeaturedAllActivity extends AppCompatActivity implements FeaturedAl
         firebaseFirestore=FirebaseFirestore.getInstance();
         recyclerViewAll=findViewById(R.id.recycler_featured_all);
 
-        imageButtonBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent=new Intent(FeaturedAllActivity.this, MainActivity.class);
-                startActivity(intent);
-                finish();
-            }
+        imageButtonBack.setOnClickListener(v -> {
+            Intent intent = new Intent(FeaturedAllActivity.this, MainActivity.class);
+            startActivity(intent);
+            finish();
         });
 
-        imageButtonFilter.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                bottomSheetDialogFilter = new BottomSheetDialog(FeaturedAllActivity.this);
-                //View bottomSheetView=LayoutInflater.from(new ContextThemeWrapper(getApplicationContext(),R.style.AppTheme)).inflate(R.layout.content_dialog_bottom_sheet, (LinearLayout)findViewById(R.id.bottomSheetLayout));
-                bottomSheetDialogFilter.setContentView(R.layout.content_filter_bottom_sheet);
-                bottomSheetDialogFilter.show();
-                bottomSheetDialogFilter.setCanceledOnTouchOutside(false);
-                ImageView ivBottomClose = bottomSheetDialogFilter.findViewById(R.id.imageView_close);
-                ivBottomClose.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        bottomSheetDialogFilter.dismiss();
-                    }
-                });
-            }
+        imageButtonFilter.setOnClickListener(v -> {
+            bottomSheetDialogFilter = new BottomSheetDialog(FeaturedAllActivity.this);
+            //View bottomSheetView=LayoutInflater.from(new ContextThemeWrapper(getApplicationContext(),R.style.AppTheme)).inflate(R.layout.content_dialog_bottom_sheet, (LinearLayout)findViewById(R.id.bottomSheetLayout));
+            bottomSheetDialogFilter.setContentView(R.layout.content_filter_bottom_sheet);
+            bottomSheetDialogFilter.show();
+            bottomSheetDialogFilter.setCanceledOnTouchOutside(false);
+            ImageView ivBottomClose = bottomSheetDialogFilter.findViewById(R.id.imageView_close);
+            assert ivBottomClose != null;
+            ivBottomClose.setOnClickListener(v1 -> bottomSheetDialogFilter.dismiss());
         });
 
         Query query=firebaseFirestore.collection("FeaturedShopsAll");
@@ -88,8 +77,6 @@ public class FeaturedAllActivity extends AppCompatActivity implements FeaturedAl
 
     @Override
     public void onItemClick() {
-        Intent intent=new Intent(FeaturedAllActivity.this, TestActivity.class);
-        startActivity(intent);
-        //Toast.makeText(this, "Clicked", Toast.LENGTH_SHORT).show();
+
     }
 }

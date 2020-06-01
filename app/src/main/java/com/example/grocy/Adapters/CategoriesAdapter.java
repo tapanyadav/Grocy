@@ -1,62 +1,51 @@
 package com.example.grocy.Adapters;
 
-import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.grocy.Models.CategoriesModel;
 import com.example.grocy.R;
+import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
+import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+import com.squareup.picasso.Picasso;
 
-import java.util.ArrayList;
+public class CategoriesAdapter extends FirestoreRecyclerAdapter<CategoriesModel, CategoriesAdapter.MyViewHolder> {
 
-public class CategoriesAdapter extends RecyclerView.Adapter<CategoriesAdapter.MyViewHolder>{
-
-    private LayoutInflater inflater;
-    private ArrayList<CategoriesModel> imageModelArrayList;
-
-    public CategoriesAdapter(Context ctx, ArrayList<CategoriesModel> imageModelArrayList){
-
-        inflater = LayoutInflater.from(ctx);
-        this.imageModelArrayList = imageModelArrayList;
+    public CategoriesAdapter(@NonNull FirestoreRecyclerOptions<CategoriesModel> options) {
+        super(options);
     }
 
     @Override
-    public CategoriesAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-
-        View view = inflater.inflate(R.layout.recycler_item, parent, false);
-        MyViewHolder holder = new MyViewHolder(view);
-
-        return holder;
+    protected void onBindViewHolder(@NonNull MyViewHolder holder, int position, @NonNull CategoriesModel model) {
+        Picasso.get().load(model.getCatBackground()).into(holder.imageViewCategoriesBackground);
+        Picasso.get().load(model.getCatImage()).into(holder.imageViewCatImage);
+        holder.textViewCatType.setText(model.getCatType());
     }
 
+    @NonNull
     @Override
-    public void onBindViewHolder(CategoriesAdapter.MyViewHolder holder, int position) {
-
-        holder.iv.setImageResource(imageModelArrayList.get(position).getImage_drawable());
-        holder.name.setText(imageModelArrayList.get(position).getText_cat());
+    public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recycler_item_cat, parent, false);
+        return new MyViewHolder(view);
     }
 
-    @Override
-    public int getItemCount() {
+    static class MyViewHolder extends RecyclerView.ViewHolder {
 
-        return imageModelArrayList.size();
-    }
+        ImageView imageViewCategoriesBackground, imageViewCatImage;
+        TextView textViewCatType;
 
-    class MyViewHolder extends RecyclerView.ViewHolder{
-
-        ImageView iv;
-        TextView name;
-
-        public MyViewHolder(View itemView) {
+        MyViewHolder(@NonNull View itemView) {
             super(itemView);
-            iv = itemView.findViewById(R.id.iv_categories_recycler);
-            name=itemView.findViewById(R.id.name_cat);
-        }
 
+            imageViewCategoriesBackground = itemView.findViewById(R.id.card_background_categories);
+            imageViewCatImage = itemView.findViewById(R.id.iv_categories_recycler);
+            textViewCatType = itemView.findViewById(R.id.name_cat);
+        }
     }
 }
