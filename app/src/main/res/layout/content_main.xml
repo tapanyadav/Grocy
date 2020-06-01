@@ -231,13 +231,14 @@
                 android:layout_marginStart="20dp"
                 android:textSize="52sp"
                 android:fontFamily="@font/kalam_bold"/>
+
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="think goods think grocy"
+                android:layout_marginStart="30dp"
                 android:fontFamily="@font/kaushan"
-                android:textSize="32sp"
-                android:layout_marginStart="30dp"/>
+                android:text="think goods think grocy"
+                android:textSize="32sp" />
 
         </LinearLayout>
 

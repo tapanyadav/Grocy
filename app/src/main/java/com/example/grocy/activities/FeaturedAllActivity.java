@@ -88,8 +88,8 @@ public class FeaturedAllActivity extends AppCompatActivity implements FeaturedAl
 
     @Override
     public void onItemClick() {
-        Intent intent=new Intent(FeaturedAllActivity.this, TestActivity.class);
-        startActivity(intent);
+//        Intent intent=new Intent(FeaturedAllActivity.this, TestActivity.class);
+//        startActivity(intent);
         //Toast.makeText(this, "Clicked", Toast.LENGTH_SHORT).show();
     }
 }

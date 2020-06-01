@@ -14,9 +14,16 @@ import android.os.Bundle;
 import android.provider.Settings;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.view.View;
+import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.SeekBar;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -26,6 +33,7 @@ import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -45,6 +53,8 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationCallback;
+import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.libraries.places.api.Places;
 import com.google.android.libraries.places.api.model.Place;
@@ -61,7 +71,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
+import java.util.List;
 import java.util.Objects;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private static final int AUTOCOMPLETE_REQUEST_CODE = 1;
@@ -80,15 +92,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     //navigation drawer
     DrawerLayout drawerLayout;
     NavigationView navigationView;
-    BottomSheetDialog bottomSheetDialog,bottomSheetDialogFilter;
-    TextView toolbarTitle,textViewFeaturedAll;
+    BottomSheetDialog bottomSheetDialog, bottomSheetDialogFilter;
+    TextView toolbarTitle, textViewFeaturedAll;
     private Toolbar toolbar;
     EditText editTextSearch;
     ImageButton imageButtonFilter;
 
     EditText editTextLocation;
     PlacesClient placesClient;
-    String apiKey="AIzaSyD3RtCpsidRz7EMJiR2EkWrYzoXFuwaUkI";
+    String apiKey = "AIzaSyD3RtCpsidRz7EMJiR2EkWrYzoXFuwaUkI";
 
 
     //AutoCompleteTextView autoCompleteTextViewLocation;
@@ -98,7 +110,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     //adapters
 
-    private RecyclerView recyclerViewCat,recyclerViewFea,recyclerViewShop,recyclerViewHorizontal,recyclerViewTryHorizontal;
+    private RecyclerView recyclerViewCat, recyclerViewFea, recyclerViewShop, recyclerViewHorizontal, recyclerViewTryHorizontal;
     private ArrayList<CategoriesModel> imageModelArrayList;
     private ArrayList<FeaturedModel> imageModelFeaturedArrayList;
     private ArrayList<ShopsModel> shopsModelArrayList;
@@ -108,28 +120,32 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private ShopsAdapter shopsAdapter;
     private HorizontalAdapter horizontalAdapter;
 
-    private int[] myImageList = new int[]{R.drawable.grocery,R.drawable.pharm,R.drawable.stationary};
-    private int[] myFeaturedImageList=new int[]{R.drawable.epic_deals,R.drawable.gupta_groc,R.drawable.chotu_med,R.drawable.tyagi_stat};
-    private String[] myImageNameList = new String[]{"Grocery","Pharmacy" ,"Stationary"};
-    private int[] myShopImageList=new int[]{R.drawable.gupta_shop,R.drawable.chotu_shop,R.drawable.tyagi_shop,R.drawable.raghu_shop};
-    private String[] myShopNameList=new String[]{"Gupta Grocery Store","Chotu Medical Store","Tyagi Stationary Store","Raghu Fruits Corner"};
-    private String[] myShopTypeList=new String[]{"Daily need items","Medicines","Books,Pens,Calculator","Apple,Oranges,Banana"};
-    private String[] myShopLimitList=new String[]{"200 per order | 40 min","300 per order | 30 min","100 per order | 50 min","100 per order | 20 min"};
-    private String[] myShopOffList=new String[]{"30% OFF - use code WELCOME30","10% OFF - use code WELCOME10","20% OFF - use code WELCOME20","40% OFF - no code needed"};
-    private String[] myShopRatingList=new String[]{"4.5","4.7","4.2","3.5"};
-    private int[] myHorizontalImageList=new int[]{R.drawable.stationary,R.drawable.groc,R.drawable.medicines,R.drawable.tea,R.drawable.fruits};
-    private int[] myBackgroundImageList=new int[]{R.color.mainAppColor,R.color.yellow,R.color.lightBlue,R.color.lightGreen,R.color.lightPink};
-    private String[] myNameStoreHorizontalList=new String[]{"Tyagi Store","Gupta Store","Chotu Store","Ujjwal Tea Shop","Raghu Fruits Corner"};
+    private int[] myImageList = new int[]{R.drawable.grocery, R.drawable.pharm, R.drawable.stationary};
+    private int[] myFeaturedImageList = new int[]{R.drawable.epic_deals, R.drawable.gupta_groc, R.drawable.chotu_med, R.drawable.tyagi_stat};
+    private String[] myImageNameList = new String[]{"Grocery", "Pharmacy", "Stationary"};
+    private int[] myShopImageList = new int[]{R.drawable.gupta_shop, R.drawable.chotu_shop, R.drawable.tyagi_shop, R.drawable.raghu_shop};
+    private String[] myShopNameList = new String[]{"Gupta Grocery Store", "Chotu Medical Store", "Tyagi Stationary Store", "Raghu Fruits Corner"};
+    private String[] myShopTypeList = new String[]{"Daily need items", "Medicines", "Books,Pens,Calculator", "Apple,Oranges,Banana"};
+    private String[] myShopLimitList = new String[]{"200 per order | 40 min", "300 per order | 30 min", "100 per order | 50 min", "100 per order | 20 min"};
+    private String[] myShopOffList = new String[]{"30% OFF - use code WELCOME30", "10% OFF - use code WELCOME10", "20% OFF - use code WELCOME20", "40% OFF - no code needed"};
+    private String[] myShopRatingList = new String[]{"4.5", "4.7", "4.2", "3.5"};
+    private int[] myHorizontalImageList = new int[]{R.drawable.stationary, R.drawable.groc, R.drawable.medicines, R.drawable.tea, R.drawable.fruits};
+    private int[] myBackgroundImageList = new int[]{R.color.mainAppColor, R.color.yellow, R.color.lightBlue, R.color.lightGreen, R.color.lightPink};
+    private String[] myNameStoreHorizontalList = new String[]{"Tyagi Store", "Gupta Store", "Chotu Store", "Ujjwal Tea Shop", "Raghu Fruits Corner"};
 
 //    private int[] myHorizontalImageTryList=new int[]{R.drawable.stationary,R.drawable.groc,R.drawable.medicines};
 //    private int[] myBackgroundImageTryList=new int[]{R.color.mainAppColor,R.color.yellow,R.color.lightBlue};
 //    private String[] myNameStoreHorizontalTryList=new String[]{"Tyagi Store","Gupta Store","Chotu Store"};
 
     TextView textViewCurrentLocationDialog;
+    Spinner spinner;
+    Button submit;
 
     String setUserLiveLocation;
     String setUserCustomLocation;
+    String globalAddress;
 
+    SeekBar seekBar;
 
 
     @SuppressLint({"RestrictedApi", "ClickableViewAccessibility"})
@@ -143,16 +159,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         drawerLayout = findViewById(R.id.drawer_layout);
         navigationView = findViewById(R.id.nav_view);
         mAuth = FirebaseAuth.getInstance();
-        fusedLocationProviderClient=new FusedLocationProviderClient(MainActivity.this);
+        fusedLocationProviderClient = new FusedLocationProviderClient(MainActivity.this);
 
         recyclerViewCat = findViewById(R.id.recycler);
-        recyclerViewFea=findViewById(R.id.recycler_featured);
-        recyclerViewShop=findViewById(R.id.recycler_shops);
-        recyclerViewHorizontal=findViewById(R.id.recycler_horizontalShops);
-        editTextSearch=findViewById(R.id.etSearch);
-        imageButtonFilter=findViewById(R.id.image_button_filter);
-        textViewFeaturedAll=findViewById(R.id.tv_content_featured_all);
-       // recyclerViewTryHorizontal=findViewById(R.id.recycler_horizontalShopsTry);
+        recyclerViewFea = findViewById(R.id.recycler_featured);
+        recyclerViewShop = findViewById(R.id.recycler_shops);
+        recyclerViewHorizontal = findViewById(R.id.recycler_horizontalShops);
+        editTextSearch = findViewById(R.id.etSearch);
+        imageButtonFilter = findViewById(R.id.image_button_filter);
+        textViewFeaturedAll = findViewById(R.id.tv_content_featured_all);
+        // recyclerViewTryHorizontal=findViewById(R.id.recycler_horizontalShopsTry);
 
         setUserCustomLocation = getIntent().getStringExtra("userEnterLocation");
         setUserLiveLocation = getIntent().getStringExtra("userLiveLocation");
@@ -163,20 +179,20 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         recyclerViewCat.setAdapter(adapter);
         recyclerViewCat.setLayoutManager(new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.HORIZONTAL, false));
 
-        imageModelFeaturedArrayList=featuredItem();
-        adapterFeatured=new FeaturedAdapter(this,imageModelFeaturedArrayList);
+        imageModelFeaturedArrayList = featuredItem();
+        adapterFeatured = new FeaturedAdapter(this, imageModelFeaturedArrayList);
         recyclerViewFea.setAdapter(adapterFeatured);
-        recyclerViewFea.setLayoutManager(new LinearLayoutManager(getApplicationContext(),LinearLayoutManager.HORIZONTAL,false));
+        recyclerViewFea.setLayoutManager(new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.HORIZONTAL, false));
 
-        shopsModelArrayList=shopsItem();
-        shopsAdapter=new ShopsAdapter(this,shopsModelArrayList);
+        shopsModelArrayList = shopsItem();
+        shopsAdapter = new ShopsAdapter(this, shopsModelArrayList);
         recyclerViewShop.setAdapter(shopsAdapter);
-        recyclerViewShop.setLayoutManager(new LinearLayoutManager(getApplicationContext(),LinearLayoutManager.VERTICAL,false));
+        recyclerViewShop.setLayoutManager(new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.VERTICAL, false));
 
-        horizontalModelArrayList=horizontalItems();
-        horizontalAdapter=new HorizontalAdapter(this,horizontalModelArrayList);
+        horizontalModelArrayList = horizontalItems();
+        horizontalAdapter = new HorizontalAdapter(this, horizontalModelArrayList);
         recyclerViewHorizontal.setAdapter(horizontalAdapter);
-        recyclerViewHorizontal.setLayoutManager(new LinearLayoutManager(getApplicationContext(),LinearLayoutManager.HORIZONTAL,false));
+        recyclerViewHorizontal.setLayoutManager(new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.HORIZONTAL, false));
 
         ActionBarDrawerToggle toggle = new
                 ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.openNavDrawer, R.string.closeNavDrawer);
@@ -193,35 +209,47 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         toolbarTitle = findViewById(R.id.loc_text_toolbar);
 
-        fusedLocationProviderClient.getLastLocation().addOnCompleteListener(task -> {
-            if (task.isSuccessful()) {
-                Location location = task.getResult();
-                if (location != null) {
-                    Geocoder geocoder = new Geocoder(this, Locale.getDefault());
-                    try {
-                        List<Address> addressList = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
 
-                        if (addressList != null) {
-                            Address address = addressList.get(0);
-
-                            finalAddress = address.getAddressLine(0) + address.getLocality();
-                            toolbarTitle.setText(finalAddress);
-                            Toast.makeText(this, "f:" + finalAddress, Toast.LENGTH_SHORT).show();
-
-                        }
-
-                        assert addressList != null;
-                        for (Address address : addressList) {
-                            Log.d(TAG, "geoLocate: Address" + address.getAddressLine(address.getMaxAddressLineIndex()));
-                        }
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
+        if (setUserCustomLocation != null) {
+            globalAddress = "c:" + setUserCustomLocation;
+            toolbarTitle.setText(globalAddress);
+        } else {
+            if (setUserLiveLocation != null) {
+                globalAddress = "m:" + setUserLiveLocation;
+                toolbarTitle.setText(globalAddress);
             } else {
-                Toast.makeText(this, "Error", Toast.LENGTH_SHORT).show();
+                fusedLocationProviderClient.getLastLocation().addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        Location location = task.getResult();
+                        if (location != null) {
+                            Geocoder geocoder = new Geocoder(this, Locale.getDefault());
+                            try {
+                                List<Address> addressList = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
+
+                                if (addressList != null) {
+                                    Address address = addressList.get(0);
+
+                                    finalAddress = address.getAddressLine(0) + address.getLocality();
+                                    globalAddress = "f:" + finalAddress;
+                                    toolbarTitle.setText(globalAddress);
+                                    Toast.makeText(this, "f:" + finalAddress, Toast.LENGTH_SHORT).show();
+
+                                }
+
+                                assert addressList != null;
+                                for (Address address : addressList) {
+                                    Log.d(TAG, "geoLocate: Address" + address.getAddressLine(address.getMaxAddressLineIndex()));
+                                }
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    } else {
+                        Toast.makeText(this, "Error", Toast.LENGTH_SHORT).show();
+                    }
+                });
             }
-        });
+        }
 
                 if (!Places.isInitialized()) {
                     Places.initialize(MainActivity.this, apiKey);
@@ -275,6 +303,29 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             ImageView ivBottomClose = bottomSheetDialogFilter.findViewById(R.id.imageView_close);
             assert ivBottomClose != null;
             ivBottomClose.setOnClickListener(closeView -> bottomSheetDialogFilter.dismiss());
+            seekBar=bottomSheetDialogFilter.findViewById(R.id.seekBar);
+            spinner = (Spinner) bottomSheetDialogFilter.findViewById(R.id.planets_spinner);
+            AtomicReference<String> selectedSeekBar = new AtomicReference<>("0");
+            List<String> list = new ArrayList<String>();
+            list.add("list 1");
+            list.add("list 2");
+            list.add("list 3");
+            AtomicReference<String> selectedSpinner = new AtomicReference<>("list 1");
+            ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this,
+                    android.R.layout.simple_spinner_item, list);
+            dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            spinner.setAdapter(dataAdapter);
+            submit=bottomSheetDialogFilter.findViewById(R.id.submit);
+            submit.setOnClickListener(printData->{
+                selectedSeekBar.set(""+seekBar.getProgress());
+                selectedSpinner.set((String)spinner.getSelectedItem());
+                Toast. makeText(MainActivity.this,"SeekBar value: "+selectedSeekBar.toString() +", Spinner value: "+selectedSpinner.toString(), Toast. LENGTH_LONG).show();
+
+                bottomSheetDialogFilter.dismiss();
+
+            });
+
+
         });
 
 
