@@ -19,6 +19,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -31,6 +32,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -56,6 +58,7 @@ import com.google.android.libraries.places.api.net.PlacesClient;
 import com.google.android.libraries.places.widget.Autocomplete;
 import com.google.android.libraries.places.widget.AutocompleteActivity;
 import com.google.android.libraries.places.widget.model.AutocompleteActivityMode;
+import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
@@ -103,6 +106,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     TextView textViewCurrentLocationDialog;
     String setUserLiveLocation;
     String setUserCustomLocation;
+    public static FragmentManager fragmentManager;
+    String globalAddress;
 
     @SuppressLint({"RestrictedApi", "ClickableViewAccessibility"})
     @Override
@@ -115,6 +120,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         drawerLayout = findViewById(R.id.drawer_layout);
         navigationView = findViewById(R.id.nav_view);
         shimmerFrameLayout = findViewById(R.id.shimmerAnimation);
+        fragmentManager = getSupportFragmentManager();
+        LinearLayout linearLayout = findViewById(R.id.linearLayoutMain);
+        AppBarLayout appBarLayout = findViewById(R.id.app_bar_layout);
 
 
         mAuth = FirebaseAuth.getInstance();
@@ -132,10 +140,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         setUserCustomLocation = getIntent().getStringExtra("userEnterLocation");
         setUserLiveLocation = getIntent().getStringExtra("userLiveLocation");
 
+        linearLayout.setVisibility(View.GONE);
+        appBarLayout.setVisibility(View.GONE);
+
         new Handler().postDelayed(() -> {
             shimmerFrameLayout.stopShimmer();
             shimmerFrameLayout.setVisibility(View.GONE);
-        }, 5000);
+            linearLayout.setVisibility(View.VISIBLE);
+            appBarLayout.setVisibility(View.VISIBLE);
+        }, 6000);
 
 
         Query queryCategories = firebaseFirestore.collection("Categories").orderBy("catArrange");
@@ -160,7 +173,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         shopsAdapter = new ShopsAdapter(shopsModelFirestoreRecyclerOptions);
         shopsAdapter.notifyDataSetChanged();
         shopsAdapter.setHasStableIds(true);
-        recyclerViewShop.setHasFixedSize(true);
+
+//        DisplayMetrics displayMetrics=new DisplayMetrics();
+//        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+//        int a=(displayMetrics.heightPixels*99)/100;
+//        recyclerViewShop.getLayoutParams().height=a;
+
+        recyclerViewShop.setHasFixedSize(false);
         recyclerViewShop.setAdapter(shopsAdapter);
         recyclerViewShop.setItemViewCacheSize(20);
         recyclerViewShop.setLayoutManager(new LinearLayoutManager(this));
@@ -190,7 +209,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         toolbarTitle = findViewById(R.id.loc_text_toolbar);
 
-        currentLocation();
+        if (setUserCustomLocation != null) {
+            globalAddress = setUserCustomLocation;
+            toolbarTitle.setText(globalAddress);
+        } else {
+            if (setUserLiveLocation != null) {
+                globalAddress = setUserLiveLocation;
+                toolbarTitle.setText(globalAddress);
+            } else {
+                currentLocation();
+            }
+        }
         if (!Places.isInitialized()) {
             Places.initialize(MainActivity.this, apiKey);
         }
@@ -199,7 +228,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         toolbarTitle.setOnClickListener(v -> {
             bottomSheetDialog = new BottomSheetDialog(MainActivity.this);
-            //View bottomSheetView=LayoutInflater.from(new ContextThemeWrapper(getApplicationContext(),R.style.AppTheme)).inflate(R.layout.content_dialog_bottom_sheet, (LinearLayout)findViewById(R.id.bottomSheetLayout));
             bottomSheetDialog.setContentView(R.layout.content_dialog_bottom_sheet);
             bottomSheetDialog.show();
             bottomSheetDialog.setCanceledOnTouchOutside(true);
@@ -489,5 +517,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         categoriesAdapter.stopListening();
         shopsAdapter.stopListening();
     }
-    
+
 }
+
