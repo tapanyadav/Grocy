@@ -1,23 +1,42 @@
 package com.example.grocy.Models;
 
 public class CategoriesModel {
-    private int image_drawable;
-    private String text_cat;
 
-    public String getText_cat() {
-        return text_cat;
+    private String catImage, catBackground;
+    private String catType;
+
+    CategoriesModel() {
     }
 
-    public void setText_cat(String text_cat) {
-        this.text_cat = text_cat;
+    CategoriesModel(String catImage, String catBackground, String catType) {
+        this.catImage = catImage;
+        this.catBackground = catBackground;
+        this.catType = catType;
     }
 
-    public int getImage_drawable() {
-        return image_drawable;
+    public String getCatImage() {
+        return catImage;
     }
 
-    public void setImage_drawable(int image_drawable) {
-        this.image_drawable = image_drawable;
-
+    public void setCatImage(String catImage) {
+        this.catImage = catImage;
     }
+
+    public String getCatBackground() {
+        return catBackground;
+    }
+
+    public void setCatBackground(String catBackground) {
+        this.catBackground = catBackground;
+    }
+
+    public String getCatType() {
+        return catType;
+    }
+
+    public void setCatType(String catType) {
+        this.catType = catType;
+    }
+
+
 }

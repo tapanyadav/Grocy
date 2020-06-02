@@ -19,7 +19,6 @@
         <activity android:name=".activities.UserEnterLocationActivity"></activity>
         <activity android:name=".activities.StartLocationActivity" />
         <activity android:name=".activities.MapActivity" />
-        <activity android:name=".activities.TestActivity" />
         <activity android:name=".activities.FeaturedAllActivity" />
         <activity android:name=".activities.EmailSentActivity" />
         <activity android:name=".activities.NumberActivity" />

@@ -8,7 +8,11 @@ import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.util.Log;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -20,20 +24,35 @@ import androidx.core.content.ContextCompat;
 import com.example.grocy.R;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
-import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.common.api.Status;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.libraries.places.api.Places;
+import com.google.android.libraries.places.api.model.Place;
+import com.google.android.libraries.places.api.net.PlacesClient;
+import com.google.android.libraries.places.widget.Autocomplete;
+import com.google.android.libraries.places.widget.AutocompleteActivity;
+import com.google.android.libraries.places.widget.model.AutocompleteActivityMode;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
+
+import java.util.Arrays;
 
 public class StartLocationActivity extends AppCompatActivity {
 
     //Location
+    private static final int AUTOCOMPLETE_REQUEST_CODE = 1;
 
     public static final int REQUEST_CODE = 9001;
     public static final int PLAY_SERVICES_ERROR_CODE = 9002;
     public static final int GPS_REQUEST_CODE = 903;
     public static final String TAG = "Map";
 
-    private FusedLocationProviderClient fusedLocationProviderClient;
+    BottomSheetDialog bottomSheetDialogStartLocation;
 
     boolean providerEnabled;
+    TextView textViewCurrentLocationDialog;
+    EditText editTextLocation;
+    PlacesClient placesClient;
+    String apiKey = "AIzaSyD3RtCpsidRz7EMJiR2EkWrYzoXFuwaUkI";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,12 +62,40 @@ public class StartLocationActivity extends AppCompatActivity {
         Button buttonLocNext = findViewById(R.id.startLocNext);
 
         Button buttonLocation= findViewById(R.id.startLocation);
-        fusedLocationProviderClient = new FusedLocationProviderClient(this);
+        if (!Places.isInitialized()) {
+            Places.initialize(StartLocationActivity.this, apiKey);
+        }
+        // Retrieve a PlacesClient (previously initialized - see StartLocationActivity)
+        placesClient = Places.createClient(StartLocationActivity.this);
 
         buttonLocation.setOnClickListener(v -> {
-            Intent intent = new Intent(StartLocationActivity.this,MapActivity.class);
-            startActivity(intent);
-            finish();
+            bottomSheetDialogStartLocation = new BottomSheetDialog(StartLocationActivity.this);
+            //View bottomSheetView=LayoutInflater.from(new ContextThemeWrapper(getApplicationContext(),R.style.AppTheme)).inflate(R.layout.content_dialog_bottom_sheet, (LinearLayout)findViewById(R.id.bottomSheetLayout));
+            bottomSheetDialogStartLocation.setContentView(R.layout.content_dialog_bottom_sheet);
+            bottomSheetDialogStartLocation.show();
+            bottomSheetDialogStartLocation.setCanceledOnTouchOutside(false);
+
+            textViewCurrentLocationDialog = bottomSheetDialogStartLocation.findViewById(R.id.textViewCurrentLoc);
+
+            assert textViewCurrentLocationDialog != null;
+            textViewCurrentLocationDialog.setOnClickListener(v12 -> {
+
+                initGoogleMap();
+
+                if (isGpsEnabled()) {
+                    Toast.makeText(StartLocationActivity.this, "All set up!", Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(StartLocationActivity.this, MapActivity.class);
+                    startActivity(intent);
+                }
+            });
+
+            editTextLocation = bottomSheetDialogStartLocation.findViewById(R.id.editTextLoc);
+
+            assert editTextLocation != null;
+            editTextLocation.setOnClickListener(v1 -> startAutocomplete());
+            ImageView ivBottomClose = bottomSheetDialogStartLocation.findViewById(R.id.imageView_close);
+            assert ivBottomClose != null;
+            ivBottomClose.setOnClickListener(v1 -> bottomSheetDialogStartLocation.dismiss());
         });
 
         initGoogleMap();
@@ -66,6 +113,16 @@ public class StartLocationActivity extends AppCompatActivity {
         });
 
 
+    }
+
+    public void startAutocomplete() {
+
+        Intent intent = new Autocomplete.IntentBuilder(
+                AutocompleteActivityMode.OVERLAY,
+                Arrays.asList(Place.Field.ID, Place.Field.NAME, Place.Field.LAT_LNG, Place.Field.ADDRESS))
+                .setCountry("IN")
+                .build(this);
+        startActivityForResult(intent, AUTOCOMPLETE_REQUEST_CODE);
     }
 
     private void initGoogleMap() {
@@ -145,6 +202,8 @@ public class StartLocationActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        LatLng latlngValue;
+        String placeAddress;
         if (requestCode == GPS_REQUEST_CODE){
 
             LocationManager locationManager= (LocationManager) getSystemService(LOCATION_SERVICE);
@@ -154,6 +213,32 @@ public class StartLocationActivity extends AppCompatActivity {
                 Toast.makeText(this, "GPS is enabled", Toast.LENGTH_SHORT).show();
             }else {
                 Toast.makeText(this, "GPS not enabled, Unable to show location.", Toast.LENGTH_SHORT).show();
+
+            }
+        }
+
+        if (requestCode == AUTOCOMPLETE_REQUEST_CODE) {
+            if (resultCode == RESULT_OK) {
+                assert data != null;
+                Place place = Autocomplete.getPlaceFromIntent(data);
+                Log.i(TAG, "Place: " + place.getName() + " , " + place.getId());
+
+                latlngValue = place.getLatLng();
+                placeAddress = place.getAddress();
+
+                Intent intent = new Intent(StartLocationActivity.this, UserEnterLocationActivity.class);
+                intent.putExtra("latlngValue", latlngValue);
+                intent.putExtra("userAddress", placeAddress);
+                startActivity(intent);
+                Toast.makeText(this, "Place: " + place, Toast.LENGTH_SHORT).show();
+
+
+            } else if (resultCode == AutocompleteActivity.RESULT_ERROR) {
+                assert data != null;
+                Status status = Autocomplete.getStatusFromIntent(data);
+                assert status.getStatusMessage() != null;
+                Log.i(TAG, status.getStatusMessage());
+            } else if (resultCode == RESULT_CANCELED) {
 
             }
         }

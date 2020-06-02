@@ -1,57 +1,103 @@
 package com.example.grocy.Models;
 
 public class ShopsModel {
-    private int image_shop_drawable;
-    private String text_shop_name, text_shop_type, text_shop_limit, text_shop_off, text_shop_rating;
+    private String shopImage, shopStatusBackground;
+    private String shopName, shopAddress, shopOff, shopLimits, shopStatus, shopCategory, shopRating, shopType;
 
-    public String getText_shop_name() {
-        return text_shop_name;
+    ShopsModel() {
+
     }
 
-    public void setText_shop_name(String text_shop_name) {
-        this.text_shop_name = text_shop_name;
+    ShopsModel(String shopImage, String shopStatusBackground, String shopName, String shopAddress, String shopOff, String shopLimits, String shopStatus, String shopCategory, String shopRating, String shopType) {
+        this.shopImage = shopImage;
+        this.shopStatusBackground = shopStatusBackground;
+        this.shopName = shopName;
+        this.shopAddress = shopAddress;
+        this.shopOff = shopOff;
+        this.shopLimits = shopLimits;
+        this.shopStatus = shopStatus;
+        this.shopCategory = shopCategory;
+        this.shopRating = shopRating;
+        this.shopType = shopType;
     }
 
-    public String getText_shop_type() {
-        return text_shop_type;
+    public String getShopImage() {
+        return shopImage;
     }
 
-    public void setText_shop_type(String text_shop_type) {
-        this.text_shop_type = text_shop_type;
+    public void setShopImage(String shopImage) {
+        this.shopImage = shopImage;
     }
 
-    public String getText_shop_limit() {
-        return text_shop_limit;
+    public String getShopStatusBackground() {
+        return shopStatusBackground;
     }
 
-    public void setText_shop_limit(String text_shop_limit) {
-        this.text_shop_limit = text_shop_limit;
+    public void setShopStatusBackground(String shopStatusBackground) {
+        this.shopStatusBackground = shopStatusBackground;
     }
 
-    public String getText_shop_off() {
-        return text_shop_off;
+    public String getShopName() {
+        return shopName;
     }
 
-    public void setText_shop_off(String text_shop_off) {
-        this.text_shop_off = text_shop_off;
+    public void setShopName(String shopName) {
+        this.shopName = shopName;
     }
 
-    public String getText_shop_rating() {
-        return text_shop_rating;
+    public String getShopAddress() {
+        return shopAddress;
     }
 
-    public void setText_shop_rating(String text_shop_rating) {
-        this.text_shop_rating = text_shop_rating;
+    public void setShopAddress(String shopAddress) {
+        this.shopAddress = shopAddress;
     }
 
-
-    public int getImage_shop_drawable() {
-
-        return image_shop_drawable;
+    public String getShopOff() {
+        return shopOff;
     }
 
-    public void setImage_shop_drawable(int image_shop_drawable) {
-        this.image_shop_drawable = image_shop_drawable;
+    public void setShopOff(String shopOff) {
+        this.shopOff = shopOff;
+    }
 
+    public String getShopLimits() {
+        return shopLimits;
+    }
+
+    public void setShopLimits(String shopLimits) {
+        this.shopLimits = shopLimits;
+    }
+
+    public String getShopStatus() {
+        return shopStatus;
+    }
+
+    public void setShopStatus(String shopStatus) {
+        this.shopStatus = shopStatus;
+    }
+
+    public String getShopCategory() {
+        return shopCategory;
+    }
+
+    public void setShopCategory(String shopCategory) {
+        this.shopCategory = shopCategory;
+    }
+
+    public String getShopRating() {
+        return shopRating;
+    }
+
+    public void setShopRating(String shopRating) {
+        this.shopRating = shopRating;
+    }
+
+    public String getShopType() {
+        return shopType;
+    }
+
+    public void setShopType(String shopType) {
+        this.shopType = shopType;
     }
 }

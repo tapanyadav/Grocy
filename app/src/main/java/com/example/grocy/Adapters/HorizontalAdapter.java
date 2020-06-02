@@ -1,65 +1,58 @@
 package com.example.grocy.Adapters;
 
-import android.content.Context;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
 import com.example.grocy.Models.HorizontalModel;
 import com.example.grocy.R;
-import java.util.ArrayList;
+import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
+import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+import com.squareup.picasso.Picasso;
+
 
 //HorizontalModel
 
-public class HorizontalAdapter extends RecyclerView.Adapter<HorizontalAdapter.MyViewHolder>{
+public class HorizontalAdapter extends FirestoreRecyclerAdapter<HorizontalModel, HorizontalAdapter.MyViewHolder> {
 
-    private LayoutInflater inflater;
-    private ArrayList<HorizontalModel> imageModelArrayList;
 
-    public HorizontalAdapter(Context ctx, ArrayList<HorizontalModel> imageModelArrayList){
-
-        inflater = LayoutInflater.from(ctx);
-        this.imageModelArrayList = imageModelArrayList;
-
+    public HorizontalAdapter(@NonNull FirestoreRecyclerOptions<HorizontalModel> options) {
+        super(options);
     }
 
     @Override
-    public HorizontalAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    protected void onBindViewHolder(@NonNull MyViewHolder holder, int position, @NonNull HorizontalModel model) {
 
-        View view = inflater.inflate(R.layout.item_horizontal_recycler, parent, false);
-        MyViewHolder holder = new MyViewHolder(view);
-        return holder;
+        Picasso.get().load(model.getShopHorizontalBackgroundImage()).into(holder.imageViewBackground);
+        Picasso.get().load(model.getShopHorizontalImage()).into(holder.imageViewHorizontalShopImage);
+        holder.textViewHorizontalShopName.setText(model.getShopHorizontalName());
+
     }
 
+    @NonNull
     @Override
-    public void onBindViewHolder(HorizontalAdapter.MyViewHolder holder, int position) {
-
-        holder.textViewStoreNameHorizontal.setText(imageModelArrayList.get(position).getText_horizontal_shopName());
-        holder.imageView_horizontal.setImageResource(imageModelArrayList.get(position).getImageHorizontalDrawable());
-        holder.imageView_background.setImageResource(imageModelArrayList.get(position).getImageBackgroundHorizontalDrawable());
-
+    public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_horizontal_recycler, parent, false);
+        return new MyViewHolder(view);
     }
 
-    @Override
-    public int getItemCount() {
+    static class MyViewHolder extends RecyclerView.ViewHolder {
 
-        return imageModelArrayList.size();
-    }
+        ImageView imageViewBackground, imageViewHorizontalShopImage;
+        TextView textViewHorizontalShopName;
 
-    class MyViewHolder extends RecyclerView.ViewHolder{
-
-        TextView textViewStoreNameHorizontal;
-        ImageView imageView_horizontal,imageView_background;
-
-        public MyViewHolder(View itemView) {
+        MyViewHolder(@NonNull View itemView) {
             super(itemView);
 
-            textViewStoreNameHorizontal=itemView.findViewById(R.id.name_store_horizontal);
-            imageView_background=itemView.findViewById(R.id.card_background_horizontal);
-            imageView_horizontal=itemView.findViewById(R.id.iv_horizontal_recycler);
+            imageViewBackground = itemView.findViewById(R.id.card_background_horizontal);
+            imageViewHorizontalShopImage = itemView.findViewById(R.id.iv_horizontal_recycler);
+            textViewHorizontalShopName = itemView.findViewById(R.id.name_store_horizontal);
         }
-
     }
 }

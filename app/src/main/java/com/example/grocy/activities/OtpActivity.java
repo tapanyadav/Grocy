@@ -43,14 +43,13 @@ public class OtpActivity extends AppCompatActivity {
     private FirebaseUser mCurrentUser;
     HashMap hm;
 
-    private boolean mVerificationInProgress = false;
     private String mVerificationId;
-    private PhoneAuthProvider.ForceResendingToken mResendToken;
-    private PhoneAuthProvider.OnVerificationStateChangedCallbacks mCallbacks;
     ProgressDialog progressDialog;
 
     TextView tvResend;
     private TextWatcher forgotTextWatcher = new TextWatcher() {
+
+        //TODO on remove of element also focus changes
 
         @Override
         public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -105,8 +104,43 @@ public class OtpActivity extends AppCompatActivity {
          hm=(HashMap)getIntent().getSerializableExtra("hm");
 
 
-
-        mCallbacks = new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
+        // This callback will be invoked in two situations:
+        // 1 - Instant verification. In some cases the phone number can be instantly
+        //     verified without needing to send or enter a verification code.
+        // 2 - Auto-retrieval. On some devices Google Play services can automatically
+        //     detect the incoming verification SMS and perform verification without
+        //     user action.
+        // [START_EXCLUDE silent]
+        // [END_EXCLUDE]
+        //123456
+        // [START_EXCLUDE silent]
+        // Update the UI and attempt sign in with the phone credential
+        //updateUI(STATE_VERIFY_SUCCESS, credential);
+        // [END_EXCLUDE]
+        // This callback is invoked in an invalid request for verification is made,
+        // for instance if the the phone number format is not valid.
+        // [START_EXCLUDE silent]
+        // [END_EXCLUDE]
+        // Invalid request
+        // [START_EXCLUDE]
+        //mPhoneNumberField.setError("Invalid phone number.");
+        // [END_EXCLUDE]
+        // The SMS quota for the project has been exceeded
+        // [START_EXCLUDE]
+        // [END_EXCLUDE]
+        // Show a message and update the UI
+        // [START_EXCLUDE]
+        //updateUI(STATE_VERIFY_FAILED);
+        // [END_EXCLUDE]
+        // The SMS verification code has been sent to the provided phone number, we
+        // now need to ask the user to enter the code and then construct a credential
+        // by combining the code with a verification ID.
+        // Save verification ID and resending token so we can use them later
+        // [START_EXCLUDE]
+        // Update UI
+        //updateUI(STATE_CODE_SENT);
+        // [END_EXCLUDE]
+        PhoneAuthProvider.OnVerificationStateChangedCallbacks mCallbacks = new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
             @Override
             public void onVerificationCompleted(@NonNull PhoneAuthCredential credential) {
                 // This callback will be invoked in two situations:
@@ -117,7 +151,6 @@ public class OtpActivity extends AppCompatActivity {
                 //     user action.
                 Log.d(TAG, "onVerificationCompleted:" + credential);
                 // [START_EXCLUDE silent]
-                mVerificationInProgress = false;
                 // [END_EXCLUDE]
 //123456
                 // [START_EXCLUDE silent]
@@ -148,14 +181,13 @@ public class OtpActivity extends AppCompatActivity {
                 // for instance if the the phone number format is not valid.
                 Log.w(TAG, "onVerificationFailed", e);
                 // [START_EXCLUDE silent]
-                mVerificationInProgress = false;
                 // [END_EXCLUDE]
 
                 if (e instanceof FirebaseAuthInvalidCredentialsException) {
                     // Invalid request
                     // [START_EXCLUDE]
                     //mPhoneNumberField.setError("Invalid phone number.");
-                    Toast.makeText(OtpActivity.this,"Invalid phone number.",Toast.LENGTH_LONG).show();
+                    Toast.makeText(OtpActivity.this, "Invalid phone number.", Toast.LENGTH_LONG).show();
                     // [END_EXCLUDE]
                 } else if (e instanceof FirebaseTooManyRequestsException) {
                     // The SMS quota for the project has been exceeded
@@ -181,7 +213,6 @@ public class OtpActivity extends AppCompatActivity {
 
                 // Save verification ID and resending token so we can use them later
                 mVerificationId = verificationId;
-                mResendToken = token;
                 et1.addTextChangedListener(forgotTextWatcher);
                 et2.addTextChangedListener(forgotTextWatcher);
                 et3.addTextChangedListener(forgotTextWatcher);
@@ -263,6 +294,7 @@ public class OtpActivity extends AppCompatActivity {
     public void onBackPressed() {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
+        assert user != null;
         user.delete()
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override

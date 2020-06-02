@@ -165,6 +165,7 @@
             android:layout_width="match_parent"
             android:layout_height="70dp"
             android:text="Sign Up"
+            android:enabled="false"
             android:textAllCaps="false"
             android:textStyle="bold"
             app:cornerRadius="12dp"

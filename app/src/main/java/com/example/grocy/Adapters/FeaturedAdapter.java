@@ -1,60 +1,50 @@
 package com.example.grocy.Adapters;
 
-import android.content.Context;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.grocy.Models.FeaturedModel;
 import com.example.grocy.R;
+import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
+import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+import com.squareup.picasso.Picasso;
 
-import java.util.ArrayList;
 
-public class FeaturedAdapter extends RecyclerView.Adapter<FeaturedAdapter.MyViewHolder>{
+public class FeaturedAdapter extends FirestoreRecyclerAdapter<FeaturedModel, FeaturedAdapter.MyViewHolder> {
 
 
-    private LayoutInflater inflater;
-    private ArrayList<FeaturedModel> imageModelFeaturedArrayList;
-
-    public FeaturedAdapter(Context ctx, ArrayList<FeaturedModel> imageModelArrayList){
-
-        inflater = LayoutInflater.from(ctx);
-        this.imageModelFeaturedArrayList = imageModelArrayList;
+    public FeaturedAdapter(@NonNull FirestoreRecyclerOptions<FeaturedModel> options) {
+        super(options);
     }
 
     @Override
-    public FeaturedAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    protected void onBindViewHolder(@NonNull MyViewHolder holder, int position, @NonNull FeaturedModel model) {
 
-        View view = inflater.inflate(R.layout.recycler_item_featured, parent, false);
-        MyViewHolder holder = new MyViewHolder(view);
-
-        return holder;
+        Picasso.get().load(model.getFeaturedImage()).into(holder.imageViewFeatured);
     }
 
+    @NonNull
     @Override
-    public void onBindViewHolder(FeaturedAdapter.MyViewHolder holder, int position) {
+    public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 
-        holder.iv.setImageResource(imageModelFeaturedArrayList.get(position).getImage_featured_drawable());
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recycler_item_featured, parent, false);
+        return new MyViewHolder(view);
     }
 
-    @Override
-    public int getItemCount() {
+    static class MyViewHolder extends RecyclerView.ViewHolder {
 
-        return imageModelFeaturedArrayList.size();
-    }
+        ImageView imageViewFeatured;
 
-    class MyViewHolder extends RecyclerView.ViewHolder{
-
-        ImageView iv;
-
-        public MyViewHolder(View itemView) {
+        MyViewHolder(@NonNull View itemView) {
             super(itemView);
-            iv = itemView.findViewById(R.id.iv_featured_recycler);
+
+            imageViewFeatured = itemView.findViewById(R.id.iv_featured_recycler);
         }
-
     }
-
 }

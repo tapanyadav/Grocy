@@ -1,71 +1,66 @@
 package com.example.grocy.Adapters;
 
-import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.grocy.R;
 import com.example.grocy.Models.ShopsModel;
-
-import java.util.ArrayList;
+import com.example.grocy.R;
+import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
+import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+import com.squareup.picasso.Picasso;
 
 //ShopsAdapter  ShopsModel
-public class ShopsAdapter extends RecyclerView.Adapter<ShopsAdapter.MyViewHolder>{
+public class ShopsAdapter extends FirestoreRecyclerAdapter<ShopsModel, ShopsAdapter.MyViewHolder> {
 
-    private LayoutInflater inflater;
-    private ArrayList<ShopsModel> imageModelArrayList;
 
-    public ShopsAdapter(Context ctx, ArrayList<ShopsModel> imageModelArrayList){
-
-        inflater = LayoutInflater.from(ctx);
-        this.imageModelArrayList = imageModelArrayList;
+    public ShopsAdapter(@NonNull FirestoreRecyclerOptions<ShopsModel> options) {
+        super(options);
     }
 
     @Override
-    public ShopsAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    protected void onBindViewHolder(@NonNull MyViewHolder holder, int position, @NonNull ShopsModel model) {
 
-        View view = inflater.inflate(R.layout.recycler_shop, parent, false);
-        MyViewHolder holder = new MyViewHolder(view);
-
-        return holder;
+        Picasso.get().load(model.getShopImage()).into(holder.imageViewShopImage);
+        Picasso.get().load(model.getShopStatusBackground()).into(holder.imageViewShopStatusBackground);
+        holder.textViewShopCat.setText(model.getShopCategory());
+        holder.textViewShopType.setText(model.getShopType());
+        holder.textViewShopOff.setText(model.getShopOff());
+        holder.textViewShopLimits.setText(model.getShopLimits());
+        holder.textViewShopStatus.setText(model.getShopStatus());
+        holder.textViewShopRating.setText(model.getShopRating());
+        holder.textViewShopAddress.setText(model.getShopAddress());
+        holder.textViewShopName.setText(model.getShopName());
     }
 
+    @NonNull
     @Override
-    public void onBindViewHolder(ShopsAdapter.MyViewHolder holder, int position) {
-
-        holder.iv.setImageResource(imageModelArrayList.get(position).getImage_shop_drawable());
-        holder.name.setText(imageModelArrayList.get(position).getText_shop_name());
-        holder.type.setText(imageModelArrayList.get(position).getText_shop_type());
-        holder.limit.setText(imageModelArrayList.get(position).getText_shop_limit());
-        holder.off.setText(imageModelArrayList.get(position).getText_shop_off());
-        holder.rating.setText(imageModelArrayList.get(position).getText_shop_rating());
+    public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recycler_shop, parent, false);
+        return new MyViewHolder(view);
     }
 
-    @Override
-    public int getItemCount() {
+    static class MyViewHolder extends RecyclerView.ViewHolder {
+        ImageView imageViewShopImage, imageViewShopStatusBackground;
+        TextView textViewShopName, textViewShopStatus, textViewShopRating, textViewShopAddress, textViewShopOff, textViewShopLimits, textViewShopType, textViewShopCat;
 
-        return imageModelArrayList.size();
-    }
-
-    class MyViewHolder extends RecyclerView.ViewHolder{
-
-        ImageView iv;
-        TextView name,type,limit,off,rating;
-
-        public MyViewHolder(View itemView) {
+        MyViewHolder(@NonNull View itemView) {
             super(itemView);
-            iv = itemView.findViewById(R.id.iv_shop_recycler);
-            name=itemView.findViewById(R.id.tv_name_shop);
-            type=itemView.findViewById(R.id.tv_type_shop);
-            limit=itemView.findViewById(R.id.tv_limit_shop);
-            off=itemView.findViewById(R.id.tv_off_shop);
-            rating=itemView.findViewById(R.id.tv_rating_shop);
+            imageViewShopImage = itemView.findViewById(R.id.imageShopMain);
+            imageViewShopStatusBackground = itemView.findViewById(R.id.backgroundStatusImage);
+            textViewShopName = itemView.findViewById(R.id.shop_name_main);
+            textViewShopStatus = itemView.findViewById(R.id.shop_status);
+            textViewShopAddress = itemView.findViewById(R.id.shop_address_main);
+            textViewShopRating = itemView.findViewById(R.id.shop_rating);
+            textViewShopLimits = itemView.findViewById(R.id.tv_limit_shop);
+            textViewShopOff = itemView.findViewById(R.id.shop_off);
+            textViewShopType = itemView.findViewById(R.id.tv_type_shop);
+            textViewShopCat = itemView.findViewById(R.id.shop_category);
         }
-
     }
 }

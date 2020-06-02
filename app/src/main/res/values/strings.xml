@@ -13,4 +13,6 @@
     //map api key
     <string name="google_maps_api_key">AIzaSyD3RtCpsidRz7EMJiR2EkWrYzoXFuwaUkI</string>
 
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
