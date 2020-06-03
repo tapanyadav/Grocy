@@ -4,7 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/card_view"
     android:layout_width="190dp"
-    android:layout_height="110dp"
+    android:layout_height="105dp"
     android:layout_marginStart="6dp"
     app:cardCornerRadius="6dp"
     app:cardPreventCornerOverlap="true">

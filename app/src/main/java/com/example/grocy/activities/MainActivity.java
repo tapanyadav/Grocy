@@ -148,7 +148,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             shimmerFrameLayout.setVisibility(View.GONE);
             linearLayout.setVisibility(View.VISIBLE);
             appBarLayout.setVisibility(View.VISIBLE);
-        }, 3000);
+        }, 4000);
 
 
         Query queryCategories = firebaseFirestore.collection("Categories").orderBy("catArrange");
