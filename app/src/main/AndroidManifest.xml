@@ -16,7 +16,10 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:targetApi="m">
-        <activity android:name=".activities.UserEnterLocationActivity"></activity>
+        <activity
+            android:name=".activities.CategoriesDetailsActivity"
+            android:hardwareAccelerated="true" />
+        <activity android:name=".activities.UserEnterLocationActivity" />
         <activity android:name=".activities.StartLocationActivity" />
         <activity android:name=".activities.MapActivity" />
         <activity android:name=".activities.FeaturedAllActivity" />

@@ -9,11 +9,12 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.grocy.Models.ShopsModel;
 import com.example.grocy.R;
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
-import com.squareup.picasso.Picasso;
 
 //ShopsAdapter  ShopsModel
 public class ShopsAdapter extends FirestoreRecyclerAdapter<ShopsModel, ShopsAdapter.MyViewHolder> {
@@ -26,8 +27,20 @@ public class ShopsAdapter extends FirestoreRecyclerAdapter<ShopsModel, ShopsAdap
     @Override
     protected void onBindViewHolder(@NonNull MyViewHolder holder, int position, @NonNull ShopsModel model) {
 
-        Picasso.get().load(model.getShopImage()).into(holder.imageViewShopImage);
-        Picasso.get().load(model.getShopStatusBackground()).into(holder.imageViewShopStatusBackground);
+//        Picasso.get().load(model.getShopImage()).into(holder.imageViewShopImage);
+//        Picasso.get().load(model.getShopStatusBackground()).into(holder.imageViewShopStatusBackground);
+
+        Glide.with(holder.imageViewShopImage.getContext())
+                .load(model.getShopImage())
+                .placeholder(R.drawable.ic_launcher_background)
+                .skipMemoryCache(true)
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                .into(holder.imageViewShopImage);
+
+        Glide.with(holder.imageViewShopStatusBackground.getContext())
+                .load(model.getShopStatusBackground())
+                .into(holder.imageViewShopStatusBackground);
+
         holder.textViewShopCat.setText(model.getShopCategory());
         holder.textViewShopType.setText(model.getShopType());
         holder.textViewShopOff.setText(model.getShopOff());

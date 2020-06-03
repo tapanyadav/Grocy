@@ -9,11 +9,11 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.grocy.Models.FeaturedAllModel;
 import com.example.grocy.R;
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
-import com.squareup.picasso.Picasso;
 
 public class FeaturedAllAdapter extends FirestoreRecyclerAdapter<FeaturedAllModel, FeaturedAllAdapter.FeaturedViewHolder> {
 
@@ -32,7 +32,11 @@ public class FeaturedAllAdapter extends FirestoreRecyclerAdapter<FeaturedAllMode
         holder.shopAddressAll.setText(model.getShopAddressAll());
         holder.shopCategory.setText(model.getShopCategory());
         holder.shopOff.setText(model.getShopOff());
-        Picasso.get().load(model.getShopImage()).into(holder.shopImage);
+        //Picasso.get().load(model.getShopImage()).into(holder.shopImage);
+
+        Glide.with(holder.shopImage.getContext())
+                .load(model.getShopImage())
+                .into(holder.shopImage);
     }
 
     @NonNull
