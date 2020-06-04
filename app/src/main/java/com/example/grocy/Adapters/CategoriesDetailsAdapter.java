@@ -1,5 +1,6 @@
 package com.example.grocy.Adapters;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,25 +14,20 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.grocy.Models.CategoriesDetailsModel;
 import com.example.grocy.R;
-import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
-import com.firebase.ui.firestore.FirestoreRecyclerOptions;
-import com.squareup.picasso.Picasso;
+import com.firebase.ui.firestore.paging.FirestorePagingAdapter;
+import com.firebase.ui.firestore.paging.FirestorePagingOptions;
+import com.firebase.ui.firestore.paging.LoadingState;
 
-public class CategoriesDetailsAdapter extends FirestoreRecyclerAdapter<CategoriesDetailsModel, CategoriesDetailsAdapter.MyViewHolder> {
-    /**
-     * Create a new RecyclerView adapter that listens to a Firestore Query.  See {@link
-     * FirestoreRecyclerOptions} for configuration options.
-     *
-     * @param options
-     */
-    public CategoriesDetailsAdapter(@NonNull FirestoreRecyclerOptions<CategoriesDetailsModel> options) {
+public class CategoriesDetailsAdapter extends FirestorePagingAdapter<CategoriesDetailsModel, CategoriesDetailsAdapter.MyViewHolder> {
+
+    public CategoriesDetailsAdapter(@NonNull FirestorePagingOptions<CategoriesDetailsModel> options) {
         super(options);
     }
 
     @Override
     protected void onBindViewHolder(@NonNull MyViewHolder holder, int position, @NonNull CategoriesDetailsModel model) {
         // Picasso.get().load(model.getShopImage()).into(holder.imageViewCatShopImage);
-        Picasso.get().load(model.getShopStatusBackground()).into(holder.imageViewCatShopStatusBackground);
+        //Picasso.get().load(model.getShopStatusBackground()).into(holder.imageViewCatShopStatusBackground);
 
         Glide.with(holder.imageViewCatShopImage.getContext())
                 .load(model.getShopImage())
@@ -55,11 +51,43 @@ public class CategoriesDetailsAdapter extends FirestoreRecyclerAdapter<Categorie
         holder.textViewCatShopName.setText(model.getShopName());
     }
 
+    @Override
+    public int getItemCount() {
+        return super.getItemCount();
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        return super.getItemViewType(position);
+    }
+
     @NonNull
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recycler_cat_all, parent, false);
         return new MyViewHolder(view);
+    }
+
+    @Override
+    protected void onLoadingStateChanged(@NonNull LoadingState state) {
+        super.onLoadingStateChanged(state);
+        switch (state) {
+            case LOADING_INITIAL:
+                Log.d("PAGING_LOG", "Loading initial data");
+                break;
+            case LOADING_MORE:
+                Log.d("PAGING_LOG", "Loading next data");
+                break;
+            case FINISHED:
+                Log.d("PAGING_LOG", "All data loaded");
+                break;
+            case ERROR:
+                Log.d("PAGING_LOG", "Error Loading data");
+                break;
+            case LOADED:
+                Log.d("PAGING_LOG", "Total items load: " + getItemCount());
+                break;
+        }
     }
 
     static class MyViewHolder extends RecyclerView.ViewHolder {

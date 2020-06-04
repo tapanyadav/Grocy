@@ -14,7 +14,8 @@
             android:id="@+id/app_bar_layout"
             android:layout_width="match_parent"
             android:background="@null"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            app:elevation="0dp">
 
             <androidx.appcompat.widget.Toolbar
                 android:id="@+id/main_toolbar"

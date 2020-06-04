@@ -1,19 +1,19 @@
 package com.example.grocy.activities;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.paging.PagedList;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.grocy.Adapters.CategoriesDetailsAdapter;
 import com.example.grocy.Models.CategoriesDetailsModel;
 import com.example.grocy.R;
-import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+import com.firebase.ui.firestore.paging.FirestorePagingOptions;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
@@ -32,7 +32,6 @@ public class CategoriesDetailsActivity extends AppCompatActivity implements Even
     CategoriesDetailsAdapter categoriesDetailsAdapter;
     private ImageView imageViewCatShopImage, imageViewCatShopStatusBackground;
     private TextView textViewCatShopName, textViewCatShopStatus, textViewCatShopRating, textViewCatShopAddress, textViewCatShopOff, textViewCatShopLimits, textViewCatShopType, textViewCatShopCat;
-    private Context context;
 
 
     @Override
@@ -58,18 +57,21 @@ public class CategoriesDetailsActivity extends AppCompatActivity implements Even
 
         documentReference = firebaseFirestore.collection("Categories").document(recResId);
 
-        Query query = documentReference.collection("subCategory").orderBy("shopArrange", Query.Direction.ASCENDING).limit(4);
+        PagedList.Config config = new PagedList.Config.Builder()
+                .setInitialLoadSizeHint(4)
+                .setPageSize(3)
+                .build();
 
-        FirestoreRecyclerOptions<CategoriesDetailsModel> categoriesDetailsModelFirestoreRecyclerOptions = new FirestoreRecyclerOptions
-                .Builder<CategoriesDetailsModel>().setQuery(query, CategoriesDetailsModel.class).build();
+        Query query = documentReference.collection("subCategory").orderBy("shopArrange", Query.Direction.ASCENDING);
+
+        FirestorePagingOptions<CategoriesDetailsModel> categoriesDetailsModelFirestoreRecyclerOptions = new FirestorePagingOptions
+                .Builder<CategoriesDetailsModel>().setQuery(query, config, CategoriesDetailsModel.class).build();
 
         categoriesDetailsAdapter = new CategoriesDetailsAdapter(categoriesDetailsModelFirestoreRecyclerOptions);
         categoriesDetailsAdapter.notifyDataSetChanged();
-        categoriesDetailsAdapter.setHasStableIds(true);
         recyclerViewCatDetails.setHasFixedSize(true);
         recyclerViewCatDetails.setLayoutManager(new LinearLayoutManager(this));
         recyclerViewCatDetails.setAdapter(categoriesDetailsAdapter);
-        recyclerViewCatDetails.setItemViewCacheSize(20);
     }
 
     @Override
