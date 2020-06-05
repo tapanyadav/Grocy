@@ -16,10 +16,14 @@ import android.provider.Settings;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.SeekBar;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -29,6 +33,7 @@ import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -89,15 +94,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     //navigation drawer
     DrawerLayout drawerLayout;
     NavigationView navigationView;
-    BottomSheetDialog bottomSheetDialog,bottomSheetDialogFilter;
-    TextView toolbarTitle,textViewFeaturedAll;
+    BottomSheetDialog bottomSheetDialog, bottomSheetDialogFilter;
+    TextView toolbarTitle, textViewFeaturedAll;
     EditText editTextSearch;
     ImageButton imageButtonFilter;
     ShimmerFrameLayout shimmerFrameLayout;
 
     EditText editTextLocation;
     PlacesClient placesClient;
-    String apiKey="AIzaSyD3RtCpsidRz7EMJiR2EkWrYzoXFuwaUkI";
+    String apiKey = "AIzaSyD3RtCpsidRz7EMJiR2EkWrYzoXFuwaUkI";
 
     String finalAddress;
     FusedLocationProviderClient fusedLocationProviderClient;
@@ -136,9 +141,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         RecyclerView recyclerViewFea = findViewById(R.id.recycler_featured);
         RecyclerView recyclerViewShop = findViewById(R.id.recycler_shops);
         RecyclerView recyclerViewHorizontal = findViewById(R.id.recycler_horizontalShops);
-        editTextSearch=findViewById(R.id.etSearch);
-        imageButtonFilter=findViewById(R.id.image_button_filter);
-        textViewFeaturedAll=findViewById(R.id.tv_content_featured_all);
+        editTextSearch = findViewById(R.id.etSearch);
+        imageButtonFilter = findViewById(R.id.image_button_filter);
+        textViewFeaturedAll = findViewById(R.id.tv_content_featured_all);
 
         setUserCustomLocation = getIntent().getStringExtra("userEnterLocation");
         setUserLiveLocation = getIntent().getStringExtra("userLiveLocation");
@@ -168,7 +173,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         adapterFeatured = new FeaturedAdapter(featuredModelFirestoreRecyclerOptions);
         recyclerViewFea.setHasFixedSize(true);
         recyclerViewFea.setAdapter(adapterFeatured);
-        recyclerViewFea.setLayoutManager(new LinearLayoutManager(getApplicationContext(),LinearLayoutManager.HORIZONTAL,false));
+        recyclerViewFea.setLayoutManager(new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.HORIZONTAL, false));
 
         Query queryShops = firebaseFirestore.collection("ShopsMain").orderBy("shopArrange");
         FirestoreRecyclerOptions<ShopsModel> shopsModelFirestoreRecyclerOptions = new FirestoreRecyclerOptions.Builder<ShopsModel>()
@@ -194,7 +199,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         horizontalAdapter = new HorizontalAdapter(horizontalModelFirestoreRecyclerOptions);
 
         recyclerViewHorizontal.setHasFixedSize(true);
-        recyclerViewHorizontal.setLayoutManager(new LinearLayoutManager(getApplicationContext(),LinearLayoutManager.HORIZONTAL,false));
+        recyclerViewHorizontal.setLayoutManager(new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.HORIZONTAL, false));
         recyclerViewHorizontal.setAdapter(horizontalAdapter);
 
         ActionBarDrawerToggle toggle = new
@@ -259,11 +264,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         });
 
         textViewFeaturedAll.setOnClickListener(tvFeaturedView -> {
-            Intent intent=new Intent(MainActivity.this, FeaturedAllActivity.class);
+            Intent intent = new Intent(MainActivity.this, FeaturedAllActivity.class);
             startActivity(intent);
         });
 
-        imageButtonFilter.setOnClickListener( filterView -> {
+        imageButtonFilter.setOnClickListener(filterView -> {
 
             bottomSheetDialogFilter = new BottomSheetDialog(MainActivity.this);
             bottomSheetDialogFilter.setContentView(R.layout.content_filter_bottom_sheet);
@@ -274,8 +279,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             ImageView ivBottomClose = bottomSheetDialogFilter.findViewById(R.id.imageView_close);
             assert ivBottomClose != null;
             ivBottomClose.setOnClickListener(closeView -> bottomSheetDialogFilter.dismiss());
-            seekBar=bottomSheetDialogFilter.findViewById(R.id.seekBar);
-            spinner = (Spinner) bottomSheetDialogFilter.findViewById(R.id.planets_spinner);
+            SeekBar seekBar = bottomSheetDialogFilter.findViewById(R.id.seekBar);
+            Spinner spinner = (Spinner) bottomSheetDialogFilter.findViewById(R.id.planets_spinner);
             AtomicReference<String> selectedSeekBar = new AtomicReference<>("0");
             List<String> list = new ArrayList<String>();
             list.add("list 1");
@@ -286,11 +291,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     android.R.layout.simple_spinner_item, list);
             dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             spinner.setAdapter(dataAdapter);
-            submit=bottomSheetDialogFilter.findViewById(R.id.submit);
-            submit.setOnClickListener(printData->{
-                selectedSeekBar.set(""+seekBar.getProgress());
-                selectedSpinner.set((String)spinner.getSelectedItem());
-                Toast. makeText(MainActivity.this,"SeekBar value: "+selectedSeekBar.toString() +", Spinner value: "+selectedSpinner.toString(), Toast. LENGTH_LONG).show();
+            Button submit = bottomSheetDialogFilter.findViewById(R.id.submit);
+            submit.setOnClickListener(printData -> {
+                selectedSeekBar.set("" + seekBar.getProgress());
+                selectedSpinner.set((String) spinner.getSelectedItem());
+                Toast.makeText(MainActivity.this, "SeekBar value: " + selectedSeekBar.toString() + ", Spinner value: " + selectedSpinner.toString(), Toast.LENGTH_LONG).show();
 
                 bottomSheetDialogFilter.dismiss();
 
@@ -302,16 +307,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     }
 
-    public void startAutocomplete(){
+    public void startAutocomplete() {
 
         Intent intent = new Autocomplete.IntentBuilder(
                 AutocompleteActivityMode.OVERLAY,
-                Arrays.asList(Place.Field.ID,  Place.Field.NAME, Place.Field.LAT_LNG,Place.Field.ADDRESS))
+                Arrays.asList(Place.Field.ID, Place.Field.NAME, Place.Field.LAT_LNG, Place.Field.ADDRESS))
                 .setCountry("IN")
                 .build(this);
-        startActivityForResult(intent,AUTOCOMPLETE_REQUEST_CODE);
+        startActivityForResult(intent, AUTOCOMPLETE_REQUEST_CODE);
     }
-
 
 
     @Override
@@ -381,8 +385,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     private boolean checkLocationPermission() {
-        return ContextCompat.checkSelfPermission(this,Manifest.permission.ACCESS_FINE_LOCATION)
-                ==PackageManager.PERMISSION_GRANTED;
+        return ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+                == PackageManager.PERMISSION_GRANTED;
     }
 
     private boolean isServicesOk() {
@@ -390,12 +394,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         GoogleApiAvailability googleApiAvailability = GoogleApiAvailability.getInstance();
         int result = googleApiAvailability.isGooglePlayServicesAvailable(this);
 
-        if (result == ConnectionResult.SUCCESS){
+        if (result == ConnectionResult.SUCCESS) {
             return true;
-        }else if (googleApiAvailability.isUserResolvableError(result)){
-            Dialog dialog = googleApiAvailability.getErrorDialog(this,result, PLAY_SERVICES_ERROR_CODE);
+        } else if (googleApiAvailability.isUserResolvableError(result)) {
+            Dialog dialog = googleApiAvailability.getErrorDialog(this, result, PLAY_SERVICES_ERROR_CODE);
             dialog.show();
-        }else {
+        } else {
             Toast.makeText(this, "Play services are required to use some features ", Toast.LENGTH_SHORT).show();
 
         }
@@ -405,27 +409,27 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == REQUEST_CODE && grantResults[0]== PackageManager.PERMISSION_GRANTED){
+        if (requestCode == REQUEST_CODE && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
             boolean mLocationPermissionGranted = true;
             Toast.makeText(this, "Permission Granted", Toast.LENGTH_SHORT).show();
-        }else {
+        } else {
             Toast.makeText(this, "Permission not granted", Toast.LENGTH_SHORT).show();
         }
     }
 
-    private boolean isGpsEnabled(){
-        LocationManager locationManager= (LocationManager) getSystemService(LOCATION_SERVICE);
+    private boolean isGpsEnabled() {
+        LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
         assert locationManager != null;
         providerEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
 
-        if (providerEnabled){
+        if (providerEnabled) {
             return true;
-        }else {
-            AlertDialog alertDialog= new AlertDialog.Builder(this)
+        } else {
+            AlertDialog alertDialog = new AlertDialog.Builder(this)
                     .setTitle("GPS Permission")
                     .setMessage("GPS is required for this app")
-                    .setPositiveButton("Yes",(dialog, which) -> {
-                        Intent intent=new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                    .setPositiveButton("Yes", (dialog, which) -> {
+                        Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
                         startActivityForResult(intent, GPS_REQUEST_CODE);
                     })
                     .setNegativeButton("No Thanks", ((dialog, which) -> dialog.dismiss()))
@@ -440,6 +444,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         initGoogleMap();
         if (isGpsEnabled()) {
             Toast.makeText(MainActivity.this, "All set up!", Toast.LENGTH_SHORT).show();
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                // TODO: Consider calling
+                //    ActivityCompat#requestPermissions
+                // here to request the missing permissions, and then overriding
+                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                //                                          int[] grantResults)
+                // to handle the case where the user grants the permission. See the documentation
+                // for ActivityCompat#requestPermissions for more details.
+                return;
+            }
             fusedLocationProviderClient.getLastLocation().addOnCompleteListener(task -> {
                 if (task.isSuccessful()) {
                     Location location = task.getResult();
