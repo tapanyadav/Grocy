@@ -10,11 +10,11 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.grocy.Models.HorizontalModel;
 import com.example.grocy.R;
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
-import com.squareup.picasso.Picasso;
 
 
 //HorizontalModel
@@ -29,8 +29,16 @@ public class HorizontalAdapter extends FirestoreRecyclerAdapter<HorizontalModel,
     @Override
     protected void onBindViewHolder(@NonNull MyViewHolder holder, int position, @NonNull HorizontalModel model) {
 
-        Picasso.get().load(model.getShopHorizontalBackgroundImage()).into(holder.imageViewBackground);
-        Picasso.get().load(model.getShopHorizontalImage()).into(holder.imageViewHorizontalShopImage);
+//        Picasso.get().load(model.getShopHorizontalBackgroundImage()).into(holder.imageViewBackground);
+//        Picasso.get().load(model.getShopHorizontalImage()).into(holder.imageViewHorizontalShopImage);
+
+        Glide.with(holder.imageViewBackground.getContext())
+                .load(model.getShopHorizontalBackgroundImage())
+                .into(holder.imageViewBackground);
+
+        Glide.with(holder.imageViewHorizontalShopImage.getContext())
+                .load(model.getShopHorizontalImage())
+                .into(holder.imageViewHorizontalShopImage);
         holder.textViewHorizontalShopName.setText(model.getShopHorizontalName());
 
     }

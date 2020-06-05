@@ -71,6 +71,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         Toast.makeText(this, "map is showing on the screen.", Toast.LENGTH_SHORT).show();
 
         mGoogleMap = googleMap;
+        mGoogleMap.setMyLocationEnabled(true);
 
         currentLocation();
     }
@@ -109,7 +110,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
                             Toast.makeText(this, ""+(address.getAddressLine(0)+address.getLocality()), Toast.LENGTH_SHORT).show();
 
-                            finalAddress = address.getAddressLine(0) + address.getLocality();
+                            finalAddress = address.getPremises() + "," + address.getSubLocality() + "," + address.getSubAdminArea();
                             textViewLocation.setText(finalAddress);
                         }
 

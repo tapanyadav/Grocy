@@ -9,13 +9,16 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.grocy.Models.CategoriesModel;
 import com.example.grocy.R;
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
-import com.squareup.picasso.Picasso;
+import com.google.firebase.firestore.DocumentSnapshot;
 
 public class CategoriesAdapter extends FirestoreRecyclerAdapter<CategoriesModel, CategoriesAdapter.MyViewHolder> {
+
+    private OnListItemClick onListItemClick;
 
     public CategoriesAdapter(@NonNull FirestoreRecyclerOptions<CategoriesModel> options) {
         super(options);
@@ -23,8 +26,17 @@ public class CategoriesAdapter extends FirestoreRecyclerAdapter<CategoriesModel,
 
     @Override
     protected void onBindViewHolder(@NonNull MyViewHolder holder, int position, @NonNull CategoriesModel model) {
-        Picasso.get().load(model.getCatBackground()).into(holder.imageViewCategoriesBackground);
-        Picasso.get().load(model.getCatImage()).into(holder.imageViewCatImage);
+
+        Glide.with(holder.imageViewCategoriesBackground.getContext())
+                .load(model.getCatBackground())
+                .into(holder.imageViewCategoriesBackground);
+
+        Glide.with(holder.imageViewCatImage.getContext())
+                .load(model.getCatImage())
+                .into(holder.imageViewCatImage);
+
+//        Picasso.get().load(model.getCatBackground()).into(holder.imageViewCategoriesBackground);
+//        Picasso.get().load(model.getCatImage()).into(holder.imageViewCatImage);
         holder.textViewCatType.setText(model.getCatType());
     }
 
@@ -35,7 +47,15 @@ public class CategoriesAdapter extends FirestoreRecyclerAdapter<CategoriesModel,
         return new MyViewHolder(view);
     }
 
-    static class MyViewHolder extends RecyclerView.ViewHolder {
+    public void setOnListItemClick(OnListItemClick onListItemClick) {
+        this.onListItemClick = onListItemClick;
+    }
+
+    public interface OnListItemClick {
+        void onItemClick(DocumentSnapshot snapshot, int position);
+    }
+
+    class MyViewHolder extends RecyclerView.ViewHolder {
 
         ImageView imageViewCategoriesBackground, imageViewCatImage;
         TextView textViewCatType;
@@ -46,6 +66,13 @@ public class CategoriesAdapter extends FirestoreRecyclerAdapter<CategoriesModel,
             imageViewCategoriesBackground = itemView.findViewById(R.id.card_background_categories);
             imageViewCatImage = itemView.findViewById(R.id.iv_categories_recycler);
             textViewCatType = itemView.findViewById(R.id.name_cat);
+
+            itemView.setOnClickListener(v -> {
+                int position = getAdapterPosition();
+                if (position != RecyclerView.NO_POSITION && onListItemClick != null) {
+                    onListItemClick.onItemClick(getSnapshots().getSnapshot(position), position);
+                }
+            });
         }
     }
 }

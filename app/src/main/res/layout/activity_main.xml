@@ -14,7 +14,8 @@
             android:id="@+id/app_bar_layout"
             android:layout_width="match_parent"
             android:background="@null"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            app:elevation="0dp">
 
             <androidx.appcompat.widget.Toolbar
                 android:id="@+id/main_toolbar"
@@ -37,7 +38,7 @@
                         android:maxLines="1"
                         android:ellipsize="end"
                         android:layout_weight="1"
-                        android:textSize="18sp" />
+                        android:textSize="16sp" />
 
                     <ImageView
                         android:layout_width="wrap_content"

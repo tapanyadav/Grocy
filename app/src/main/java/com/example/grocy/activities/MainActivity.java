@@ -156,7 +156,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             shimmerFrameLayout.setVisibility(View.GONE);
             linearLayout.setVisibility(View.VISIBLE);
             appBarLayout.setVisibility(View.VISIBLE);
-        }, 6000);
+        }, 4000);
 
 
         Query queryCategories = firebaseFirestore.collection("Categories").orderBy("catArrange");
@@ -166,6 +166,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         recyclerViewCat.setHasFixedSize(true);
         recyclerViewCat.setAdapter(categoriesAdapter);
         recyclerViewCat.setLayoutManager(new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.HORIZONTAL, false));
+
+        categoriesAdapter.setOnListItemClick((snapshot, position) -> {
+            String resId = snapshot.getId();
+            Toast.makeText(MainActivity.this, "Position: " + position + " and Id is " + resId, Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(MainActivity.this, CategoriesDetailsActivity.class);
+            intent.putExtra("resId", resId);
+            startActivity(intent);
+        });
 
         Query queryFeatured = firebaseFirestore.collection("FeaturedItems").orderBy("featuredArrange");
         FirestoreRecyclerOptions<FeaturedModel> featuredModelFirestoreRecyclerOptions = new FirestoreRecyclerOptions.Builder<FeaturedModel>()
@@ -192,7 +200,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         recyclerViewShop.setItemViewCacheSize(20);
         recyclerViewShop.setLayoutManager(new LinearLayoutManager(this));
 
-        Query query = firebaseFirestore.collection("shopHorizontal").orderBy("shopHorizontalName");
+        Query query = firebaseFirestore.collection("shopHorizontal").orderBy("shopArrange");
         FirestoreRecyclerOptions<HorizontalModel> horizontalModelFirestoreRecyclerOptions = new FirestoreRecyclerOptions.Builder<HorizontalModel>()
                 .setQuery(query, HorizontalModel.class).build();
 
@@ -465,9 +473,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                             if (addressList != null) {
                                 Address address = addressList.get(0);
 
-                                finalAddress = address.getAddressLine(0) + address.getLocality();
+                                finalAddress = address.getPremises() + "," + address.getSubLocality() + "," + address.getSubAdminArea();
                                 toolbarTitle.setText(finalAddress);
-                                Toast.makeText(this, "f:" + finalAddress, Toast.LENGTH_SHORT).show();
+                                Toast.makeText(this, finalAddress, Toast.LENGTH_SHORT).show();
 
                             }
 

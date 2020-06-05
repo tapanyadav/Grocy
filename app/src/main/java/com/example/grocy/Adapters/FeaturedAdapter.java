@@ -9,11 +9,11 @@ import android.widget.ImageView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.grocy.Models.FeaturedModel;
 import com.example.grocy.R;
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
-import com.squareup.picasso.Picasso;
 
 
 public class FeaturedAdapter extends FirestoreRecyclerAdapter<FeaturedModel, FeaturedAdapter.MyViewHolder> {
@@ -26,7 +26,10 @@ public class FeaturedAdapter extends FirestoreRecyclerAdapter<FeaturedModel, Fea
     @Override
     protected void onBindViewHolder(@NonNull MyViewHolder holder, int position, @NonNull FeaturedModel model) {
 
-        Picasso.get().load(model.getFeaturedImage()).into(holder.imageViewFeatured);
+        //Picasso.get().load(model.getFeaturedImage()).into(holder.imageViewFeatured);
+        Glide.with(holder.imageViewFeatured.getContext())
+                .load(model.getFeaturedImage())
+                .into(holder.imageViewFeatured);
     }
 
     @NonNull

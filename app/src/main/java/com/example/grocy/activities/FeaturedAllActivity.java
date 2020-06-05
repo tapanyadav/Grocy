@@ -21,8 +21,6 @@ public class FeaturedAllActivity extends AppCompatActivity implements FeaturedAl
 
     ImageButton imageButtonBack,imageButtonFilter;
     BottomSheetDialog bottomSheetDialogFilter;
-    private FirebaseFirestore firebaseFirestore;
-    private RecyclerView recyclerViewAll;
     FeaturedAllAdapter adapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,8 +29,8 @@ public class FeaturedAllActivity extends AppCompatActivity implements FeaturedAl
 
         imageButtonBack=findViewById(R.id.ib_back);
         imageButtonFilter=findViewById(R.id.image_button_filter_all);
-        firebaseFirestore=FirebaseFirestore.getInstance();
-        recyclerViewAll=findViewById(R.id.recycler_featured_all);
+        FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
+        RecyclerView recyclerViewAll = findViewById(R.id.recycler_featured_all);
 
         imageButtonBack.setOnClickListener(v -> {
             Intent intent = new Intent(FeaturedAllActivity.this, MainActivity.class);
@@ -51,7 +49,7 @@ public class FeaturedAllActivity extends AppCompatActivity implements FeaturedAl
             ivBottomClose.setOnClickListener(v1 -> bottomSheetDialogFilter.dismiss());
         });
 
-        Query query=firebaseFirestore.collection("FeaturedShopsAll");
+        Query query = firebaseFirestore.collection("FeaturedShopsAll");
         FirestoreRecyclerOptions<FeaturedAllModel> options=new FirestoreRecyclerOptions.Builder<FeaturedAllModel>()
                 .setQuery(query,FeaturedAllModel.class).build();
 
