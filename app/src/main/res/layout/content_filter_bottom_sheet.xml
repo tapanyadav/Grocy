@@ -58,7 +58,7 @@
         style="@style/Widget.AppCompat.SeekBar.Discrete"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:max="5"
+        android:max="4"
         android:layout_marginTop="20dp"
         android:padding="10dp"
         android:progress="3" />
@@ -71,17 +71,71 @@
         android:layout_marginTop="10dp"
         />
 
-    <Spinner
-        android:id="@+id/planets_spinner"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content">
+
+        <CheckBox
+            android:id="@+id/groceryCheck"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:useMaterialThemeColors="false"
+            android:text="Grocery"
+            android:layout_marginLeft="20dp"/>
+
+        <CheckBox
+            android:id="@+id/stationaryCheck"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_marginStart="200dp"
+            android:text="Stationary"
+            app:useMaterialThemeColors="false" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <CheckBox
+            android:id="@+id/pharmacyCheck"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:useMaterialThemeColors="false"
+            android:text="Pharmacy"
+            android:layout_marginLeft="20dp"/>
+
+        <CheckBox
+            android:id="@+id/hardwareCheck"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_marginStart="200dp"
+            android:text="Hardware"
+            app:useMaterialThemeColors="false" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <CheckBox
+            android:id="@+id/fruitsAndVegCheck"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:useMaterialThemeColors="false"
+            android:text="Fruits and Veg"
+            android:layout_marginLeft="20dp"/>
+    </RelativeLayout>
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Submit"
         android:id="@+id/submit"
-        />
+        android:layout_marginStart="250dp"/>
 
 
 </LinearLayout>

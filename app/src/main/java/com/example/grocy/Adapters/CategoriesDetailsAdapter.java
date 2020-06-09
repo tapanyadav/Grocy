@@ -46,7 +46,7 @@ public class CategoriesDetailsAdapter extends FirestorePagingAdapter<CategoriesD
         holder.textViewCatShopOff.setText(model.getShopOff());
         holder.textViewCatShopLimits.setText(model.getShopLimits());
         holder.textViewCatShopStatus.setText(model.getShopStatus());
-        holder.textViewCatShopRating.setText(model.getShopRating());
+        holder.textViewCatShopRating.setText(""+model.getShopRating());
         holder.textViewCatShopAddress.setText(model.getShopAddress());
         holder.textViewCatShopName.setText(model.getShopName());
     }

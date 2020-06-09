@@ -11,8 +11,11 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.grocy.Adapters.CategoriesDetailsAdapter;
+import com.example.grocy.Adapters.ShopsAdapter;
 import com.example.grocy.Models.CategoriesDetailsModel;
+import com.example.grocy.Models.ShopsModel;
 import com.example.grocy.R;
+import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.firebase.ui.firestore.paging.FirestorePagingOptions;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -34,6 +37,9 @@ public class CategoriesDetailsActivity extends AppCompatActivity implements Even
     private TextView textViewCatShopName, textViewCatShopStatus, textViewCatShopRating, textViewCatShopAddress, textViewCatShopOff, textViewCatShopLimits, textViewCatShopType, textViewCatShopCat;
 
 
+    FirestoreRecyclerOptions<ShopsModel> shopsModelFirestoreRecyclerOptions;
+    private ShopsAdapter shopsAdapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,7 +60,8 @@ public class CategoriesDetailsActivity extends AppCompatActivity implements Even
         textViewCatShopCat = findViewById(R.id.shop_category_cat);
 
         String recResId = Objects.requireNonNull(Objects.requireNonNull(getIntent().getExtras()).get("resId")).toString();
-
+        String catType = Objects.requireNonNull(Objects.requireNonNull(getIntent().getExtras()).get("catType")).toString();
+        System.out.println(catType);
         documentReference = firebaseFirestore.collection("Categories").document(recResId);
 
         PagedList.Config config = new PagedList.Config.Builder()
@@ -62,28 +69,39 @@ public class CategoriesDetailsActivity extends AppCompatActivity implements Even
                 .setPageSize(3)
                 .build();
 
-        Query query = documentReference.collection("subCategory").orderBy("shopArrange", Query.Direction.ASCENDING);
-
+//        Query query = documentReference.collection("subCategory").orderBy("shopArrange", Query.Direction.ASCENDING);
+        Query queryShops=firebaseFirestore.collection("ShopsMain").whereEqualTo("shopCategory", catType).orderBy("shopArrange");
         FirestorePagingOptions<CategoriesDetailsModel> categoriesDetailsModelFirestoreRecyclerOptions = new FirestorePagingOptions
-                .Builder<CategoriesDetailsModel>().setQuery(query, config, CategoriesDetailsModel.class).build();
+                .Builder<CategoriesDetailsModel>().setQuery(queryShops, config, CategoriesDetailsModel.class).build();
 
         categoriesDetailsAdapter = new CategoriesDetailsAdapter(categoriesDetailsModelFirestoreRecyclerOptions);
         categoriesDetailsAdapter.notifyDataSetChanged();
         recyclerViewCatDetails.setHasFixedSize(true);
         recyclerViewCatDetails.setLayoutManager(new LinearLayoutManager(this));
         recyclerViewCatDetails.setAdapter(categoriesDetailsAdapter);
+
+//        shopsModelFirestoreRecyclerOptions = new FirestoreRecyclerOptions.Builder<ShopsModel>()
+//                .setQuery(queryShops, ShopsModel.class).build();
+//        shopsAdapter = new ShopsAdapter(shopsModelFirestoreRecyclerOptions);
+//        shopsAdapter.notifyDataSetChanged();
+//        shopsAdapter.setHasStableIds(true);
+
+
+
     }
 
     @Override
     protected void onStart() {
         super.onStart();
         categoriesDetailsAdapter.startListening();
+//        shopsAdapter.startListening();
     }
 
     @Override
     protected void onStop() {
         super.onStop();
         categoriesDetailsAdapter.stopListening();
+//        shopsAdapter.stopListening();
     }
 
     @Override
@@ -105,7 +123,7 @@ public class CategoriesDetailsActivity extends AppCompatActivity implements Even
         textViewCatShopOff.setText(categoriesDetailsModel.getShopOff());
         textViewCatShopLimits.setText(categoriesDetailsModel.getShopLimits());
         textViewCatShopStatus.setText(categoriesDetailsModel.getShopStatus());
-        textViewCatShopRating.setText(categoriesDetailsModel.getShopRating());
+        textViewCatShopRating.setText(""+categoriesDetailsModel.getShopRating());
         textViewCatShopAddress.setText(categoriesDetailsModel.getShopAddress());
         textViewCatShopName.setText(categoriesDetailsModel.getShopName());
 

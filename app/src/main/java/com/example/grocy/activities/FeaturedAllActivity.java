@@ -50,6 +50,7 @@ public class FeaturedAllActivity extends AppCompatActivity implements FeaturedAl
         });
 
         Query query = firebaseFirestore.collection("FeaturedShopsAll");
+//        Query queryShops=firebaseFirestore.collection("ShopsMain").whereEqualTo("featuredShop", true).orderBy("shopArrange");
         FirestoreRecyclerOptions<FeaturedAllModel> options=new FirestoreRecyclerOptions.Builder<FeaturedAllModel>()
                 .setQuery(query,FeaturedAllModel.class).build();
 

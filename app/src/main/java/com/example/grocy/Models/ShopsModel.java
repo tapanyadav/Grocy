@@ -2,13 +2,13 @@ package com.example.grocy.Models;
 
 public class ShopsModel {
     private String shopImage, shopStatusBackground;
-    private String shopName, shopAddress, shopOff, shopLimits, shopStatus, shopCategory, shopRating, shopType;
-
+    private String shopName, shopAddress, shopOff, shopLimits, shopStatus, shopCategory, shopType;
+    private double shopRating;
     ShopsModel() {
 
     }
 
-    ShopsModel(String shopImage, String shopStatusBackground, String shopName, String shopAddress, String shopOff, String shopLimits, String shopStatus, String shopCategory, String shopRating, String shopType) {
+    ShopsModel(String shopImage, String shopStatusBackground, String shopName, String shopAddress, String shopOff, String shopLimits, String shopStatus, String shopCategory, double shopRating, String shopType) {
         this.shopImage = shopImage;
         this.shopStatusBackground = shopStatusBackground;
         this.shopName = shopName;
@@ -85,11 +85,11 @@ public class ShopsModel {
         this.shopCategory = shopCategory;
     }
 
-    public String getShopRating() {
+    public double getShopRating() {
         return shopRating;
     }
 
-    public void setShopRating(String shopRating) {
+    public void setShopRating(double shopRating) {
         this.shopRating = shopRating;
     }
 

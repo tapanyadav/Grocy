@@ -46,7 +46,7 @@ public class ShopsAdapter extends FirestoreRecyclerAdapter<ShopsModel, ShopsAdap
         holder.textViewShopOff.setText(model.getShopOff());
         holder.textViewShopLimits.setText(model.getShopLimits());
         holder.textViewShopStatus.setText(model.getShopStatus());
-        holder.textViewShopRating.setText(model.getShopRating());
+        holder.textViewShopRating.setText(""+model.getShopRating());
         holder.textViewShopAddress.setText(model.getShopAddress());
         holder.textViewShopName.setText(model.getShopName());
     }

@@ -2,7 +2,7 @@ package com.example.grocy.Models;
 
 public class FeaturedAllModel {
     private String shopStatus,shopNameAll,shopAddressAll,shopCategory,shopOff;
-    private long shopRating;
+    private double shopRating;
     private String shopImage;
 
 
@@ -10,7 +10,7 @@ public class FeaturedAllModel {
     public FeaturedAllModel() {
     }
 
-    public FeaturedAllModel(String shopStatus, String shopNameAll, String shopAddressAll, String shopCategory, String shopOff, String shopImage, long shopRating) {
+    public FeaturedAllModel(String shopStatus, String shopNameAll, String shopAddressAll, String shopCategory, String shopOff, String shopImage, double shopRating) {
         this.shopStatus = shopStatus;
         this.shopNameAll = shopNameAll;
         this.shopAddressAll = shopAddressAll;
@@ -68,11 +68,11 @@ public class FeaturedAllModel {
         this.shopImage = shopImage;
     }
 
-    public long getShopRating() {
+    public double getShopRating() {
         return shopRating;
     }
 
-    public void setShopRating(long shopRating) {
+    public void setShopRating(double shopRating) {
         this.shopRating = shopRating;
     }
 

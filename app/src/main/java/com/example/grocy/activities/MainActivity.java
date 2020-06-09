@@ -18,6 +18,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -57,6 +58,7 @@ import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.libraries.places.api.Places;
 import com.google.android.libraries.places.api.model.Place;
 import com.google.android.libraries.places.api.net.PlacesClient;
@@ -69,8 +71,11 @@ import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -94,7 +99,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     //navigation drawer
     DrawerLayout drawerLayout;
     NavigationView navigationView;
-    BottomSheetDialog bottomSheetDialog, bottomSheetDialogFilter;
+    BottomSheetDialog bottomSheetDialog;
     TextView toolbarTitle, textViewFeaturedAll;
     EditText editTextSearch;
     ImageButton imageButtonFilter;
@@ -116,7 +121,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     String setUserCustomLocation;
     public static FragmentManager fragmentManager;
     String globalAddress;
-
+    Query queryShops;
+    FirestoreRecyclerOptions<ShopsModel> shopsModelFirestoreRecyclerOptions;
+    String flag="0";
+    Intent main_intent;
+    ArrayList<String> checkList=null;
+    double rating=1;
     @SuppressLint({"RestrictedApi", "ClickableViewAccessibility"})
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -147,7 +157,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         setUserCustomLocation = getIntent().getStringExtra("userEnterLocation");
         setUserLiveLocation = getIntent().getStringExtra("userLiveLocation");
-
+        checkList = (ArrayList<String>) getIntent().getSerializableExtra("checkList");
+        if(getIntent().getIntExtra("rating",1)>=1){
+            rating=Double.parseDouble(String.valueOf(getIntent().getIntExtra("rating",1)));
+        }
         linearLayout.setVisibility(View.GONE);
         appBarLayout.setVisibility(View.GONE);
 
@@ -172,6 +185,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             Toast.makeText(MainActivity.this, "Position: " + position + " and Id is " + resId, Toast.LENGTH_SHORT).show();
             Intent intent = new Intent(MainActivity.this, CategoriesDetailsActivity.class);
             intent.putExtra("resId", resId);
+            intent.putExtra("catType", (Serializable) snapshot.getData().get("catType"));
             startActivity(intent);
         });
 
@@ -182,23 +196,30 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         recyclerViewFea.setHasFixedSize(true);
         recyclerViewFea.setAdapter(adapterFeatured);
         recyclerViewFea.setLayoutManager(new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.HORIZONTAL, false));
-
-        Query queryShops = firebaseFirestore.collection("ShopsMain").orderBy("shopArrange");
-        FirestoreRecyclerOptions<ShopsModel> shopsModelFirestoreRecyclerOptions = new FirestoreRecyclerOptions.Builder<ShopsModel>()
-                .setQuery(queryShops, ShopsModel.class).build();
-        shopsAdapter = new ShopsAdapter(shopsModelFirestoreRecyclerOptions);
-        shopsAdapter.notifyDataSetChanged();
-        shopsAdapter.setHasStableIds(true);
+        if(checkList!=null && rating>1) {
+            queryShops = firebaseFirestore.collection("ShopsMain").whereIn("shopCategory",checkList).whereGreaterThanOrEqualTo("shopRating",rating).orderBy("shopRating", Query.Direction.DESCENDING);
+        }
+        else if(checkList==null && rating>1){
+            queryShops = firebaseFirestore.collection("ShopsMain").whereGreaterThanOrEqualTo("shopRating",rating).orderBy("shopRating", Query.Direction.DESCENDING);
+        }
+        else{
+            queryShops = firebaseFirestore.collection("ShopsMain").orderBy("shopArrange");
+        }
+            shopsModelFirestoreRecyclerOptions = new FirestoreRecyclerOptions.Builder<ShopsModel>()
+                    .setQuery(queryShops, ShopsModel.class).build();
+            shopsAdapter = new ShopsAdapter(shopsModelFirestoreRecyclerOptions);
+            shopsAdapter.notifyDataSetChanged();
+            shopsAdapter.setHasStableIds(true);
 
 //        DisplayMetrics displayMetrics=new DisplayMetrics();
 //        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
 //        int a=(displayMetrics.heightPixels*99)/100;
 //        recyclerViewShop.getLayoutParams().height=a;
 
-        recyclerViewShop.setHasFixedSize(false);
-        recyclerViewShop.setAdapter(shopsAdapter);
-        recyclerViewShop.setItemViewCacheSize(20);
-        recyclerViewShop.setLayoutManager(new LinearLayoutManager(this));
+            recyclerViewShop.setHasFixedSize(false);
+            recyclerViewShop.setAdapter(shopsAdapter);
+            recyclerViewShop.setItemViewCacheSize(20);
+            recyclerViewShop.setLayoutManager(new LinearLayoutManager(this));
 
         Query query = firebaseFirestore.collection("shopHorizontal").orderBy("shopArrange");
         FirestoreRecyclerOptions<HorizontalModel> horizontalModelFirestoreRecyclerOptions = new FirestoreRecyclerOptions.Builder<HorizontalModel>()
@@ -277,43 +298,79 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         });
 
         imageButtonFilter.setOnClickListener(filterView -> {
+            FilterActivity bottomSheetDialogFilter = new FilterActivity();
+//            bottomSheetDialogFilter.setContentView(R.layout.content_filter_bottom_sheet);
+            bottomSheetDialogFilter.show(getSupportFragmentManager(), "exampleBottomSheet");
+//            bottomSheetDialogFilter.setCanceledOnTouchOutside(true);
 
-            bottomSheetDialogFilter = new BottomSheetDialog(MainActivity.this);
-            bottomSheetDialogFilter.setContentView(R.layout.content_filter_bottom_sheet);
-            bottomSheetDialogFilter.show();
-            bottomSheetDialogFilter.setCanceledOnTouchOutside(true);
 
-
-            ImageView ivBottomClose = bottomSheetDialogFilter.findViewById(R.id.imageView_close);
-            assert ivBottomClose != null;
-            ivBottomClose.setOnClickListener(closeView -> bottomSheetDialogFilter.dismiss());
-            SeekBar seekBar = bottomSheetDialogFilter.findViewById(R.id.seekBar);
-            Spinner spinner = (Spinner) bottomSheetDialogFilter.findViewById(R.id.planets_spinner);
-            AtomicReference<String> selectedSeekBar = new AtomicReference<>("0");
-            List<String> list = new ArrayList<String>();
-            list.add("list 1");
-            list.add("list 2");
-            list.add("list 3");
-            AtomicReference<String> selectedSpinner = new AtomicReference<>("list 1");
-            ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this,
-                    android.R.layout.simple_spinner_item, list);
-            dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-            spinner.setAdapter(dataAdapter);
-            Button submit = bottomSheetDialogFilter.findViewById(R.id.submit);
-            submit.setOnClickListener(printData -> {
-                selectedSeekBar.set("" + seekBar.getProgress());
-                selectedSpinner.set((String) spinner.getSelectedItem());
-                Toast.makeText(MainActivity.this, "SeekBar value: " + selectedSeekBar.toString() + ", Spinner value: " + selectedSpinner.toString(), Toast.LENGTH_LONG).show();
-
-                bottomSheetDialogFilter.dismiss();
-
-            });
-
+//            ImageView ivBottomClose = bottomSheetDialogFilter.findViewById(R.id.imageView_close);
+//            assert ivBottomClose != null;
+//            ivBottomClose.setOnClickListener(closeView -> bottomSheetDialogFilter.dismiss());
+//            SeekBar seekBar = bottomSheetDialogFilter.findViewById(R.id.seekBar);
+//            AtomicReference<String> selectedSeekBar = new AtomicReference<>("0");
+//            Button submit = bottomSheetDialogFilter.findViewById(R.id.submit);
+//            CheckBox [] check = new CheckBox[5];
+//            check[0] = bottomSheetDialogFilter.findViewById(R.id.groceryCheck);
+//            check[1] = bottomSheetDialogFilter.findViewById(R.id.stationaryCheck);
+//            check[2] = bottomSheetDialogFilter.findViewById(R.id.pharmacyCheck);
+//            check[3] = bottomSheetDialogFilter.findViewById(R.id.hardwareCheck);
+//            check[4] = bottomSheetDialogFilter.findViewById(R.id.fruitsAndVegCheck);
+//            List<String> selectedCatagories= new ArrayList();
+//            submit.setOnClickListener(printData -> {
+//                flag=1;
+//                for(int i=0;i<5;i++){
+//                    System.out.println(check[i].isChecked());
+//                    if(check[i].isChecked()==true){
+//                        selectedCatagories.add(check[i].getText().toString());
+//                        System.out.println(check[i].getText().toString());
+//                    }
+//                }
+//                queryShops = firebaseFirestore.collection("ShopsMain").whereIn("shopCategory",selectedCatagories).orderBy("shopArrange");
+//                queryShops.get()
+//                        .addOnSuccessListener(documentSnapshots -> {// [START_EXCLUDE]
+//                            for (QueryDocumentSnapshot snap : documentSnapshots) {
+//                                System.out.println("-------------------------------------");
+//                                System.out.println(snap.getData().toString());
+//                                System.out.println("-------------------------------------");
+//                            }
+//                        });
+//                main_intent = new Intent(this, MainActivity.class);
+//                main_intent.putExtra("flag", 1);
+//                shopsModelFirestoreRecyclerOptions = new FirestoreRecyclerOptions.Builder<ShopsModel>()
+//                        .setQuery(queryShops, ShopsModel.class).build();
+//                shopsAdapter = new ShopsAdapter(shopsModelFirestoreRecyclerOptions);
+//                shopsAdapter.notifyDataSetChanged();
+//                shopsAdapter.setHasStableIds(true);
+//
+////        DisplayMetrics displayMetrics=new DisplayMetrics();
+////        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+////        int a=(displayMetrics.heightPixels*99)/100;
+////        recyclerViewShop.getLayoutParams().height=a;
+//
+//                recyclerViewShop.setHasFixedSize(false);
+//                recyclerViewShop.setAdapter(shopsAdapter);
+//                recyclerViewShop.setItemViewCacheSize(20);
+//                recyclerViewShop.setLayoutManager(new LinearLayoutManager(this));
+//
+//                selectedSeekBar.set("" + seekBar.getProgress());
+//                for(int i=0;i<selectedCatagories.size();i++){
+//                    Toast.makeText(MainActivity.this, selectedCatagories.get(i), Toast.LENGTH_LONG).show();
+//                }
+//                Toast.makeText(MainActivity.this, "SeekBar value: " + selectedSeekBar.toString(), Toast.LENGTH_LONG).show();
+//
+//                bottomSheetDialogFilter.dismiss();
+//
+//                startActivity(main_intent);
+//
+//            });
+//
 
         });
 
 
     }
+
 
     public void startAutocomplete() {
 
