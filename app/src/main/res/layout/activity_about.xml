@@ -1,0 +1,257 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="#FFFFFF"
+    android:baselineAligned="true"
+    android:orientation="vertical"
+    tools:context=".activities.AboutActivity">
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="About Us"
+        android:layout_gravity="center"
+        android:textStyle="bold"
+        android:textSize="50sp"/>
+    <View
+        android:id="@+id/view"
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:background="@color/places_text_black_alpha_26"
+        android:layout_weight="1" />
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20sp"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:text="We are the one for your all kind of daily needs like groceries, vegetables, medicines, stationary etc at your doorstep by your choosen shop within an hour." />
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:text="Basically, in our app all your nearby shops are shown and you can view and order the items from the shops and it will be deliver within an hour to your doorstep." />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#FFFFFF"
+        android:baselineAligned="true"
+        android:orientation="horizontal"
+        tools:context=".activities.About">
+
+        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            xmlns:tools="http://schemas.android.com/tools"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#FFFFFF"
+            android:baselineAligned="true"
+            android:layout_weight="1"
+            android:orientation="vertical"
+
+            tools:context=".activities.About">
+            <TextView
+                android:id="@+id/textView6"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20sp"
+                android:textSize="30dp"
+                android:textStyle="italic"
+                android:layout_gravity="center"
+                android:text="Mission" />
+
+            <TextView
+                android:id="@+id/textView3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:text="Our mission is to provide solution to your every possible daily needs and other goods at your door step safely." />
+
+            <TextView
+                android:id="@+id/textView4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20sp"
+                android:textSize="30dp"
+                android:layout_gravity="center"
+                android:textStyle="italic"
+                android:text="Vision" />
+            <TextView
+                android:id="@+id/textView5"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:text="To be India's most recognized platform in order to fullfill every kind of daily needs and other goods." />
+        </LinearLayout>
+
+        <ImageView
+            android:layout_width="120dp"
+            android:layout_height="match_parent"
+            app:srcCompat="@drawable/supermarket" />
+
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#FFFFFF"
+        android:baselineAligned="true"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:layout_marginTop="20dp"
+        android:backgroundTint="@color/quantum_grey"
+        tools:context=".activities.About">
+
+        <TextView
+            android:id="@+id/textView7"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Categories"
+            android:textColor="@color/white"
+            android:textSize="30sp"/>
+
+        <TextView
+            android:id="@+id/textView9"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Groceries"
+            android:layout_marginStart="10dp"
+            android:textColor="@color/white"/>
+        <TextView
+            android:id="@+id/textView10"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Vegetables and Fruits"
+            android:layout_marginStart="10dp"
+            android:textColor="@color/white"/>
+        <TextView
+            android:id="@+id/textView11"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Medicines"
+            android:layout_marginStart="10dp"
+            android:textColor="@color/white"/>
+        <TextView
+            android:id="@+id/textView12"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Stationary"
+            android:layout_marginStart="10dp"
+            android:textColor="@color/white"/>
+        <TextView
+            android:id="@+id/textView13"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Hardware etc"
+            android:layout_marginStart="10dp"
+            android:textColor="@color/white"/>
+
+
+        <TextView
+            android:id="@+id/textView15"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Contact Us"
+            android:textColor="@color/white"
+            android:layout_marginTop="10dp"
+            android:textSize="20sp"/>
+        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            xmlns:tools="http://schemas.android.com/tools"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#FFFFFF"
+            android:baselineAligned="true"
+            android:layout_weight="1"
+            android:orientation="horizontal"
+            android:layout_marginTop="10dp"
+            android:backgroundTint="@color/quantum_grey"
+            tools:context=".activities.About">
+            <ImageView
+                android:layout_width="15dp"
+                android:layout_height="15dp"
+                android:background="@color/white"
+                android:layout_marginStart="10dp"
+                android:scaleType="fitXY"
+                android:src="@drawable/icon_email"/>
+            <TextView
+                android:id="@+id/textView16"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="grocyforu@gmail.com"
+                android:layout_marginLeft="10dp"
+                android:textColor="@color/white"/>
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/textView17"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Social Media"
+            android:textColor="@color/white"
+            android:textSize="20sp"
+            android:layout_marginTop="10dp"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#FFFFFF"
+            android:baselineAligned="true"
+            android:layout_weight="1"
+            android:orientation="horizontal"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="20dp"
+            android:backgroundTint="@color/quantum_grey"
+            tools:context=".activities.About">
+
+            <ImageButton
+                android:id="@+id/btn_fb"
+                android:layout_width="15dp"
+                android:layout_height="15dp"
+                android:layout_marginStart="10dp"
+                android:background="@color/white"
+                android:scaleType="fitCenter"
+                android:src="@drawable/icon_fb" />
+
+            <ImageButton
+                android:id="@+id/btn_twitter"
+                android:layout_width="15dp"
+                android:layout_height="15dp"
+                android:layout_marginLeft="10dp"
+                android:background="@color/white"
+                android:scaleType="fitCenter"
+                android:src="@drawable/icon_twitter" />
+
+            <ImageButton
+                android:id="@+id/btn_linkedin"
+                android:layout_width="15dp"
+                android:layout_height="15dp"
+                android:layout_marginLeft="10dp"
+                android:background="@color/white"
+                android:scaleType="fitCenter"
+                android:src="@drawable/icon_link" />
+
+            <ImageButton
+                android:id="@+id/btn_insta"
+                android:layout_width="15dp"
+                android:layout_height="15dp"
+                android:layout_marginLeft="10dp"
+                android:background="@color/white"
+                android:scaleType="fitCenter"
+                android:src="@drawable/icon_instaa" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+</LinearLayout>
+
+
+

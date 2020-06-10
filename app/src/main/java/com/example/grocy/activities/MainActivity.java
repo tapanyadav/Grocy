@@ -3,6 +3,7 @@ package com.example.grocy.activities;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Address;
@@ -303,11 +304,24 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 return true;
             case R.id.about:
                 Toast.makeText(this, "About is clicked!", Toast.LENGTH_SHORT).show();
+                Intent intent=new Intent(this, AboutActivity.class);
+                startActivity(intent);
                 return true;
             case R.id.feedback:
                 Toast.makeText(this, "Give your feedback here!", Toast.LENGTH_SHORT).show();
                 return true;
             case R.id.log_out:
+                AlertDialog.Builder builder=new AlertDialog.Builder(MainActivity.this);
+                builder.setMessage("Are you sure want to logout")
+                        .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                logOut();
+                            }
+                        }).setNegativeButton("Cancel", null);
+
+                AlertDialog alert =builder.create();
+                alert.show();
                 logOut();
                 return true;
 
