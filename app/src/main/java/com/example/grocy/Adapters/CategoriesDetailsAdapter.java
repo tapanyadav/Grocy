@@ -90,11 +90,11 @@ public class CategoriesDetailsAdapter extends FirestorePagingAdapter<CategoriesD
         }
     }
 
-    static class MyViewHolder extends RecyclerView.ViewHolder {
+    public static class MyViewHolder extends RecyclerView.ViewHolder {
         ImageView imageViewCatShopImage, imageViewCatShopStatusBackground;
         TextView textViewCatShopName, textViewCatShopStatus, textViewCatShopRating, textViewCatShopAddress, textViewCatShopOff, textViewCatShopLimits, textViewCatShopType, textViewCatShopCat;
 
-        MyViewHolder(@NonNull View itemView) {
+        public MyViewHolder(@NonNull View itemView) {
             super(itemView);
 
             imageViewCatShopImage = itemView.findViewById(R.id.imageCatDetails);

@@ -1,24 +1,73 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <item
-        android:id="@+id/orders"
-        android:icon="@drawable/ic_library_books_black_24dp"
-        android:title="Your Orders" />
+    <group
+        android:id="@+id/main"
+        android:checkableBehavior="single">
 
-    <item
-        android:id="@+id/about"
-        android:icon="@drawable/ic_person_outline_black_24dp"
-        android:title="About" />
+        <item
+            android:id="@+id/home"
+            android:icon="@drawable/icon_home"
+            android:title="Home" />
+        <item
+            android:id="@+id/notification"
+            android:icon="@drawable/icons_notification"
+            android:title="Notifications" />
+    </group>
 
-    <item
-        android:id="@+id/feedback"
-        android:icon="@drawable/ic_feedback_black_24dp"
-        android:title="Feedback" />
 
-    <item
-        android:id="@+id/log_out"
-        android:icon="@drawable/ic_sentiment_dissatisfied_black_24dp"
-        android:title="Log Out" />
+    <item android:title="Orders">
+
+        <menu>
+
+            <group android:checkableBehavior="single">
+                <item
+                    android:id="@+id/orders"
+                    android:icon="@drawable/icon_orders"
+                    android:title="Your Orders" />
+                <item
+                    android:id="@+id/favourite_orders"
+                    android:icon="@drawable/icons_favourite"
+                    android:title="Favourite Orders" />
+            </group>
+
+        </menu>
+    </item>
+
+
+    <group
+        android:id="@+id/help"
+        android:checkableBehavior="single">
+        <item
+            android:id="@+id/feedback"
+            android:icon="@drawable/icon_feedback"
+            android:title="Feedback" />
+        <item
+            android:id="@+id/about"
+            android:icon="@drawable/icon_about"
+            android:title="About" />
+    </group>
+
+    <group
+        android:id="@+id/log"
+        android:checkableBehavior="single">
+
+        <item
+            android:id="@+id/setting"
+            android:icon="@drawable/icon_settings"
+            android:title="Settings" />
+        <item
+            android:id="@+id/log_out"
+            android:icon="@drawable/icon_signout"
+            android:title="Log Out" />
+    </group>
+
+    <group
+        android:id="@+id/rateus"
+        android:checkableBehavior="single">
+        <item
+            android:id="@+id/rate_us"
+            android:title="Rate us on play store" />
+    </group>
 
 </menu>

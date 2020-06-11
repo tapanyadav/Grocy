@@ -16,6 +16,8 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:targetApi="m">
+        <activity android:name=".activities.UserProfileActivity"></activity>
+        <activity android:name=".activities.ShopDetailsActivity" />
         <activity
             android:name=".activities.CategoriesDetailsActivity"
             android:hardwareAccelerated="true" />

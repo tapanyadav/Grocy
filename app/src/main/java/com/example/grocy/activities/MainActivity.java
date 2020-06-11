@@ -5,6 +5,7 @@ import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
@@ -19,7 +20,6 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -29,6 +29,8 @@ import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
+import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -71,6 +73,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 
+import de.hdodenhof.circleimageview.CircleImageView;
+
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private static final int AUTOCOMPLETE_REQUEST_CODE = 1;
     private FirebaseAuth mAuth;
@@ -80,21 +84,25 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public static final int PLAY_SERVICES_ERROR_CODE = 9002;
     public static final String TAG = "Map";
     public static final int GPS_REQUEST_CODE = 903;
+    static final float END_SCALE = 0.7f;
+
+    AppBarLayout appBarLayout;
 
     boolean providerEnabled;
+    CoordinatorLayout coordinatorLayout;
 
     //navigation drawer
     DrawerLayout drawerLayout;
     NavigationView navigationView;
-    BottomSheetDialog bottomSheetDialog,bottomSheetDialogFilter;
-    TextView toolbarTitle,textViewFeaturedAll;
+    BottomSheetDialog bottomSheetDialog, bottomSheetDialogFilter;
+    TextView toolbarTitle, textViewFeaturedAll;
     EditText editTextSearch;
     ImageButton imageButtonFilter;
     ShimmerFrameLayout shimmerFrameLayout;
 
     EditText editTextLocation;
     PlacesClient placesClient;
-    String apiKey="AIzaSyD3RtCpsidRz7EMJiR2EkWrYzoXFuwaUkI";
+    String apiKey = "AIzaSyD3RtCpsidRz7EMJiR2EkWrYzoXFuwaUkI";
 
     String finalAddress;
     FusedLocationProviderClient fusedLocationProviderClient;
@@ -108,6 +116,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     String setUserCustomLocation;
     public static FragmentManager fragmentManager;
     String globalAddress;
+    CircleImageView circleImageView;
 
     @SuppressLint({"RestrictedApi", "ClickableViewAccessibility"})
     @Override
@@ -121,8 +130,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         navigationView = findViewById(R.id.nav_view);
         shimmerFrameLayout = findViewById(R.id.shimmerAnimation);
         fragmentManager = getSupportFragmentManager();
-        LinearLayout linearLayout = findViewById(R.id.linearLayoutMain);
-        AppBarLayout appBarLayout = findViewById(R.id.app_bar_layout);
+        appBarLayout = findViewById(R.id.app_bar_layout);
+        coordinatorLayout = findViewById(R.id.cordLay);
 
 
         mAuth = FirebaseAuth.getInstance();
@@ -133,22 +142,24 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         RecyclerView recyclerViewFea = findViewById(R.id.recycler_featured);
         RecyclerView recyclerViewShop = findViewById(R.id.recycler_shops);
         RecyclerView recyclerViewHorizontal = findViewById(R.id.recycler_horizontalShops);
-        editTextSearch=findViewById(R.id.etSearch);
-        imageButtonFilter=findViewById(R.id.image_button_filter);
-        textViewFeaturedAll=findViewById(R.id.tv_content_featured_all);
+        editTextSearch = findViewById(R.id.etSearch);
+        imageButtonFilter = findViewById(R.id.image_button_filter);
+        textViewFeaturedAll = findViewById(R.id.tv_content_featured_all);
 
         setUserCustomLocation = getIntent().getStringExtra("userEnterLocation");
         setUserLiveLocation = getIntent().getStringExtra("userLiveLocation");
 
-        linearLayout.setVisibility(View.GONE);
-        appBarLayout.setVisibility(View.GONE);
+//        linearLayout.setVisibility(View.GONE);
+//        appBarLayout.setVisibility(View.GONE);
+        coordinatorLayout.setVisibility(View.GONE);
 
         new Handler().postDelayed(() -> {
             shimmerFrameLayout.stopShimmer();
             shimmerFrameLayout.setVisibility(View.GONE);
-            linearLayout.setVisibility(View.VISIBLE);
-            appBarLayout.setVisibility(View.VISIBLE);
-        }, 4000);
+//            linearLayout.setVisibility(View.VISIBLE);
+//            appBarLayout.setVisibility(View.VISIBLE);
+            coordinatorLayout.setVisibility(View.VISIBLE);
+        }, 3000);
 
 
         Query queryCategories = firebaseFirestore.collection("Categories").orderBy("catArrange");
@@ -167,20 +178,23 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             startActivity(intent);
         });
 
+//        PagedList.Config config = new PagedList.Config.Builder()
+//                .setInitialLoadSizeHint(4)
+//                .setPageSize(3)
+//                .build();
+
         Query queryFeatured = firebaseFirestore.collection("FeaturedItems").orderBy("featuredArrange");
         FirestoreRecyclerOptions<FeaturedModel> featuredModelFirestoreRecyclerOptions = new FirestoreRecyclerOptions.Builder<FeaturedModel>()
                 .setQuery(queryFeatured, FeaturedModel.class).build();
         adapterFeatured = new FeaturedAdapter(featuredModelFirestoreRecyclerOptions);
         recyclerViewFea.setHasFixedSize(true);
         recyclerViewFea.setAdapter(adapterFeatured);
-        recyclerViewFea.setLayoutManager(new LinearLayoutManager(getApplicationContext(),LinearLayoutManager.HORIZONTAL,false));
+        recyclerViewFea.setLayoutManager(new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.HORIZONTAL, false));
 
         Query queryShops = firebaseFirestore.collection("ShopsMain").orderBy("shopArrange");
         FirestoreRecyclerOptions<ShopsModel> shopsModelFirestoreRecyclerOptions = new FirestoreRecyclerOptions.Builder<ShopsModel>()
                 .setQuery(queryShops, ShopsModel.class).build();
         shopsAdapter = new ShopsAdapter(shopsModelFirestoreRecyclerOptions);
-        shopsAdapter.notifyDataSetChanged();
-        shopsAdapter.setHasStableIds(true);
 
 //        DisplayMetrics displayMetrics=new DisplayMetrics();
 //        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
@@ -189,8 +203,24 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         recyclerViewShop.setHasFixedSize(false);
         recyclerViewShop.setAdapter(shopsAdapter);
-        recyclerViewShop.setItemViewCacheSize(20);
         recyclerViewShop.setLayoutManager(new LinearLayoutManager(this));
+
+//        categoriesAdapter.setOnListItemClick((snapshot, position) -> {
+//            String resId = snapshot.getId();
+//            Toast.makeText(MainActivity.this, "Position: " + position + " and Id is " + resId, Toast.LENGTH_SHORT).show();
+//            Intent intent = new Intent(MainActivity.this, CategoriesDetailsActivity.class);
+//            intent.putExtra("resId", resId);
+//            startActivity(intent);
+//        });
+
+        shopsAdapter.setOnListItemClick((snapshot, position) -> {
+            String resId = snapshot.getId();
+            Toast.makeText(MainActivity.this, "Position: " + position + " and Id is " + resId, Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(MainActivity.this, ShopDetailsActivity.class);
+            intent.putExtra("shopId", resId);
+            startActivity(intent);
+
+        });
 
         Query query = firebaseFirestore.collection("shopHorizontal").orderBy("shopArrange");
         FirestoreRecyclerOptions<HorizontalModel> horizontalModelFirestoreRecyclerOptions = new FirestoreRecyclerOptions.Builder<HorizontalModel>()
@@ -199,7 +229,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         horizontalAdapter = new HorizontalAdapter(horizontalModelFirestoreRecyclerOptions);
 
         recyclerViewHorizontal.setHasFixedSize(true);
-        recyclerViewHorizontal.setLayoutManager(new LinearLayoutManager(getApplicationContext(),LinearLayoutManager.HORIZONTAL,false));
+        recyclerViewHorizontal.setLayoutManager(new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.HORIZONTAL, false));
         recyclerViewHorizontal.setAdapter(horizontalAdapter);
 
         ActionBarDrawerToggle toggle = new
@@ -209,12 +239,20 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         toggle.syncState();
         navigationView.setNavigationItemSelectedListener(this);
         navigationView.bringToFront();
+        navigationView.setItemIconTintList(null);
+        navigationView.setCheckedItem(R.id.home);
         toolbar.setNavigationIcon(R.drawable.icon_menu);
+        animateNavigationDrawer();
+        View view = navigationView.getHeaderView(0);
+        circleImageView = view.findViewById(R.id.profilePic);
+
+        circleImageView.setOnClickListener(v -> {
+            Intent intent = new Intent(MainActivity.this, UserProfileActivity.class);
+            startActivity(intent);
+        });
 
         Objects.requireNonNull(getSupportActionBar()).setDefaultDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
-        navigationView.setCheckedItem(R.id.orders);
-
         toolbarTitle = findViewById(R.id.loc_text_toolbar);
 
         if (setUserCustomLocation != null) {
@@ -264,11 +302,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         });
 
         textViewFeaturedAll.setOnClickListener(tvFeaturedView -> {
-            Intent intent=new Intent(MainActivity.this, FeaturedAllActivity.class);
+            Intent intent = new Intent(MainActivity.this, FeaturedAllActivity.class);
             startActivity(intent);
         });
 
-        imageButtonFilter.setOnClickListener( filterView -> {
+        imageButtonFilter.setOnClickListener(filterView -> {
 
             bottomSheetDialogFilter = new BottomSheetDialog(MainActivity.this);
             bottomSheetDialogFilter.setContentView(R.layout.content_filter_bottom_sheet);
@@ -284,33 +322,73 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     }
 
-    public void startAutocomplete(){
+    private void animateNavigationDrawer() {
+
+        //Add any color or remove it to use the default one!
+        //To make it transparent use Color.Transparent in side setScrimColor();
+        drawerLayout.setScrimColor(Color.TRANSPARENT);
+        drawerLayout.addDrawerListener(new DrawerLayout.SimpleDrawerListener() {
+            @Override
+            public void onDrawerSlide(View drawerView, float slideOffset) {
+
+                // Scale the View based on current slide offset
+                final float diffScaledOffset = slideOffset * (1 - END_SCALE);
+                final float offsetScale = 1 - diffScaledOffset;
+                coordinatorLayout.setScaleX(offsetScale);
+                coordinatorLayout.setScaleY(offsetScale);
+
+                // Translate the View, accounting for the scaled width
+                final float xOffset = drawerView.getWidth() * slideOffset;
+                final float xOffsetDiff = coordinatorLayout.getWidth() * diffScaledOffset / 2;
+                final float xTranslation = xOffset - xOffsetDiff;
+                coordinatorLayout.setTranslationX(xTranslation);
+            }
+        });
+
+    }
+
+    public void startAutocomplete() {
 
         Intent intent = new Autocomplete.IntentBuilder(
                 AutocompleteActivityMode.OVERLAY,
-                Arrays.asList(Place.Field.ID,  Place.Field.NAME, Place.Field.LAT_LNG,Place.Field.ADDRESS))
+                Arrays.asList(Place.Field.ID, Place.Field.NAME, Place.Field.LAT_LNG, Place.Field.ADDRESS))
                 .setCountry("IN")
                 .build(this);
-        startActivityForResult(intent,AUTOCOMPLETE_REQUEST_CODE);
+        startActivityForResult(intent, AUTOCOMPLETE_REQUEST_CODE);
     }
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
 
         switch (menuItem.getItemId()) {
-            case R.id.orders:
-                Toast.makeText(this, "Orders are shown here!", Toast.LENGTH_SHORT).show();
+
+            case R.id.home:
+                Toast.makeText(this, "Home", Toast.LENGTH_SHORT).show();
                 return true;
-            case R.id.about:
-                Toast.makeText(this, "About is clicked!", Toast.LENGTH_SHORT).show();
+            case R.id.notification:
+                Toast.makeText(this, "Notifications", Toast.LENGTH_SHORT).show();
+                return true;
+            case R.id.orders:
+                Toast.makeText(this, "All Orders are shown here!", Toast.LENGTH_SHORT).show();
+                return true;
+            case R.id.favourite_orders:
+                Toast.makeText(this, "Favourite orders are shown here!", Toast.LENGTH_SHORT).show();
                 return true;
             case R.id.feedback:
                 Toast.makeText(this, "Give your feedback here!", Toast.LENGTH_SHORT).show();
                 return true;
+            case R.id.about:
+                Toast.makeText(this, "About is clicked!", Toast.LENGTH_SHORT).show();
+                return true;
+            case R.id.setting:
+                Toast.makeText(this, "Settings for this app shown here!", Toast.LENGTH_SHORT).show();
+                return true;
             case R.id.log_out:
                 logOut();
                 return true;
-
+            case R.id.rate_us:
+                Toast.makeText(this, "App on play store will open from here!", Toast.LENGTH_SHORT).show();
+                return true;
         }
         drawerLayout.closeDrawer(GravityCompat.START);
         return true;
@@ -361,8 +439,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     private boolean checkLocationPermission() {
-        return ContextCompat.checkSelfPermission(this,Manifest.permission.ACCESS_FINE_LOCATION)
-                ==PackageManager.PERMISSION_GRANTED;
+        return ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+                == PackageManager.PERMISSION_GRANTED;
     }
 
     private boolean isServicesOk() {
@@ -370,12 +448,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         GoogleApiAvailability googleApiAvailability = GoogleApiAvailability.getInstance();
         int result = googleApiAvailability.isGooglePlayServicesAvailable(this);
 
-        if (result == ConnectionResult.SUCCESS){
+        if (result == ConnectionResult.SUCCESS) {
             return true;
-        }else if (googleApiAvailability.isUserResolvableError(result)){
-            Dialog dialog = googleApiAvailability.getErrorDialog(this,result, PLAY_SERVICES_ERROR_CODE);
+        } else if (googleApiAvailability.isUserResolvableError(result)) {
+            Dialog dialog = googleApiAvailability.getErrorDialog(this, result, PLAY_SERVICES_ERROR_CODE);
             dialog.show();
-        }else {
+        } else {
             Toast.makeText(this, "Play services are required to use some features ", Toast.LENGTH_SHORT).show();
 
         }
@@ -385,27 +463,27 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == REQUEST_CODE && grantResults[0]== PackageManager.PERMISSION_GRANTED){
+        if (requestCode == REQUEST_CODE && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
             boolean mLocationPermissionGranted = true;
             Toast.makeText(this, "Permission Granted", Toast.LENGTH_SHORT).show();
-        }else {
+        } else {
             Toast.makeText(this, "Permission not granted", Toast.LENGTH_SHORT).show();
         }
     }
 
-    private boolean isGpsEnabled(){
-        LocationManager locationManager= (LocationManager) getSystemService(LOCATION_SERVICE);
+    private boolean isGpsEnabled() {
+        LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
         assert locationManager != null;
         providerEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
 
-        if (providerEnabled){
+        if (providerEnabled) {
             return true;
-        }else {
-            AlertDialog alertDialog= new AlertDialog.Builder(this)
+        } else {
+            AlertDialog alertDialog = new AlertDialog.Builder(this)
                     .setTitle("GPS Permission")
                     .setMessage("GPS is required for this app")
-                    .setPositiveButton("Yes",(dialog, which) -> {
-                        Intent intent=new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                    .setPositiveButton("Yes", (dialog, which) -> {
+                        Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
                         startActivityForResult(intent, GPS_REQUEST_CODE);
                     })
                     .setNegativeButton("No Thanks", ((dialog, which) -> dialog.dismiss()))
@@ -420,6 +498,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         initGoogleMap();
         if (isGpsEnabled()) {
             Toast.makeText(MainActivity.this, "All set up!", Toast.LENGTH_SHORT).show();
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                // TODO: Consider calling
+                //    ActivityCompat#requestPermissions
+                // here to request the missing permissions, and then overriding
+                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                //                                          int[] grantResults)
+                // to handle the case where the user grants the permission. See the documentation
+                // for ActivityCompat#requestPermissions for more details.
+                return;
+            }
             fusedLocationProviderClient.getLastLocation().addOnCompleteListener(task -> {
                 if (task.isSuccessful()) {
                     Location location = task.getResult();

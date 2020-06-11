@@ -35,8 +35,6 @@ public class CategoriesAdapter extends FirestoreRecyclerAdapter<CategoriesModel,
                 .load(model.getCatImage())
                 .into(holder.imageViewCatImage);
 
-//        Picasso.get().load(model.getCatBackground()).into(holder.imageViewCategoriesBackground);
-//        Picasso.get().load(model.getCatImage()).into(holder.imageViewCatImage);
         holder.textViewCatType.setText(model.getCatType());
     }
 

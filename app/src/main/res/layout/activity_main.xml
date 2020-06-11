@@ -5,6 +5,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <com.facebook.shimmer.ShimmerFrameLayout
+        android:id="@+id/shimmerAnimation"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <include layout="@layout/layout_shimmer" />
+    </com.facebook.shimmer.ShimmerFrameLayout>
+
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:id="@+id/cordLay"
         android:layout_width="match_parent"
@@ -33,7 +41,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
-                        android:text="Location an email app might have one activity to show a list of new… ... A task is a collection of activities that users interact with when performing a certain job. ... If the user presses the Back button, that new activity is finished and ... likewise, some launch modes available as flags for an intent "
+                        android:text="Location"
                         android:textColor="#000"
                         android:maxLines="1"
                         android:ellipsize="end"
@@ -44,8 +52,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="end|center_vertical"
-                        android:layout_marginEnd="10dp"
-                        android:src="@drawable/icon_location" />
+                        android:layout_marginEnd="20dp"
+                        android:src="@drawable/pin" />
                 </LinearLayout>
 
 
@@ -69,10 +77,31 @@
 
     <com.google.android.material.navigation.NavigationView
         android:id="@+id/nav_view"
-        android:layout_width="wrap_content"
+        style="@style/navigationTheme"
         android:layout_height="match_parent"
         android:layout_gravity="start"
         app:headerLayout="@layout/nd_header"
-        app:menu="@menu/menu_item" />
+        android:layout_width="match_parent"
+        app:menu="@menu/menu_item">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp" />
+
+            <TextView
+                android:id="@+id/logout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="v - 1.0" />
+        </LinearLayout>
+    </com.google.android.material.navigation.NavigationView>
 
 </androidx.drawerlayout.widget.DrawerLayout>
