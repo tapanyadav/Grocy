@@ -4,6 +4,7 @@ public class ShopsModel {
     private String shopImage, shopStatusBackground;
     private String shopName, shopAddress, shopOff, shopLimits, shopStatus, shopCategory, shopType;
     private double shopRating;
+
     ShopsModel() {
 
     }

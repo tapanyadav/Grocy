@@ -5,6 +5,7 @@ import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
@@ -34,6 +35,8 @@ import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ActivityCompat;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
@@ -84,6 +87,8 @@ import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicReference;
 
+import de.hdodenhof.circleimageview.CircleImageView;
+
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private static final int AUTOCOMPLETE_REQUEST_CODE = 1;
     private FirebaseAuth mAuth;
@@ -93,8 +98,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public static final int PLAY_SERVICES_ERROR_CODE = 9002;
     public static final String TAG = "Map";
     public static final int GPS_REQUEST_CODE = 903;
+    static final float END_SCALE = 0.7f;
+
+    AppBarLayout appBarLayout;
 
     boolean providerEnabled;
+    CoordinatorLayout coordinatorLayout;
 
     //navigation drawer
     DrawerLayout drawerLayout;
@@ -127,6 +136,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     Intent main_intent;
     ArrayList<String> checkList=null;
     double rating=1;
+    CircleImageView circleImageView;
+
     @SuppressLint({"RestrictedApi", "ClickableViewAccessibility"})
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -139,8 +150,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         navigationView = findViewById(R.id.nav_view);
         shimmerFrameLayout = findViewById(R.id.shimmerAnimation);
         fragmentManager = getSupportFragmentManager();
-        LinearLayout linearLayout = findViewById(R.id.linearLayoutMain);
-        AppBarLayout appBarLayout = findViewById(R.id.app_bar_layout);
+        appBarLayout = findViewById(R.id.app_bar_layout);
+        coordinatorLayout = findViewById(R.id.cordLay);
 
 
         mAuth = FirebaseAuth.getInstance();
@@ -157,19 +168,22 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         setUserCustomLocation = getIntent().getStringExtra("userEnterLocation");
         setUserLiveLocation = getIntent().getStringExtra("userLiveLocation");
+
+//        linearLayout.setVisibility(View.GONE);
+//        appBarLayout.setVisibility(View.GONE);
+        coordinatorLayout.setVisibility(View.GONE);
         checkList = (ArrayList<String>) getIntent().getSerializableExtra("checkList");
         if(getIntent().getIntExtra("rating",1)>=1){
             rating=Double.parseDouble(String.valueOf(getIntent().getIntExtra("rating",1)));
         }
-        linearLayout.setVisibility(View.GONE);
-        appBarLayout.setVisibility(View.GONE);
 
         new Handler().postDelayed(() -> {
             shimmerFrameLayout.stopShimmer();
             shimmerFrameLayout.setVisibility(View.GONE);
-            linearLayout.setVisibility(View.VISIBLE);
-            appBarLayout.setVisibility(View.VISIBLE);
-        }, 4000);
+//            linearLayout.setVisibility(View.VISIBLE);
+//            appBarLayout.setVisibility(View.VISIBLE);
+            coordinatorLayout.setVisibility(View.VISIBLE);
+        }, 3000);
 
 
         Query queryCategories = firebaseFirestore.collection("Categories").orderBy("catArrange");
@@ -188,6 +202,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             intent.putExtra("catType", (Serializable) snapshot.getData().get("catType"));
             startActivity(intent);
         });
+
+//        PagedList.Config config = new PagedList.Config.Builder()
+//                .setInitialLoadSizeHint(4)
+//                .setPageSize(3)
+//                .build();
 
         Query queryFeatured = firebaseFirestore.collection("FeaturedItems").orderBy("featuredArrange");
         FirestoreRecyclerOptions<FeaturedModel> featuredModelFirestoreRecyclerOptions = new FirestoreRecyclerOptions.Builder<FeaturedModel>()
@@ -216,10 +235,30 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 //        int a=(displayMetrics.heightPixels*99)/100;
 //        recyclerViewShop.getLayoutParams().height=a;
 
-            recyclerViewShop.setHasFixedSize(false);
-            recyclerViewShop.setAdapter(shopsAdapter);
-            recyclerViewShop.setItemViewCacheSize(20);
-            recyclerViewShop.setLayoutManager(new LinearLayoutManager(this));
+//            recyclerViewShop.setHasFixedSize(false);
+//            recyclerViewShop.setAdapter(shopsAdapter);
+//            recyclerViewShop.setItemViewCacheSize(20);
+//            recyclerViewShop.setLayoutManager(new LinearLayoutManager(this));
+        recyclerViewShop.setHasFixedSize(false);
+        recyclerViewShop.setAdapter(shopsAdapter);
+        recyclerViewShop.setLayoutManager(new LinearLayoutManager(this));
+
+//        categoriesAdapter.setOnListItemClick((snapshot, position) -> {
+//            String resId = snapshot.getId();
+//            Toast.makeText(MainActivity.this, "Position: " + position + " and Id is " + resId, Toast.LENGTH_SHORT).show();
+//            Intent intent = new Intent(MainActivity.this, CategoriesDetailsActivity.class);
+//            intent.putExtra("resId", resId);
+//            startActivity(intent);
+//        });
+
+        shopsAdapter.setOnListItemClick((snapshot, position) -> {
+            String resId = snapshot.getId();
+            Toast.makeText(MainActivity.this, "Position: " + position + " and Id is " + resId, Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(MainActivity.this, ShopDetailsActivity.class);
+            intent.putExtra("shopId", resId);
+            startActivity(intent);
+
+        });
 
         Query query = firebaseFirestore.collection("shopHorizontal").orderBy("shopArrange");
         FirestoreRecyclerOptions<HorizontalModel> horizontalModelFirestoreRecyclerOptions = new FirestoreRecyclerOptions.Builder<HorizontalModel>()
@@ -238,12 +277,20 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         toggle.syncState();
         navigationView.setNavigationItemSelectedListener(this);
         navigationView.bringToFront();
+        navigationView.setItemIconTintList(null);
+        navigationView.setCheckedItem(R.id.home);
         toolbar.setNavigationIcon(R.drawable.icon_menu);
+        animateNavigationDrawer();
+        View view = navigationView.getHeaderView(0);
+        circleImageView = view.findViewById(R.id.profilePic);
+
+        circleImageView.setOnClickListener(v -> {
+            Intent intent = new Intent(MainActivity.this, UserProfileActivity.class);
+            startActivity(intent);
+        });
 
         Objects.requireNonNull(getSupportActionBar()).setDefaultDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
-        navigationView.setCheckedItem(R.id.orders);
-
         toolbarTitle = findViewById(R.id.loc_text_toolbar);
 
         if (setUserCustomLocation != null) {
@@ -372,6 +419,31 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
 
+    private void animateNavigationDrawer() {
+
+        //Add any color or remove it to use the default one!
+        //To make it transparent use Color.Transparent in side setScrimColor();
+        drawerLayout.setScrimColor(Color.TRANSPARENT);
+        drawerLayout.addDrawerListener(new DrawerLayout.SimpleDrawerListener() {
+            @Override
+            public void onDrawerSlide(View drawerView, float slideOffset) {
+
+                // Scale the View based on current slide offset
+                final float diffScaledOffset = slideOffset * (1 - END_SCALE);
+                final float offsetScale = 1 - diffScaledOffset;
+                coordinatorLayout.setScaleX(offsetScale);
+                coordinatorLayout.setScaleY(offsetScale);
+
+                // Translate the View, accounting for the scaled width
+                final float xOffset = drawerView.getWidth() * slideOffset;
+                final float xOffsetDiff = coordinatorLayout.getWidth() * diffScaledOffset / 2;
+                final float xTranslation = xOffset - xOffsetDiff;
+                coordinatorLayout.setTranslationX(xTranslation);
+            }
+        });
+
+    }
+
     public void startAutocomplete() {
 
         Intent intent = new Autocomplete.IntentBuilder(
@@ -387,19 +459,34 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
 
         switch (menuItem.getItemId()) {
-            case R.id.orders:
-                Toast.makeText(this, "Orders are shown here!", Toast.LENGTH_SHORT).show();
+
+            case R.id.home:
+                Toast.makeText(this, "Home", Toast.LENGTH_SHORT).show();
                 return true;
-            case R.id.about:
-                Toast.makeText(this, "About is clicked!", Toast.LENGTH_SHORT).show();
+            case R.id.notification:
+                Toast.makeText(this, "Notifications", Toast.LENGTH_SHORT).show();
+                return true;
+            case R.id.orders:
+                Toast.makeText(this, "All Orders are shown here!", Toast.LENGTH_SHORT).show();
+                return true;
+            case R.id.favourite_orders:
+                Toast.makeText(this, "Favourite orders are shown here!", Toast.LENGTH_SHORT).show();
                 return true;
             case R.id.feedback:
                 Toast.makeText(this, "Give your feedback here!", Toast.LENGTH_SHORT).show();
                 return true;
+            case R.id.about:
+                Toast.makeText(this, "About is clicked!", Toast.LENGTH_SHORT).show();
+                return true;
+            case R.id.setting:
+                Toast.makeText(this, "Settings for this app shown here!", Toast.LENGTH_SHORT).show();
+                return true;
             case R.id.log_out:
                 logOut();
                 return true;
-
+            case R.id.rate_us:
+                Toast.makeText(this, "App on play store will open from here!", Toast.LENGTH_SHORT).show();
+                return true;
         }
         drawerLayout.closeDrawer(GravityCompat.START);
         return true;

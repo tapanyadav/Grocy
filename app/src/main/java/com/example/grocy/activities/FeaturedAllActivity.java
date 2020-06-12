@@ -1,6 +1,5 @@
 package com.example.grocy.activities;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -33,9 +32,7 @@ public class FeaturedAllActivity extends AppCompatActivity implements FeaturedAl
         RecyclerView recyclerViewAll = findViewById(R.id.recycler_featured_all);
 
         imageButtonBack.setOnClickListener(v -> {
-            Intent intent = new Intent(FeaturedAllActivity.this, MainActivity.class);
-            startActivity(intent);
-            finish();
+            onBackPressed();
         });
 
         imageButtonFilter.setOnClickListener(v -> {
