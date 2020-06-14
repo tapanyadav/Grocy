@@ -26,6 +26,7 @@ android {
         targetCompatibility = 1.8
     }
 
+
 }
 
 dependencies {
@@ -64,5 +65,8 @@ dependencies {
     implementation 'com.github.bumptech.glide:glide:4.11.0'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.11.0'
     implementation 'android.arch.paging:runtime:2.1.1'
+
+
+    implementation 'androidx.recyclerview:recyclerview:1.1.0'
 
 }

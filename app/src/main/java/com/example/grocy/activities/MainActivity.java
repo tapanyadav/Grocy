@@ -301,11 +301,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         switch (menuItem.getItemId()) {
             case R.id.orders:
                 Toast.makeText(this, "Orders are shown here!", Toast.LENGTH_SHORT).show();
+                Intent intent=new Intent(this, Order_recyclerview.class);
+                startActivity(intent);
                 return true;
             case R.id.about:
                 Toast.makeText(this, "About is clicked!", Toast.LENGTH_SHORT).show();
-                Intent intent=new Intent(this, AboutActivity.class);
-                startActivity(intent);
+                Intent intent1=new Intent(this, AboutActivity.class);
+                startActivity(intent1);
                 return true;
             case R.id.feedback:
                 Toast.makeText(this, "Give your feedback here!", Toast.LENGTH_SHORT).show();
