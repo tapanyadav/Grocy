@@ -16,6 +16,8 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:targetApi="m">
+        <activity android:name=".activities.UserProfileActivity"></activity>
+        <activity android:name=".activities.ShopDetailsActivity" />
         <activity android:name=".activities.Order_recyclerview"></activity>
         <activity android:name=".activities.AboutActivity" />
         <activity

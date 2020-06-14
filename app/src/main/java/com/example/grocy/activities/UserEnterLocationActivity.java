@@ -9,7 +9,6 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.grocy.R;
-import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -18,11 +17,11 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import java.util.Objects;
+
 public class UserEnterLocationActivity extends AppCompatActivity implements OnMapReadyCallback {
 
-    public static final String TAG = "Map";
 
-    private FusedLocationProviderClient fusedLocationProviderClient;
     private GoogleMap mGoogleMap;
 
     Button buttonMapConfirmLoc;
@@ -42,10 +41,9 @@ public class UserEnterLocationActivity extends AppCompatActivity implements OnMa
         buttonMapConfirmLoc=findViewById(R.id.mapUserButtonConfirmLoc);
         textViewUserLocation=findViewById(R.id.mapUserLocation);
 
-        fusedLocationProviderClient=new FusedLocationProviderClient(this);
 
-        userPlaceAddress=getIntent().getStringExtra("userAddress");
-        latLngValue = (LatLng) getIntent().getExtras().get("latlngValue");
+        userPlaceAddress = getIntent().getStringExtra("userAddress");
+        latLngValue = (LatLng) Objects.requireNonNull(getIntent().getExtras()).get("latlngValue");
 
         Toast.makeText(this, "User: "+userPlaceAddress, Toast.LENGTH_SHORT).show();
         Toast.makeText(this, "Lat lng: "+latLngValue, Toast.LENGTH_SHORT).show();

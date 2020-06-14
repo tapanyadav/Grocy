@@ -1,5 +1,6 @@
 package com.example.grocy.Adapters;
 
+import android.annotation.SuppressLint;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,31 +11,28 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.grocy.Models.ShopsModel;
 import com.example.grocy.R;
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+import com.google.firebase.firestore.DocumentSnapshot;
 
 //ShopsAdapter  ShopsModel
 public class ShopsAdapter extends FirestoreRecyclerAdapter<ShopsModel, ShopsAdapter.MyViewHolder> {
+    private CategoriesAdapter.OnListItemClick onListItemClick;
 
 
     public ShopsAdapter(@NonNull FirestoreRecyclerOptions<ShopsModel> options) {
         super(options);
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     protected void onBindViewHolder(@NonNull MyViewHolder holder, int position, @NonNull ShopsModel model) {
-
-//        Picasso.get().load(model.getShopImage()).into(holder.imageViewShopImage);
-//        Picasso.get().load(model.getShopStatusBackground()).into(holder.imageViewShopStatusBackground);
 
         Glide.with(holder.imageViewShopImage.getContext())
                 .load(model.getShopImage())
                 .placeholder(R.drawable.ic_launcher_background)
-                .skipMemoryCache(true)
-                .diskCacheStrategy(DiskCacheStrategy.NONE)
                 .into(holder.imageViewShopImage);
 
         Glide.with(holder.imageViewShopStatusBackground.getContext())
@@ -46,7 +44,7 @@ public class ShopsAdapter extends FirestoreRecyclerAdapter<ShopsModel, ShopsAdap
         holder.textViewShopOff.setText(model.getShopOff());
         holder.textViewShopLimits.setText(model.getShopLimits());
         holder.textViewShopStatus.setText(model.getShopStatus());
-        holder.textViewShopRating.setText(""+model.getShopRating());
+        holder.textViewShopRating.setText(model.getShopRating() + "");
         holder.textViewShopAddress.setText(model.getShopAddress());
         holder.textViewShopName.setText(model.getShopName());
     }
@@ -58,7 +56,15 @@ public class ShopsAdapter extends FirestoreRecyclerAdapter<ShopsModel, ShopsAdap
         return new MyViewHolder(view);
     }
 
-    static class MyViewHolder extends RecyclerView.ViewHolder {
+    public void setOnListItemClick(CategoriesAdapter.OnListItemClick onListItemClick) {
+        this.onListItemClick = onListItemClick;
+    }
+
+    public interface OnListItemClick {
+        void onItemClick(DocumentSnapshot snapshot, int position);
+    }
+
+    class MyViewHolder extends RecyclerView.ViewHolder {
         ImageView imageViewShopImage, imageViewShopStatusBackground;
         TextView textViewShopName, textViewShopStatus, textViewShopRating, textViewShopAddress, textViewShopOff, textViewShopLimits, textViewShopType, textViewShopCat;
 
@@ -74,6 +80,13 @@ public class ShopsAdapter extends FirestoreRecyclerAdapter<ShopsModel, ShopsAdap
             textViewShopOff = itemView.findViewById(R.id.shop_off);
             textViewShopType = itemView.findViewById(R.id.tv_type_shop);
             textViewShopCat = itemView.findViewById(R.id.shop_category);
+
+            itemView.setOnClickListener(v -> {
+                int position = getAdapterPosition();
+                if (position != RecyclerView.NO_POSITION && onListItemClick != null) {
+                    onListItemClick.onItemClick(getSnapshots().getSnapshot(position), position);
+                }
+            });
         }
     }
 }
