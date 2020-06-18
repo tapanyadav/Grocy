@@ -1,52 +1,66 @@
 package com.example.grocy.Adapters;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.RecyclerView;
-
 import com.bumptech.glide.Glide;
 import com.example.grocy.Models.ShopItemsModel;
 import com.example.grocy.R;
-import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
-import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 
-public class ShopItemsAdapter extends FirestoreRecyclerAdapter<ShopItemsModel, ShopItemsAdapter.MyViewHolder> {
+import java.util.ArrayList;
 
-    public ShopItemsAdapter(@NonNull FirestoreRecyclerOptions<ShopItemsModel> options) {
-        super(options);
-    }
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 
-    @Override
-    protected void onBindViewHolder(@NonNull MyViewHolder holder, int position, @NonNull ShopItemsModel model) {
+public class ShopItemsAdapter extends RecyclerView.Adapter<ShopItemsAdapter.ShopItemsViewHolder> {
 
-        holder.textViewItemName.setText(model.getItemsProductName());
-        holder.textViewItemDescription.setText(model.getItemsProductDescription());
-        holder.textViewItemPrice.setText(model.getItemsPrice());
-        holder.textViewItemQuantity.setText(model.getItemsQuantity());
+    Context context;
+    ArrayList<ShopItemsModel> singleItem;
 
-        Glide.with(holder.imageViewItem.getContext())
-                .load(model.getItemsImage())
-                .into(holder.imageViewItem);
+    public ShopItemsAdapter(Context context, ArrayList<ShopItemsModel> singleItem) {
+        super();
+        this.context = context;
+        this.singleItem = singleItem;
     }
 
     @NonNull
     @Override
-    public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public ShopItemsViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.shop_details_items_recycler, parent, false);
-        return new MyViewHolder(view);
+        return new ShopItemsViewHolder(view);
     }
 
-    public static class MyViewHolder extends RecyclerView.ViewHolder {
+    @Override
+    public void onBindViewHolder(@NonNull ShopItemsViewHolder holder, int position) {
+        final ShopItemsModel shopItemsModel = singleItem.get(position);
+        holder.textViewItemName.setText(shopItemsModel.getItemsProductName());
+        holder.textViewItemDescription.setText(shopItemsModel.getItemsProductDescription());
+        holder.textViewItemPrice.setText(shopItemsModel.getItemsPrice());
+        holder.textViewItemQuantity.setText(shopItemsModel.getItemsQuantity());
+
+        Glide.with(holder.imageViewItem.getContext())
+                .load(shopItemsModel.getItemsImage())
+                .into(holder.imageViewItem);
+
+    }
+
+
+    @Override
+    public int getItemCount() {
+        return this.singleItem.size();
+    }
+
+
+    public class ShopItemsViewHolder extends RecyclerView.ViewHolder {
 
         ImageView imageViewItem;
         TextView textViewItemName, textViewItemDescription, textViewItemPrice, textViewItemQuantity;
 
-        public MyViewHolder(@NonNull View itemView) {
+        public ShopItemsViewHolder(@NonNull View itemView) {
             super(itemView);
 
             imageViewItem = itemView.findViewById(R.id.item_image);

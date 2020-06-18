@@ -7,11 +7,11 @@ public class ShopItemsModel {
     private String itemsProductName;
     private String itemsQuantity;
 
-    ShopItemsModel() {
+    public ShopItemsModel() {
 
     }
 
-    ShopItemsModel(String itemsImage, String itemsPrice, String itemsProductDescription, String itemsProductName, String itemsQuantity) {
+    public ShopItemsModel(String itemsImage, String itemsPrice, String itemsProductDescription, String itemsProductName, String itemsQuantity) {
         this.itemsImage = itemsImage;
         this.itemsPrice = itemsPrice;
         this.itemsProductDescription = itemsProductDescription;

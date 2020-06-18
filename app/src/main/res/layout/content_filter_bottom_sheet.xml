@@ -61,7 +61,7 @@
         android:max="4"
         android:layout_marginTop="20dp"
         android:padding="10dp"
-        android:progress="3" />
+        android:progress="2" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -135,7 +135,7 @@
         android:layout_height="wrap_content"
         android:text="Submit"
         android:id="@+id/submit"
-        android:layout_marginStart="250dp"/>
+        android:layout_gravity="end" />
 
 
 </LinearLayout>
