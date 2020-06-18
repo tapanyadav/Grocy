@@ -21,23 +21,23 @@
             android:orientation="horizontal">
 
             <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/etSearch"
+                android:id="@+id/etSearch"
                 android:layout_width="0dp"
                 android:layout_height="52dp"
                 android:layout_weight="1"
-                    android:background="@android:color/transparent"
-                    android:hint="Search for stores"
-                    android:gravity="center_vertical"
-                    android:fontFamily="@font/josefin_sans"
-                    android:textColorHint="#9DC0F9"
-                    android:textColor="#659BF6"
-                    android:textStyle="bold"
-                    android:textSize="22sp"
-                    android:maxLines="1"
-                    android:inputType="textFilter"
-                    android:drawableStart="@drawable/icon_search_new"
-                    android:paddingStart="20dp"
-                    android:drawablePadding="12dp"/>
+                android:background="@android:color/transparent"
+                android:drawableStart="@drawable/icon_search_new"
+                android:drawablePadding="12dp"
+                android:fontFamily="@font/josefin_sans"
+                android:gravity="center_vertical"
+                android:hint="Search for stores"
+                android:inputType="textFilter"
+                android:maxLines="1"
+                android:paddingStart="20dp"
+                android:textColor="#659BF6"
+                android:textColorHint="#9DC0F9"
+                android:textSize="22sp"
+                android:textStyle="bold" />
 
                 <ImageButton
                     android:id="@+id/image_button_filter"

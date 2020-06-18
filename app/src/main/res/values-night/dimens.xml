@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="activity_vertical_margin">16dp</dimen>
+    <dimen name="fab_margin">16dp</dimen>
+
+    <dimen name="stroke_width">3dp</dimen>
+    <dimen name="line_width">4dp</dimen>
+    <dimen name="circle_radius">48dp</dimen>
+    <dimen name="inner_circle_radius">40dp</dimen>
+    <dimen name="inner_circle_margin">4dp</dimen>
+    <dimen name="line_top_margin">20dp</dimen>
+    <dimen name="line_height">40dp</dimen>
+</resources>

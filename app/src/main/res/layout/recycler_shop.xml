@@ -9,6 +9,7 @@
     android:layout_marginBottom="4dp"
     android:layout_marginEnd="6dp"
     android:padding="4dp"
+    app:cardElevation="4dp"
     app:cardCornerRadius="6dp">
 
     <LinearLayout
@@ -24,9 +25,8 @@
                 android:id="@+id/imageShopMain"
                 android:layout_width="match_parent"
                 android:layout_height="180dp"
-                android:background="#659FF6"
                 android:scaleType="centerCrop"
-                android:src="@drawable/groc" />
+                android:src="@drawable/back_image_new" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -95,7 +95,6 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/light_grey"
             android:gravity="center_vertical"
             android:orientation="horizontal">
 

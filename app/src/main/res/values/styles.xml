@@ -34,4 +34,8 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorControlHighlight">@color/colorAccent</item>
     </style>
+
+    <style name="brandonFont">
+        <item name="android:fontFamily">@font/brandon</item>
+    </style>
 </resources>

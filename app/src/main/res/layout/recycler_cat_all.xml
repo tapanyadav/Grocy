@@ -23,9 +23,8 @@
                 android:id="@+id/imageCatDetails"
                 android:layout_width="match_parent"
                 android:layout_height="210dp"
-                android:background="#659FF6"
                 android:scaleType="centerCrop"
-                android:src="@drawable/groc" />
+                android:src="@drawable/back_image_new" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -95,7 +94,6 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginTop="3dp"
-            android:background="@color/light_grey"
             android:gravity="center_vertical"
             android:orientation="horizontal">
 

@@ -17,11 +17,11 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:fitsSystemWindows="true"
-            app:contentScrim="?attr/colorPrimary"
+            app:contentScrim="@color/mainBackground"
             app:expandedTitleMarginEnd="20dp"
             app:expandedTitleMarginStart="15dp"
             app:expandedTitleTextAppearance="@style/CollapsingToolbarLayoutExpandedTextStyle"
-            app:layout_scrollFlags="scroll|exitUntilCollapsed">
+            app:layout_scrollFlags="scroll|exitUntilCollapsed|snap">
 
             <ImageView
                 android:id="@+id/recyclerIvShopDetails"
@@ -121,8 +121,7 @@
             <include
                 layout="@layout/shop_details_header"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp" />
+                android:layout_height="wrap_content" />
 
             <include
                 layout="@layout/content_shop"

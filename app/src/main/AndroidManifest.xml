@@ -16,7 +16,13 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:targetApi="m">
-        <activity android:name=".activities.UserProfileActivity"></activity>
+        <activity android:name=".activities.StoresAddedActivity"></activity>
+        <activity android:name=".activities.AddStoreActivity" />
+        <activity android:name=".activities.SettingsActivity" />
+        <activity android:name=".activities.NotificationActivity" />
+        <activity android:name=".activities.AboutActivity" />
+        <activity android:name=".activities.CommentsActivity" />
+        <activity android:name=".activities.UserProfileActivity" />
         <activity android:name=".activities.ShopDetailsActivity" />
         <activity
             android:name=".activities.CategoriesDetailsActivity"
@@ -58,7 +64,9 @@
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
 
-                <data android:scheme="@string/fb_login_protocol_scheme" />
+                <data
+                    android:scheme="@string/fb_login_protocol_scheme"
+                    tools:ignore="ManifestResource" />
             </intent-filter>
         </activity>
 

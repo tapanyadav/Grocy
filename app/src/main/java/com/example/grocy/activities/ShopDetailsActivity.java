@@ -43,16 +43,17 @@ public class ShopDetailsActivity extends AppCompatActivity implements EventListe
         super.onCreate(savedInstanceState);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
                 WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
-
+        getWindow().setStatusBarColor(Color.WHITE);
         setContentView(R.layout.activity_shop_details);
-
-        getWindow().setStatusBarColor(Color.TRANSPARENT);
         Toolbar toolbar = findViewById(R.id.shop_toolbar);
         setSupportActionBar(toolbar);
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
 
+        toolbar.setNavigationIcon(R.drawable.icon_back_new);
+        toolbar.setNavigationOnClickListener(v -> onBackPressed());
         CollapsingToolbarLayout collapsingToolbarLayout = findViewById(R.id.collapsing_toolbar);
         collapsingToolbarLayout.setTitle("Gupta Grocery Store");
+        collapsingToolbarLayout.setCollapsedTitleTextColor(getResources().getColor(R.color.black));
 
         firebaseFirestore = FirebaseFirestore.getInstance();
         recyclerViewShopDetails = findViewById(R.id.shop_items_recycler);

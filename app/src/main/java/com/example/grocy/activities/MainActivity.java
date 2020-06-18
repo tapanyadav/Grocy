@@ -6,6 +6,7 @@ import android.app.Dialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
@@ -15,8 +16,12 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.provider.Settings;
 import android.util.Log;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -133,6 +138,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         appBarLayout = findViewById(R.id.app_bar_layout);
         coordinatorLayout = findViewById(R.id.cordLay);
 
+        //AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
 
         mAuth = FirebaseAuth.getInstance();
         FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
@@ -159,7 +165,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 //            linearLayout.setVisibility(View.VISIBLE);
 //            appBarLayout.setVisibility(View.VISIBLE);
             coordinatorLayout.setVisibility(View.VISIBLE);
-        }, 3000);
+        }, 2000);
 
 
         Query queryCategories = firebaseFirestore.collection("Categories").orderBy("catArrange");
@@ -240,7 +246,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         navigationView.setNavigationItemSelectedListener(this);
         navigationView.bringToFront();
         navigationView.setItemIconTintList(null);
-        navigationView.setCheckedItem(R.id.home);
+        //onNavigationItemSelected(navigationView.getMenu().findItem(R.id.home));
+        //navigationView.setCheckedItem(R.id.home);
+        navigationView.getMenu().getItem(0).setChecked(true);
+        //navigationView.setCheckedItem(home);
         toolbar.setNavigationIcon(R.drawable.icon_menu);
         animateNavigationDrawer();
         View view = navigationView.getHeaderView(0);
@@ -364,9 +373,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
             case R.id.home:
                 Toast.makeText(this, "Home", Toast.LENGTH_SHORT).show();
+                drawerLayout.closeDrawer(Gravity.LEFT);
                 return true;
             case R.id.notification:
-                Toast.makeText(this, "Notifications", Toast.LENGTH_SHORT).show();
+                Intent intentNoti = new Intent(this, NotificationActivity.class);
+                startActivity(intentNoti);
                 return true;
             case R.id.orders:
                 Toast.makeText(this, "All Orders are shown here!", Toast.LENGTH_SHORT).show();
@@ -375,19 +386,26 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 Toast.makeText(this, "Favourite orders are shown here!", Toast.LENGTH_SHORT).show();
                 return true;
             case R.id.feedback:
-                Toast.makeText(this, "Give your feedback here!", Toast.LENGTH_SHORT).show();
+                showFeedbackDialog();
                 return true;
             case R.id.about:
-                Toast.makeText(this, "About is clicked!", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(this, AboutActivity.class);
+                startActivity(intent);
                 return true;
             case R.id.setting:
                 Toast.makeText(this, "Settings for this app shown here!", Toast.LENGTH_SHORT).show();
+                Intent intentSetting = new Intent(this, SettingsActivity.class);
+                startActivity(intentSetting);
                 return true;
             case R.id.log_out:
-                logOut();
+                AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+                builder.setMessage("Are you sure you want to logout?")
+                        .setPositiveButton("OK", (dialogInterface, i) -> logOut()).setNegativeButton("Cancel", null);
+                AlertDialog alert = builder.create();
+                alert.show();
                 return true;
             case R.id.rate_us:
-                Toast.makeText(this, "App on play store will open from here!", Toast.LENGTH_SHORT).show();
+                showRatingDialog();
                 return true;
         }
         drawerLayout.closeDrawer(GravityCompat.START);
@@ -418,6 +436,103 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public void onPointerCaptureChanged(boolean hasCapture) {
 
+    }
+
+    private void showFeedbackDialog() {
+
+        ViewGroup viewGroup = findViewById(android.R.id.content);
+
+        View dialogView = LayoutInflater.from(this).inflate(R.layout.feedback_dialog, viewGroup, false);
+
+
+        //Now we need an AlertDialog.Builder object
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+        //setting the view of the builder to our custom view that we already inflated
+        builder.setView(dialogView);
+
+        //finally creating the alert dialog and displaying it
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
+        Objects.requireNonNull(alertDialog.getWindow()).setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+        Button buttonLove = alertDialog.findViewById(R.id.btnLove);
+        Button buttonImprove = alertDialog.findViewById(R.id.btnImprove);
+
+        assert buttonImprove != null;
+        buttonImprove.setOnClickListener(v -> {
+            alertDialog.dismiss();
+            showExpDialog();
+        });
+
+        assert buttonLove != null;
+        buttonLove.setOnClickListener(v -> {
+            alertDialog.dismiss();
+            showRatingDialog();
+        });
+    }
+
+    private void showRatingDialog() {
+        ViewGroup viewGroup = findViewById(android.R.id.content);
+
+        View dialogView = LayoutInflater.from(this).inflate(R.layout.rating_dialog, viewGroup, false);
+
+
+        //Now we need an AlertDialog.Builder object
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+        //setting the view of the builder to our custom view that we already inflated
+        builder.setView(dialogView);
+
+        //finally creating the alert dialog and displaying it
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
+        Objects.requireNonNull(alertDialog.getWindow()).setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+        Button buttonRate = alertDialog.findViewById(R.id.btnRatingPlay);
+        TextView textViewNo = alertDialog.findViewById(R.id.textNoThanks);
+        assert buttonRate != null;
+        buttonRate.setOnClickListener(v -> {
+            Toast.makeText(this, "Opening Play store!", Toast.LENGTH_SHORT).show();
+            alertDialog.dismiss();
+        });
+
+        assert textViewNo != null;
+        textViewNo.setOnClickListener(v -> {
+            alertDialog.dismiss();
+        });
+    }
+
+    private void showExpDialog() {
+        ViewGroup viewGroup = findViewById(android.R.id.content);
+
+        View dialogView = LayoutInflater.from(this).inflate(R.layout.experience_dialog, viewGroup, false);
+
+
+        //Now we need an AlertDialog.Builder object
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+        //setting the view of the builder to our custom view that we already inflated
+        builder.setView(dialogView);
+
+        //finally creating the alert dialog and displaying it
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
+        Objects.requireNonNull(alertDialog.getWindow()).setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        alertDialog.setCanceledOnTouchOutside(false);
+
+        Button buttonFeedback = alertDialog.findViewById(R.id.btnFeed);
+        ImageView imageViewClose = alertDialog.findViewById(R.id.imageClose);
+        assert buttonFeedback != null;
+        buttonFeedback.setOnClickListener(v -> {
+            Toast.makeText(this, "Feedback sent!!", Toast.LENGTH_SHORT).show();
+            alertDialog.dismiss();
+        });
+
+        assert imageViewClose != null;
+        imageViewClose.setOnClickListener(v -> {
+            alertDialog.dismiss();
+        });
     }
 
     private void initGoogleMap() {
@@ -519,7 +634,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                             if (addressList != null) {
                                 Address address = addressList.get(0);
 
-                                finalAddress = address.getPremises() + "," + address.getSubLocality() + "," + address.getSubAdminArea();
+                                finalAddress = address.getSubLocality() + "," + address.getSubAdminArea();
                                 toolbarTitle.setText(finalAddress);
                                 Toast.makeText(this, finalAddress, Toast.LENGTH_SHORT).show();
 
