@@ -1,26 +1,27 @@
 package com.example.grocy.Adapters;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.RecyclerView;
-
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.grocy.Models.CategoriesDetailsModel;
 import com.example.grocy.R;
-import com.firebase.ui.firestore.paging.FirestorePagingAdapter;
-import com.firebase.ui.firestore.paging.FirestorePagingOptions;
-import com.firebase.ui.firestore.paging.LoadingState;
+import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
+import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+import com.google.firebase.firestore.DocumentSnapshot;
 
-public class CategoriesDetailsAdapter extends FirestorePagingAdapter<CategoriesDetailsModel, CategoriesDetailsAdapter.MyViewHolder> {
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 
-    public CategoriesDetailsAdapter(@NonNull FirestorePagingOptions<CategoriesDetailsModel> options) {
+public class CategoriesDetailsAdapter extends FirestoreRecyclerAdapter<CategoriesDetailsModel, CategoriesDetailsAdapter.MyViewHolder> {
+
+    private CategoriesAdapter.OnListItemClick onListItemClick;
+
+    public CategoriesDetailsAdapter(@NonNull FirestoreRecyclerOptions<CategoriesDetailsModel> options) {
         super(options);
     }
 
@@ -46,10 +47,20 @@ public class CategoriesDetailsAdapter extends FirestorePagingAdapter<CategoriesD
         holder.textViewCatShopOff.setText(model.getShopOff());
         holder.textViewCatShopLimits.setText(model.getShopLimits());
         holder.textViewCatShopStatus.setText(model.getShopStatus());
-        holder.textViewCatShopRating.setText(model.getShopRating());
+        holder.textViewCatShopRating.setText("" + model.getShopRating());
         holder.textViewCatShopAddress.setText(model.getShopAddress());
         holder.textViewCatShopName.setText(model.getShopName());
     }
+
+
+    public void setOnListItemClick(CategoriesAdapter.OnListItemClick onListItemClick) {
+        this.onListItemClick = onListItemClick;
+    }
+
+    public interface OnListItemClick {
+        void onItemClick(DocumentSnapshot snapshot, int position);
+    }
+
 
     @Override
     public int getItemCount() {
@@ -68,29 +79,29 @@ public class CategoriesDetailsAdapter extends FirestorePagingAdapter<CategoriesD
         return new MyViewHolder(view);
     }
 
-    @Override
-    protected void onLoadingStateChanged(@NonNull LoadingState state) {
-        super.onLoadingStateChanged(state);
-        switch (state) {
-            case LOADING_INITIAL:
-                Log.d("PAGING_LOG", "Loading initial data");
-                break;
-            case LOADING_MORE:
-                Log.d("PAGING_LOG", "Loading next data");
-                break;
-            case FINISHED:
-                Log.d("PAGING_LOG", "All data loaded");
-                break;
-            case ERROR:
-                Log.d("PAGING_LOG", "Error Loading data");
-                break;
-            case LOADED:
-                Log.d("PAGING_LOG", "Total items load: " + getItemCount());
-                break;
-        }
-    }
+//    @Override
+//    protected void onLoadingStateChanged(@NonNull LoadingState state) {
+//        super.onLoadingStateChanged(state);
+//        switch (state) {
+//            case LOADING_INITIAL:
+//                Log.d("PAGING_LOG", "Loading initial data");
+//                break;
+//            case LOADING_MORE:
+//                Log.d("PAGING_LOG", "Loading next data");
+//                break;
+//            case FINISHED:
+//                Log.d("PAGING_LOG", "All data loaded");
+//                break;
+//            case ERROR:
+//                Log.d("PAGING_LOG", "Error Loading data");
+//                break;
+//            case LOADED:
+//                Log.d("PAGING_LOG", "Total items load: " + getItemCount());
+//                break;
+//        }
+//    }
 
-    public static class MyViewHolder extends RecyclerView.ViewHolder {
+    public class MyViewHolder extends RecyclerView.ViewHolder {
         ImageView imageViewCatShopImage, imageViewCatShopStatusBackground;
         TextView textViewCatShopName, textViewCatShopStatus, textViewCatShopRating, textViewCatShopAddress, textViewCatShopOff, textViewCatShopLimits, textViewCatShopType, textViewCatShopCat;
 
@@ -107,6 +118,12 @@ public class CategoriesDetailsAdapter extends FirestorePagingAdapter<CategoriesD
             textViewCatShopOff = itemView.findViewById(R.id.shop_off_cat);
             textViewCatShopType = itemView.findViewById(R.id.tv_type_shop_cat);
             textViewCatShopCat = itemView.findViewById(R.id.shop_category_cat);
+            itemView.setOnClickListener(v -> {
+                int position = getAdapterPosition();
+                if (position != RecyclerView.NO_POSITION && onListItemClick != null) {
+                    onListItemClick.onItemClick(getSnapshots().getSnapshot(position), position);
+                }
+            });
         }
     }
 }
