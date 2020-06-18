@@ -20,17 +20,11 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.CheckBox;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.SeekBar;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -40,7 +34,6 @@ import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.core.app.ActivityCompat;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -66,7 +59,6 @@ import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.libraries.places.api.Places;
 import com.google.android.libraries.places.api.model.Place;
 import com.google.android.libraries.places.api.net.PlacesClient;
@@ -79,8 +71,6 @@ import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
 
 import java.io.IOException;
 import java.io.Serializable;
@@ -88,9 +78,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
-import java.util.List;
 import java.util.Objects;
-import java.util.concurrent.atomic.AtomicReference;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -359,10 +347,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             bottomSheetDialogFilter.show(getSupportFragmentManager(), "exampleBottomSheet");
 //            bottomSheetDialogFilter.setCanceledOnTouchOutside(true);
 
-            bottomSheetDialogFilter = new BottomSheetDialog(MainActivity.this);
-            bottomSheetDialogFilter.setContentView(R.layout.content_filter_bottom_sheet);
-            bottomSheetDialogFilter.show();
-            bottomSheetDialogFilter.setCanceledOnTouchOutside(true);
+//            bottomSheetDialogFilter = new BottomSheetDialog(MainActivity.this);
+//            bottomSheetDialogFilter.setContentView(R.layout.content_filter_bottom_sheet);
+//            bottomSheetDialogFilter.show();
+//            bottomSheetDialogFilter.setCanceledOnTouchOutside(true);
 
 //            ImageView ivBottomClose = bottomSheetDialogFilter.findViewById(R.id.imageView_close);
 //            assert ivBottomClose != null;
@@ -426,9 +414,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 //            });
 //
 
-            ImageView ivBottomClose = bottomSheetDialogFilter.findViewById(R.id.imageView_close);
-            assert ivBottomClose != null;
-            ivBottomClose.setOnClickListener(closeView -> bottomSheetDialogFilter.dismiss());
+//            ImageView ivBottomClose = bottomSheetDialogFilter.findViewById(R.id.imageView_close);
+//            assert ivBottomClose != null;
+//            ivBottomClose.setOnClickListener(closeView -> bottomSheetDialogFilter.dismiss());
         });
 
 
