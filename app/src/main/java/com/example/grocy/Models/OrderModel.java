@@ -1,79 +1,72 @@
 package com.example.grocy.Models;
 
 public class OrderModel {
-    public String Shop, Address, Item, Date,Amount, Delivery_status;
-    public int Imageid;
+    public String shopName, shopAddress, orderedItems, dateTime, deliveryStatus, orderAmount;
+    public int shopImage;
 
-
-
-    public OrderModel(String Shop, String Address, String Item, String Date, int Imageid, String Amount, String Delivery_status) {
-        this.Shop = Shop;
-        this.Address = Address;
-        this.Item = Item;
-        this.Date = Date;
-        this.Imageid = Imageid;
-        this.Amount = Amount;
-        this.Delivery_status=Delivery_status;
+    public OrderModel(String shopName, String shopAddress, String orderedItems, String dateTime, String deliveryStatus, String orderAmount, int shopImage) {
+        this.shopName = shopName;
+        this.shopAddress = shopAddress;
+        this.orderedItems = orderedItems;
+        this.dateTime = dateTime;
+        this.deliveryStatus = deliveryStatus;
+        this.orderAmount = orderAmount;
+        this.shopImage = shopImage;
     }
 
-    public String getShop() {
-        return Shop;
+    public String getShopName() {
+        return shopName;
     }
 
-    public void setShop(String Shop) {
-        this.Shop = Shop;
+    public void setShopName(String shopName) {
+        this.shopName = shopName;
     }
 
-    public String getAddress() {
-        return Address;
+    public String getShopAddress() {
+        return shopAddress;
     }
 
-    public void setAddress(String Address) {
-        this.Address = Address;
+    public void setShopAddress(String shopAddress) {
+        this.shopAddress = shopAddress;
     }
 
-    public String getItem() {
-        return Item;
+    public String getOrderedItems() {
+        return orderedItems;
     }
 
-    public void setItem(String Item) {
-        this.Item = Item;
+    public void setOrderedItems(String orderedItems) {
+        this.orderedItems = orderedItems;
     }
 
-    public String getDate() {
-        return Date;
+    public String getDateTime() {
+        return dateTime;
     }
 
-    public void setDate(String Date) {
-        this.Date = Date;
+    public void setDateTime(String dateTime) {
+        this.dateTime = dateTime;
     }
 
-    public int getImageid() {
-        return Imageid;
+    public String getDeliveryStatus() {
+        return deliveryStatus;
     }
 
-    public void setImageid(int Imageid) {
-        this.Imageid = Imageid;
+    public void setDeliveryStatus(String deliveryStatus) {
+        this.deliveryStatus = deliveryStatus;
     }
 
-    public String getAmount() {
-        return Amount;
+    public String getOrderAmount() {
+        return orderAmount;
     }
 
-    public void setAmount(String Amount) {
-        this.Amount = Amount;
+    public void setOrderAmount(String orderAmount) {
+        this.orderAmount = orderAmount;
     }
 
-    public String getDelivery_status() {
-        return Delivery_status;
+    public int getShopImage() {
+        return shopImage;
     }
 
-    public void setDelivery_status(String Delivery_status) {
-        this.Delivery_status = Delivery_status;
+    public void setShopImage(int shopImage) {
+        this.shopImage = shopImage;
     }
-
-
-
-
-
 }
