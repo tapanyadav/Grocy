@@ -371,20 +371,23 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 return true;
             case R.id.orders:
 //                Toast.makeText(this, "Orders are shown here!", Toast.LENGTH_SHORT).show();
-                Intent intent=new Intent(this, Order_recyclerview.class);
+                Intent intent=new Intent(this, MyOrderActivity.class);
                 startActivity(intent);
                 Toast.makeText(this, "All Orders are shown here!", Toast.LENGTH_SHORT).show();
                 return true;
             case R.id.favourite_orders:
                 Toast.makeText(this, "Favourite orders are shown here!", Toast.LENGTH_SHORT).show();
+                Intent intent1=new Intent(this, FavOrderActivity.class);
+                startActivity(intent1);
                 return true;
             case R.id.feedback:
                 Toast.makeText(this, "Give your feedback here!", Toast.LENGTH_SHORT).show();
+
                 return true;
             case R.id.about:
                 Toast.makeText(this, "About is clicked!", Toast.LENGTH_SHORT).show();
-                Intent intent1=new Intent(this, AboutActivity.class);
-                startActivity(intent1);
+                Intent intent2=new Intent(this, AboutActivity.class);
+                startActivity(intent2);
                 return true;
             case R.id.setting:
                 Toast.makeText(this, "Settings for this app shown here!", Toast.LENGTH_SHORT).show();

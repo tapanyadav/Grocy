@@ -1,25 +1,25 @@
 package com.example.grocy.Adapters;
 
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.grocy.Models.OrderModel;
 import com.example.grocy.R;
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 
-public class OrdersAdapter extends FirestoreRecyclerAdapter<OrderModel, OrdersAdapter.MyViewHolder> {
-    public OrdersAdapter(@NonNull FirestoreRecyclerOptions<OrderModel> options) {
+public class FavOrdersAdapter extends FirestoreRecyclerAdapter<OrderModel, FavOrdersAdapter.MyViewHolder> {
+    public FavOrdersAdapter(@NonNull FirestoreRecyclerOptions<OrderModel> options) {
         super(options);
     }
 
     @Override
-    protected void onBindViewHolder(@NonNull MyViewHolder holder, int position, @NonNull OrderModel model) {
+    protected void onBindViewHolder(@NonNull FavOrdersAdapter.MyViewHolder holder, int position, @NonNull OrderModel model) {
 
         holder.name.setText(model.getShopName());
         holder.address.setText(model.getShopAddress());
@@ -33,9 +33,9 @@ public class OrdersAdapter extends FirestoreRecyclerAdapter<OrderModel, OrdersAd
 
     @NonNull
     @Override
-    public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.order_layout,parent,false);
-        return new MyViewHolder(view);
+    public FavOrdersAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.fav_order_layout,parent,false);
+        return new FavOrdersAdapter.MyViewHolder(view);
     }
 
     public static class MyViewHolder extends RecyclerView.ViewHolder {
@@ -61,4 +61,5 @@ public class OrdersAdapter extends FirestoreRecyclerAdapter<OrderModel, OrdersAd
 
         }
     }
+
 }

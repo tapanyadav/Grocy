@@ -16,9 +16,11 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:targetApi="m">
-        <activity android:name=".activities.UserProfileActivity"></activity>
+        <activity android:name=".Adapters.FavOrdersAdapter"></activity>
+        <activity android:name=".activities.FavOrderActivity" />
+        <activity android:name=".activities.UserProfileActivity" />
         <activity android:name=".activities.ShopDetailsActivity" />
-        <activity android:name=".activities.Order_recyclerview"></activity>
+        <activity android:name=".activities.MyOrderActivity" />
         <activity android:name=".activities.AboutActivity" />
         <activity
             android:name=".activities.CategoriesDetailsActivity"

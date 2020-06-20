@@ -1,10 +1,12 @@
 package com.example.grocy.Models;
 
 public class OrderModel {
-    public String shopName, shopAddress, orderedItems, dateTime, deliveryStatus, orderAmount;
-    public int shopImage;
+    public String shopName, shopAddress, orderedItems, dateTime, deliveryStatus, orderAmount, shopImage;
 
-    public OrderModel(String shopName, String shopAddress, String orderedItems, String dateTime, String deliveryStatus, String orderAmount, int shopImage) {
+    public OrderModel() {
+    }
+
+    public OrderModel(String shopName, String shopAddress, String orderedItems, String dateTime, String deliveryStatus, String orderAmount, String shopImage) {
         this.shopName = shopName;
         this.shopAddress = shopAddress;
         this.orderedItems = orderedItems;
@@ -62,11 +64,11 @@ public class OrderModel {
         this.orderAmount = orderAmount;
     }
 
-    public int getShopImage() {
+    public String getShopImage() {
         return shopImage;
     }
 
-    public void setShopImage(int shopImage) {
+    public void setShopImage(String shopImage) {
         this.shopImage = shopImage;
     }
 }
