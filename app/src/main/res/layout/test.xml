@@ -1,121 +1,346 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginTop="10dp"
     tools:context=".activities.AboutActivity">
 
-    <ImageView
-        android:id="@+id/item_image"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
-        android:layout_gravity="center_vertical"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="2dp"
-        android:layout_marginEnd="10dp"
-        android:layout_marginBottom="2dp"
-        android:scaleType="centerCrop"
-        android:src="@drawable/grocery"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/tv_name_item"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.6" />
+    <!--    <ImageView-->
+    <!--        android:id="@+id/item_image"-->
+    <!--        android:layout_width="80dp"-->
+    <!--        android:layout_height="80dp"-->
+    <!--        android:layout_gravity="center_vertical"-->
+    <!--        android:layout_marginStart="10dp"-->
+    <!--        android:layout_marginTop="2dp"-->
+    <!--        android:layout_marginEnd="10dp"-->
+    <!--        android:layout_marginBottom="2dp"-->
+    <!--        android:scaleType="centerCrop"-->
+    <!--        android:src="@drawable/grocery"-->
+    <!--        app:layout_constraintBottom_toBottomOf="parent"-->
+    <!--        app:layout_constraintEnd_toStartOf="@+id/tv_name_item"-->
+    <!--        app:layout_constraintStart_toStartOf="parent"-->
+    <!--        app:layout_constraintTop_toTopOf="parent"-->
+    <!--        app:layout_constraintVertical_bias="0.6" />-->
 
-    <TextView
-        android:id="@+id/tv_name_item"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="2dp"
-        android:fontFamily="@font/kalam_bold"
-        android:text="Product Name"
-        android:textColor="#000"
-        android:textSize="16sp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/tv_item_description"
-        app:layout_constraintEnd_toStartOf="@+id/materialButton"
-        app:layout_constraintStart_toEndOf="@+id/item_image"
-        app:layout_constraintTop_toTopOf="parent" />
+    <!--    <TextView-->
+    <!--        android:id="@+id/tv_name_item"-->
+    <!--        android:layout_width="0dp"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:layout_marginTop="2dp"-->
+    <!--        android:fontFamily="@font/kalam_bold"-->
+    <!--        android:text="Product Name"-->
+    <!--        android:textColor="#000"-->
+    <!--        android:textSize="16sp"-->
+    <!--        android:textStyle="bold"-->
+    <!--        app:layout_constraintBottom_toTopOf="@+id/tv_item_description"-->
+    <!--        app:layout_constraintEnd_toStartOf="@+id/materialButton"-->
+    <!--        app:layout_constraintStart_toEndOf="@+id/item_image"-->
+    <!--        app:layout_constraintTop_toTopOf="parent" />-->
 
-    <TextView
-        android:id="@+id/tv_item_description"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        android:layout_marginBottom="2dp"
-        android:text="Product description"
-        android:textSize="12sp"
-        app:layout_constraintBottom_toTopOf="@+id/textView2"
-        app:layout_constraintEnd_toStartOf="@+id/materialButton"
-        app:layout_constraintStart_toEndOf="@+id/item_image"
-        app:layout_constraintTop_toBottomOf="@+id/tv_name_item" />
+    <!--    <TextView-->
+    <!--        android:id="@+id/tv_item_description"-->
+    <!--        android:layout_width="0dp"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:layout_marginStart="10dp"-->
+    <!--        android:layout_marginBottom="2dp"-->
+    <!--        android:text="Product description"-->
+    <!--        android:textSize="12sp"-->
+    <!--        app:layout_constraintBottom_toTopOf="@+id/textView2"-->
+    <!--        app:layout_constraintEnd_toStartOf="@+id/materialButton"-->
+    <!--        app:layout_constraintStart_toEndOf="@+id/item_image"-->
+    <!--        app:layout_constraintTop_toBottomOf="@+id/tv_name_item" />-->
 
 
-    <TextView
-        android:id="@+id/textView2"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="1dp"
-        android:layout_marginEnd="4dp"
-        android:layout_marginBottom="1dp"
-        android:gravity="center_vertical"
-        android:text="₹"
-        android:textSize="12sp"
-        app:layout_constraintBottom_toTopOf="@+id/tv_quantity_item"
-        app:layout_constraintEnd_toStartOf="@+id/tv_item_price"
-        app:layout_constraintStart_toEndOf="@+id/item_image"
-        app:layout_constraintTop_toBottomOf="@+id/tv_item_description" />
+    <!--    <TextView-->
+    <!--        android:id="@+id/textView2"-->
+    <!--        android:layout_width="wrap_content"-->
+    <!--        android:layout_height="match_parent"-->
+    <!--        android:layout_marginStart="10dp"-->
+    <!--        android:layout_marginTop="1dp"-->
+    <!--        android:layout_marginEnd="4dp"-->
+    <!--        android:layout_marginBottom="1dp"-->
+    <!--        android:gravity="center_vertical"-->
+    <!--        android:text="₹"-->
+    <!--        android:textSize="12sp"-->
+    <!--        app:layout_constraintBottom_toTopOf="@+id/tv_quantity_item"-->
+    <!--        app:layout_constraintEnd_toStartOf="@+id/tv_item_price"-->
+    <!--        app:layout_constraintStart_toEndOf="@+id/item_image"-->
+    <!--        app:layout_constraintTop_toBottomOf="@+id/tv_item_description" />-->
 
-    <TextView
-        android:id="@+id/tv_item_price"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_marginStart="4dp"
-        android:layout_marginTop="2dp"
-        android:layout_marginBottom="1dp"
-        android:gravity="center_vertical"
-        android:text="Price"
-        android:textSize="12sp"
-        app:layout_constraintBottom_toTopOf="@+id/tv_quantity_item"
-        app:layout_constraintEnd_toEndOf="@+id/tv_item_description"
-        app:layout_constraintStart_toEndOf="@+id/textView2"
-        app:layout_constraintTop_toBottomOf="@+id/tv_item_description" />
+    <!--    <TextView-->
+    <!--        android:id="@+id/tv_item_price"-->
+    <!--        android:layout_width="0dp"-->
+    <!--        android:layout_height="match_parent"-->
+    <!--        android:layout_marginStart="4dp"-->
+    <!--        android:layout_marginTop="2dp"-->
+    <!--        android:layout_marginBottom="1dp"-->
+    <!--        android:gravity="center_vertical"-->
+    <!--        android:text="Price"-->
+    <!--        android:textSize="12sp"-->
+    <!--        app:layout_constraintBottom_toTopOf="@+id/tv_quantity_item"-->
+    <!--        app:layout_constraintEnd_toEndOf="@+id/tv_item_description"-->
+    <!--        app:layout_constraintStart_toEndOf="@+id/textView2"-->
+    <!--        app:layout_constraintTop_toBottomOf="@+id/tv_item_description" />-->
 
-    <TextView
-        android:id="@+id/tv_quantity_item"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="1dp"
-        android:layout_marginBottom="2dp"
-        android:text="Quantity"
-        android:textColor="@color/mainAppColor"
-        android:textSize="12sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/tv_item_description"
-        app:layout_constraintStart_toEndOf="@+id/item_image"
-        app:layout_constraintTop_toBottomOf="@+id/textView2" />
+    <!--    <TextView-->
+    <!--        android:id="@+id/tv_quantity_item"-->
+    <!--        android:layout_width="0dp"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:layout_marginStart="10dp"-->
+    <!--        android:layout_marginTop="1dp"-->
+    <!--        android:layout_marginBottom="2dp"-->
+    <!--        android:text="Quantity"-->
+    <!--        android:textColor="@color/mainAppColor"-->
+    <!--        android:textSize="12sp"-->
+    <!--        app:layout_constraintBottom_toBottomOf="parent"-->
+    <!--        app:layout_constraintEnd_toEndOf="@+id/tv_item_description"-->
+    <!--        app:layout_constraintStart_toEndOf="@+id/item_image"-->
+    <!--        app:layout_constraintTop_toBottomOf="@+id/textView2" />-->
 
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/materialButton"
-        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="19dp"
-        android:layout_marginEnd="4dp"
-        android:layout_marginBottom="20dp"
-        android:drawableStart="@drawable/ic_baseline_remove_24"
-        android:drawableRight="@drawable/ic_baseline_add_24"
-        android:text="ADD"
-        android:textSize="16sp"
-        android:textStyle="bold"
-        app:cornerRadius="12dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/tv_name_item"
-        app:layout_constraintTop_toTopOf="parent" />
+    <!--    <com.google.android.material.button.MaterialButton-->
+    <!--        android:id="@+id/materialButton"-->
+    <!--        style="@style/Widget.MaterialComponents.Button.OutlinedButton"-->
+    <!--        android:layout_width="wrap_content"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:layout_marginTop="19dp"-->
+    <!--        android:layout_marginEnd="4dp"-->
+    <!--        android:layout_marginBottom="20dp"-->
+    <!--        android:drawableStart="@drawable/ic_baseline_remove_24"-->
+    <!--        android:drawableRight="@drawable/ic_baseline_add_24"-->
+    <!--        android:text="ADD"-->
+    <!--        android:textSize="16sp"-->
+    <!--        android:textStyle="bold"-->
+    <!--        app:cornerRadius="12dp"-->
+    <!--        app:layout_constraintBottom_toBottomOf="parent"-->
+    <!--        app:layout_constraintEnd_toEndOf="parent"-->
+    <!--        app:layout_constraintStart_toEndOf="@+id/tv_name_item"-->
+    <!--        app:layout_constraintTop_toTopOf="parent" />-->
+
+
+    <!--    <androidx.constraintlayout.widget.ConstraintLayout-->
+    <!--        android:id="@+id/constLayout"-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:background="@color/light_grey"-->
+    <!--        app:layout_constraintEnd_toEndOf="parent"-->
+    <!--        app:layout_constraintStart_toStartOf="parent"-->
+    <!--        app:layout_constraintTop_toBottomOf="@+id/recycle">-->
+
+
+    <!--        <TextView-->
+    <!--            android:id="@+id/textView13"-->
+    <!--            android:layout_width="0dp"-->
+    <!--            android:layout_height="wrap_content"-->
+    <!--            android:layout_marginStart="12dp"-->
+    <!--            android:layout_marginTop="12dp"-->
+    <!--            android:layout_marginEnd="268dp"-->
+    <!--            android:layout_marginBottom="15dp"-->
+    <!--            android:text="Apply Promo Code"-->
+    <!--            android:textColor="@color/colorPrimary"-->
+    <!--            android:textSize="14sp"-->
+    <!--            app:layout_constraintBottom_toTopOf="@+id/textView18"-->
+    <!--            app:layout_constraintEnd_toEndOf="parent"-->
+    <!--            app:layout_constraintStart_toStartOf="parent"-->
+    <!--            app:layout_constraintTop_toTopOf="parent" />-->
+
+    <!--        <TextView-->
+    <!--            android:id="@+id/textView18"-->
+    <!--            android:layout_width="0dp"-->
+    <!--            android:layout_height="wrap_content"-->
+    <!--            android:layout_marginStart="10dp"-->
+    <!--            android:layout_marginTop="4dp"-->
+    <!--            android:layout_marginEnd="249dp"-->
+    <!--            android:layout_marginBottom="4dp"-->
+    <!--            android:text="Items Amount"-->
+    <!--            android:textColor="@color/black"-->
+    <!--            android:textSize="12sp"-->
+    <!--            app:layout_constraintBottom_toTopOf="@+id/textView19"-->
+    <!--            app:layout_constraintEnd_toStartOf="@+id/textView21"-->
+    <!--            app:layout_constraintStart_toStartOf="parent"-->
+    <!--            app:layout_constraintTop_toBottomOf="@+id/textView13" />-->
+
+    <!--        <TextView-->
+    <!--            android:id="@+id/textView19"-->
+    <!--            android:layout_width="0dp"-->
+    <!--            android:layout_height="wrap_content"-->
+    <!--            android:layout_marginStart="10dp"-->
+    <!--            android:layout_marginBottom="6dp"-->
+    <!--            android:text="Taxes and charges"-->
+    <!--            android:textSize="12sp"-->
+    <!--            app:layout_constraintBottom_toBottomOf="parent"-->
+    <!--            app:layout_constraintEnd_toStartOf="@+id/textView23"-->
+    <!--            app:layout_constraintStart_toStartOf="parent"-->
+    <!--            app:layout_constraintTop_toBottomOf="@+id/textView18" />-->
+
+    <!--        <TextView-->
+    <!--            android:id="@+id/textView"-->
+    <!--            android:layout_width="0dp"-->
+    <!--            android:layout_height="wrap_content"-->
+    <!--            android:layout_marginStart="10dp"-->
+    <!--            android:layout_marginTop="6dp"-->
+    <!--            android:layout_marginEnd="251dp"-->
+    <!--            android:layout_marginBottom="4dp"-->
+    <!--            android:text="Total Amount"-->
+    <!--            android:textSize="12sp"-->
+    <!--            android:textStyle="bold"-->
+    <!--            app:layout_constraintBottom_toBottomOf="parent"-->
+    <!--            app:layout_constraintEnd_toStartOf="@+id/textView25"-->
+    <!--            app:layout_constraintStart_toStartOf="parent"-->
+    <!--            app:layout_constraintTop_toBottomOf="@+id/textView19" />-->
+
+    <!--        <TextView-->
+    <!--            android:id="@+id/textView21"-->
+    <!--            android:layout_width="wrap_content"-->
+    <!--            android:layout_height="wrap_content"-->
+    <!--            android:layout_gravity="end"-->
+    <!--            android:layout_marginStart="8dp"-->
+    <!--            android:layout_marginTop="76dp"-->
+    <!--            android:layout_marginBottom="30dp"-->
+    <!--            android:text="₹"-->
+    <!--            app:layout_constraintBottom_toTopOf="@+id/textView25"-->
+    <!--            app:layout_constraintEnd_toStartOf="@+id/textView20"-->
+    <!--            app:layout_constraintStart_toEndOf="@+id/textView18"-->
+    <!--            app:layout_constraintTop_toTopOf="parent" />-->
+
+    <!--        <TextView-->
+    <!--            android:id="@+id/textView20"-->
+    <!--            android:layout_width="wrap_content"-->
+    <!--            android:layout_height="wrap_content"-->
+    <!--            android:layout_gravity="end"-->
+    <!--            android:layout_marginStart="1dp"-->
+    <!--            android:layout_marginTop="76dp"-->
+    <!--            android:layout_marginEnd="4dp"-->
+    <!--            android:layout_marginBottom="3dp"-->
+    <!--            android:text="540.00"-->
+    <!--            app:layout_constraintBottom_toTopOf="@+id/textView23"-->
+    <!--            app:layout_constraintEnd_toEndOf="parent"-->
+    <!--            app:layout_constraintStart_toEndOf="@+id/textView21"-->
+    <!--            app:layout_constraintTop_toTopOf="parent" />-->
+
+    <!--        <TextView-->
+    <!--            android:id="@+id/textView23"-->
+    <!--            android:layout_width="wrap_content"-->
+    <!--            android:layout_height="wrap_content"-->
+    <!--            android:layout_gravity="end"-->
+    <!--            android:layout_marginStart="238dp"-->
+    <!--            android:layout_marginTop="3dp"-->
+    <!--            android:layout_marginEnd="2dp"-->
+    <!--            android:layout_marginBottom="3dp"-->
+    <!--            android:text="₹"-->
+    <!--            app:layout_constraintBottom_toTopOf="@+id/textView25"-->
+    <!--            app:layout_constraintEnd_toStartOf="@+id/textView22"-->
+    <!--            app:layout_constraintStart_toEndOf="@+id/textView19"-->
+    <!--            app:layout_constraintTop_toBottomOf="@+id/textView20" />-->
+
+    <!--        <TextView-->
+    <!--            android:id="@+id/textView22"-->
+    <!--            android:layout_width="wrap_content"-->
+    <!--            android:layout_height="wrap_content"-->
+    <!--            android:layout_gravity="end"-->
+    <!--            android:layout_marginStart="1dp"-->
+    <!--            android:layout_marginTop="3dp"-->
+    <!--            android:layout_marginEnd="3dp"-->
+    <!--            android:layout_marginBottom="5dp"-->
+    <!--            android:text="40.00"-->
+    <!--            app:layout_constraintBottom_toTopOf="@+id/textView26"-->
+    <!--            app:layout_constraintEnd_toEndOf="parent"-->
+    <!--            app:layout_constraintStart_toEndOf="@+id/textView23"-->
+    <!--            app:layout_constraintTop_toBottomOf="@+id/textView20" />-->
+
+    <!--        <TextView-->
+    <!--            android:id="@+id/textView25"-->
+    <!--            android:layout_width="wrap_content"-->
+    <!--            android:layout_height="wrap_content"-->
+    <!--            android:layout_gravity="end"-->
+    <!--            android:layout_marginTop="3dp"-->
+    <!--            android:layout_marginEnd="12dp"-->
+    <!--            android:layout_marginBottom="5dp"-->
+    <!--            android:text="₹"-->
+    <!--            app:layout_constraintBottom_toBottomOf="parent"-->
+    <!--            app:layout_constraintEnd_toStartOf="@+id/textView22"-->
+    <!--            app:layout_constraintStart_toEndOf="@+id/textView"-->
+    <!--            app:layout_constraintTop_toBottomOf="@+id/textView23" />-->
+
+    <!--        <TextView-->
+    <!--            android:id="@+id/textView26"-->
+    <!--            android:layout_width="wrap_content"-->
+    <!--            android:layout_height="wrap_content"-->
+    <!--            android:layout_gravity="end"-->
+    <!--            android:layout_marginStart="1dp"-->
+    <!--            android:layout_marginTop="3dp"-->
+    <!--            android:layout_marginEnd="4dp"-->
+    <!--            android:layout_marginBottom="4dp"-->
+    <!--            android:text="580.00"-->
+    <!--            app:layout_constraintBottom_toBottomOf="parent"-->
+    <!--            app:layout_constraintEnd_toEndOf="parent"-->
+    <!--            app:layout_constraintStart_toEndOf="@+id/textView25"-->
+    <!--            app:layout_constraintTop_toBottomOf="@+id/textView23" />-->
+
+    <!--    </androidx.constraintlayout.widget.ConstraintLayout>-->
+
+
+    <!--    <androidx.constraintlayout.widget.ConstraintLayout-->
+    <!--        android:id="@+id/conLay"-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        app:layout_constraintEnd_toEndOf="parent"-->
+    <!--        app:layout_constraintStart_toStartOf="parent"-->
+    <!--        app:layout_constraintTop_toBottomOf="@+id/constLayout">-->
+
+    <!--        <TextView-->
+    <!--            android:id="@+id/textView24"-->
+    <!--            android:layout_width="0dp"-->
+    <!--            android:layout_height="wrap_content"-->
+    <!--            android:layout_marginStart="12dp"-->
+    <!--            android:layout_marginTop="16dp"-->
+    <!--            android:layout_marginEnd="290dp"-->
+    <!--            android:layout_marginBottom="6dp"-->
+    <!--            android:text="ORDERING FOR"-->
+    <!--            android:textSize="16sp"-->
+    <!--            app:layout_constraintBottom_toTopOf="@+id/userName"-->
+    <!--            app:layout_constraintEnd_toEndOf="parent"-->
+    <!--            app:layout_constraintStart_toStartOf="parent"-->
+    <!--            app:layout_constraintTop_toTopOf="parent" />-->
+
+    <!--        <TextView-->
+    <!--            android:id="@+id/userName"-->
+    <!--            android:layout_width="0dp"-->
+    <!--            android:layout_height="wrap_content"-->
+    <!--            android:layout_marginStart="5dp"-->
+    <!--            android:layout_marginTop="2dp"-->
+    <!--            android:layout_marginEnd="8dp"-->
+    <!--            android:layout_marginBottom="4dp"-->
+    <!--            android:text="Tapan Yadav ghhxva,"-->
+    <!--            android:textSize="18sp"-->
+    <!--            android:textStyle="bold"-->
+    <!--            app:layout_constraintBottom_toBottomOf="parent"-->
+    <!--            app:layout_constraintEnd_toStartOf="@+id/userPhone"-->
+    <!--            app:layout_constraintStart_toStartOf="parent"-->
+    <!--            app:layout_constraintTop_toBottomOf="@+id/textView24" />-->
+
+    <!--        <TextView-->
+    <!--            android:id="@+id/userPhone"-->
+    <!--            android:layout_width="0dp"-->
+    <!--            android:layout_height="wrap_content"-->
+    <!--            android:text="9760096730"-->
+    <!--            android:textSize="16sp"-->
+    <!--            android:textStyle="bold"-->
+    <!--            tools:layout_editor_absoluteX="197dp"-->
+    <!--            tools:layout_editor_absoluteY="45dp" />-->
+    <!--    </androidx.constraintlayout.widget.ConstraintLayout>-->
+
+    <!--    <androidx.constraintlayout.widget.ConstraintLayout-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        app:layout_constraintTop_toBottomOf="@+id/conLay">-->
+
+    <!--    </androidx.constraintlayout.widget.ConstraintLayout>-->
+
+    <!--    <TextView-->
+    <!--        android:layout_width="wrap_content"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:text="DELIVERY AT"-->
+    <!--        tools:layout_editor_absoluteY="342dp" />-->
 
 </androidx.constraintlayout.widget.ConstraintLayout>

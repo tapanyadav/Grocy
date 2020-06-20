@@ -6,6 +6,12 @@ import android.view.WindowManager;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.example.grocy.Adapters.ShopItemsCategoryAdapter;
 import com.example.grocy.Models.ShopItemsCategoryModel;
 import com.example.grocy.Models.ShopItemsModel;
@@ -13,6 +19,7 @@ import com.example.grocy.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
@@ -26,17 +33,12 @@ import java.util.Objects;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 public class ShopDetailsActivity extends AppCompatActivity {
 
     FirebaseFirestore firebaseFirestore;
     RecyclerView recyclerViewShopDetails;
     DocumentReference documentReference;
+    private BottomSheetDialog bottomSheetDialog;
 
     SortedSet<String> item_categories_name = new TreeSet();
 
@@ -48,6 +50,7 @@ public class ShopDetailsActivity extends AppCompatActivity {
     HashMap<String, Object> shop_detail = new HashMap();
 
     TextView textViewShopName, textViewShopAddress, textViewShopTime, textViewShopCategoryType, textViewShopOff, textViewShopRating;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,6 +77,7 @@ public class ShopDetailsActivity extends AppCompatActivity {
         textViewShopCategoryType = findViewById(R.id.shop_category_items);
         textViewShopOff = findViewById(R.id.shop_off_items);
         textViewShopRating = findViewById(R.id.shop_rating_items);
+
 
         String shopsId = Objects.requireNonNull(Objects.requireNonNull(getIntent().getExtras()).get("shopId")).toString();
 

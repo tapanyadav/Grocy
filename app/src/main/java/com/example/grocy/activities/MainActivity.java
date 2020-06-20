@@ -343,80 +343,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         imageButtonFilter.setOnClickListener(filterView -> {
             FilterActivity bottomSheetDialogFilter = new FilterActivity();
-//            bottomSheetDialogFilter.setContentView(R.layout.content_filter_bottom_sheet);
+
             bottomSheetDialogFilter.show(getSupportFragmentManager(), "exampleBottomSheet");
-//            bottomSheetDialogFilter.setCanceledOnTouchOutside(true);
 
-//            bottomSheetDialogFilter = new BottomSheetDialog(MainActivity.this);
-//            bottomSheetDialogFilter.setContentView(R.layout.content_filter_bottom_sheet);
-//            bottomSheetDialogFilter.show();
-//            bottomSheetDialogFilter.setCanceledOnTouchOutside(true);
-
-//            ImageView ivBottomClose = bottomSheetDialogFilter.findViewById(R.id.imageView_close);
-//            assert ivBottomClose != null;
-//            ivBottomClose.setOnClickListener(closeView -> bottomSheetDialogFilter.dismiss());
-//            SeekBar seekBar = bottomSheetDialogFilter.findViewById(R.id.seekBar);
-//            AtomicReference<String> selectedSeekBar = new AtomicReference<>("0");
-//            Button submit = bottomSheetDialogFilter.findViewById(R.id.submit);
-//            CheckBox [] check = new CheckBox[5];
-//            check[0] = bottomSheetDialogFilter.findViewById(R.id.groceryCheck);
-//            check[1] = bottomSheetDialogFilter.findViewById(R.id.stationaryCheck);
-//            check[2] = bottomSheetDialogFilter.findViewById(R.id.pharmacyCheck);
-//            check[3] = bottomSheetDialogFilter.findViewById(R.id.hardwareCheck);
-//            check[4] = bottomSheetDialogFilter.findViewById(R.id.fruitsAndVegCheck);
-//            List<String> selectedCatagories= new ArrayList();
-//            submit.setOnClickListener(printData -> {
-//                flag=1;
-//                for(int i=0;i<5;i++){
-//                    System.out.println(check[i].isChecked());
-//                    if(check[i].isChecked()==true){
-//                        selectedCatagories.add(check[i].getText().toString());
-//                        System.out.println(check[i].getText().toString());
-//                    }
-//                }
-//                queryShops = firebaseFirestore.collection("ShopsMain").whereIn("shopCategory",selectedCatagories).orderBy("shopArrange");
-//                queryShops.get()
-//                        .addOnSuccessListener(documentSnapshots -> {// [START_EXCLUDE]
-//                            for (QueryDocumentSnapshot snap : documentSnapshots) {
-//                                System.out.println("-------------------------------------");
-//                                System.out.println(snap.getData().toString());
-//                                System.out.println("-------------------------------------");
-//                            }
-//                        });
-//                main_intent = new Intent(this, MainActivity.class);
-//                main_intent.putExtra("flag", 1);
-//                shopsModelFirestoreRecyclerOptions = new FirestoreRecyclerOptions.Builder<ShopsModel>()
-//                        .setQuery(queryShops, ShopsModel.class).build();
-//                shopsAdapter = new ShopsAdapter(shopsModelFirestoreRecyclerOptions);
-//                shopsAdapter.notifyDataSetChanged();
-//                shopsAdapter.setHasStableIds(true);
-//
-////        DisplayMetrics displayMetrics=new DisplayMetrics();
-////        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
-////        int a=(displayMetrics.heightPixels*99)/100;
-////        recyclerViewShop.getLayoutParams().height=a;
-//
-//                recyclerViewShop.setHasFixedSize(false);
-//                recyclerViewShop.setAdapter(shopsAdapter);
-//                recyclerViewShop.setItemViewCacheSize(20);
-//                recyclerViewShop.setLayoutManager(new LinearLayoutManager(this));
-//
-//                selectedSeekBar.set("" + seekBar.getProgress());
-//                for(int i=0;i<selectedCatagories.size();i++){
-//                    Toast.makeText(MainActivity.this, selectedCatagories.get(i), Toast.LENGTH_LONG).show();
-//                }
-//                Toast.makeText(MainActivity.this, "SeekBar value: " + selectedSeekBar.toString(), Toast.LENGTH_LONG).show();
-//
-//                bottomSheetDialogFilter.dismiss();
-//
-//                startActivity(main_intent);
-//
-//            });
-//
-
-//            ImageView ivBottomClose = bottomSheetDialogFilter.findViewById(R.id.imageView_close);
-//            assert ivBottomClose != null;
-//            ivBottomClose.setOnClickListener(closeView -> bottomSheetDialogFilter.dismiss());
         });
 
 
@@ -474,6 +403,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 return true;
             case R.id.orders:
                 Toast.makeText(this, "All Orders are shown here!", Toast.LENGTH_SHORT).show();
+                Intent intentOrders = new Intent(this, MyOrdersActivity.class);
+                startActivity(intentOrders);
                 return true;
             case R.id.favourite_orders:
                 Toast.makeText(this, "Favourite orders are shown here!", Toast.LENGTH_SHORT).show();

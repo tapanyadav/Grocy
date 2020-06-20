@@ -40,9 +40,7 @@
         android:id="@+id/view"
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:layout_marginStart="12dp"
         android:layout_marginTop="11dp"
-        android:layout_marginEnd="12dp"
         android:background="@color/light_grey"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -52,7 +50,7 @@
         android:id="@+id/textView4"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
+        android:layout_marginStart="10dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="312dp"
         android:text="Quantity"
@@ -83,7 +81,6 @@
         android:id="@+id/radioGroup"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="30dp"
         android:layout_marginTop="26dp"
         android:layout_marginEnd="264dp"
         android:orientation="vertical"
@@ -99,7 +96,7 @@
             android:checked="true"
             android:paddingStart="10dp"
             android:selectAllOnFocus="true"
-            android:text="200g \t ₹250"
+            android:text="200g\n₹250"
             android:textColor="@drawable/radio_bg" />
 
         <com.google.android.material.radiobutton.MaterialRadioButton
@@ -109,7 +106,7 @@
             android:buttonTint="@color/colorPrimary"
             android:paddingStart="10dp"
             android:selectAllOnFocus="true"
-            android:text="500g \t ₹450"
+            android:text="500g\n₹450"
             android:textColor="@drawable/radio_bg" />
 
         <com.google.android.material.radiobutton.MaterialRadioButton
@@ -119,7 +116,7 @@
             android:buttonTint="@color/colorPrimary"
             android:paddingStart="10dp"
             android:selectAllOnFocus="true"
-            android:text="400g \t ₹350"
+            android:text="400g\n₹350"
             android:textColor="@drawable/radio_bg" />
 
         <com.google.android.material.radiobutton.MaterialRadioButton
@@ -130,7 +127,7 @@
             android:buttonTint="@color/colorPrimary"
             android:paddingStart="10dp"
             android:selectAllOnFocus="true"
-            android:text="800g \t ₹650"
+            android:text="800g\n₹650"
             android:textColor="@drawable/radio_bg" />
     </RadioGroup>
 
@@ -178,6 +175,7 @@
         </LinearLayout>
 
         <com.google.android.material.button.MaterialButton
+            android:id="@+id/buttonCartShow"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginStart="20dp"
