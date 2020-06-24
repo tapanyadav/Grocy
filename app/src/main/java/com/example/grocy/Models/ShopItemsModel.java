@@ -6,6 +6,8 @@ public class ShopItemsModel {
     private String itemsProductDescription;
     private String itemsProductName;
     private String itemsQuantity;
+    private String itemID;
+    private String shopID;
 
     public ShopItemsModel() {
 
@@ -57,5 +59,21 @@ public class ShopItemsModel {
 
     public void setItemsQuantity(String itemsQuantity) {
         this.itemsQuantity = itemsQuantity;
+    }
+
+    public String getItemID() {
+        return itemID;
+    }
+
+    public void setItemID(String itemID) {
+        this.itemID = itemID;
+    }
+
+    public String getShopID() {
+        return shopID;
+    }
+
+    public void setShopID(String shopID) {
+        this.shopID = shopID;
     }
 }

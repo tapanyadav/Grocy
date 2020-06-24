@@ -23,6 +23,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:scaleType="centerCrop"
+                android:id="@+id/userImage"
                 android:src="@drawable/user_profile" />
         </com.google.android.material.card.MaterialCardView>
 
@@ -52,6 +53,7 @@
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/brandon"
                     android:text="Tapan"
+                    android:id="@+id/userName"
                     android:textSize="22sp" />
             </LinearLayout>
 

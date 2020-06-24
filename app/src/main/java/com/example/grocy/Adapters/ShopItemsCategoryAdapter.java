@@ -27,6 +27,7 @@ public class ShopItemsCategoryAdapter extends RecyclerView.Adapter<ShopItemsCate
         this.shop_items_list = shop_items_list;
     }
 
+
     @NonNull
     @Override
     public ShopItemsCategoryViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {

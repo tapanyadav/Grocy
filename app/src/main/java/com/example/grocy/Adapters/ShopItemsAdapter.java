@@ -9,16 +9,27 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.RecyclerView;
-
 import com.bumptech.glide.Glide;
+import com.example.grocy.Models.ItemVariantsModel;
 import com.example.grocy.Models.ShopItemsModel;
 import com.example.grocy.R;
 import com.example.grocy.activities.CartActivity;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 public class ShopItemsAdapter extends RecyclerView.Adapter<ShopItemsAdapter.ShopItemsViewHolder> {
 
@@ -55,6 +66,8 @@ public class ShopItemsAdapter extends RecyclerView.Adapter<ShopItemsAdapter.Shop
             bottomSheetDialog.setContentView(R.layout.bottom_sheet_items_quantity);
             bottomSheetDialog.show();
             bottomSheetDialog.setCanceledOnTouchOutside(true);
+            setUpItemVariantsRecycler(bottomSheetDialog, position);
+
 
             Button buttonCart = bottomSheetDialog.findViewById(R.id.buttonCartShow);
             assert buttonCart != null;
@@ -63,6 +76,7 @@ public class ShopItemsAdapter extends RecyclerView.Adapter<ShopItemsAdapter.Shop
                 BottomSheetDialog bottomSheetDialog1 = new BottomSheetDialog(context);
                 bottomSheetDialog1.setContentView(R.layout.bottom_sheet_cart);
                 bottomSheetDialog1.show();
+
 
                 TextView textViewCartShow = bottomSheetDialog1.findViewById(R.id.textViewCart);
                 textViewCartShow.setOnClickListener(v2 -> {
@@ -73,6 +87,63 @@ public class ShopItemsAdapter extends RecyclerView.Adapter<ShopItemsAdapter.Shop
             });
         });
     }
+
+    private void setUpItemVariantsRecycler(BottomSheetDialog bottomSheetDialog, int position) {
+        final ShopItemsModel shopItemsModel = singleItem.get(position);
+
+        HashMap<String, Object> itemVariants = new HashMap<>();
+        FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
+        System.out.println("--------------------------");
+        System.out.println(shopItemsModel.getItemID());
+        System.out.println(shopItemsModel.getShopID());
+        System.out.println("--------------------------");
+        DocumentReference documentReference = firebaseFirestore.collection("ShopsMain").document(shopItemsModel.getShopID())
+                .collection("Items").document(shopItemsModel.getItemID());
+
+        Query query = documentReference.collection("Variants");
+
+        query.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    for (QueryDocumentSnapshot document : task.getResult()) {
+                        System.out.println("----------------------");
+                        System.out.println(document.getId());
+                        System.out.println(document.getData());
+                        System.out.println("----------------------");
+                        itemVariants.put(document.getId(), document.getData());
+                    }
+                    setAdapter(bottomSheetDialog, itemVariants);
+                }
+            }
+        });
+    }
+
+    private void setAdapter(BottomSheetDialog bottomSheetDialog, HashMap<String, Object> itemVariants) {
+
+        RecyclerView variantsRecyclerView;
+        ArrayList<ItemVariantsModel> itemVariantsModelArrayList;
+        ItemVariantsAdapter itemVariantsAdapter;
+        itemVariantsModelArrayList = new ArrayList<>();
+        variantsRecyclerView = bottomSheetDialog.findViewById(R.id.variantsRecyclerView);
+        variantsRecyclerView.setHasFixedSize(false);
+
+        variantsRecyclerView.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false));
+
+        itemVariantsAdapter = new ItemVariantsAdapter(context, itemVariantsModelArrayList);
+
+        variantsRecyclerView.setAdapter(itemVariantsAdapter);
+        for (Map.Entry mapElement : itemVariants.entrySet()) {
+            String key = (String) mapElement.getKey();
+            HashMap item = (HashMap) mapElement.getValue();
+            ItemVariantsModel itemVariantsModel = new ItemVariantsModel();
+            itemVariantsModel.setItemPrice((String) item.get("itemPrice"));
+            itemVariantsModel.setItemQuantity((String) item.get("itemQuantity"));
+            itemVariantsModelArrayList.add(itemVariantsModel);
+        }
+        itemVariantsAdapter.notifyDataSetChanged();
+    }
+
 
     private void openCart() {
         Intent intent = new Intent(context, CartActivity.class);
