@@ -127,7 +127,7 @@
                 android:layout_weight="1"
                 android:background="@color/lightBlue"
                 android:gravity="center"
-                android:text="11"
+                android:text="1"
                 android:textColor="@color/white"
                 android:textStyle="bold" />
 

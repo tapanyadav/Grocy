@@ -10,18 +10,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.example.grocy.Models.CartItemsModel;
 import com.example.grocy.Models.ItemVariantsModel;
+import com.example.grocy.Models.ShopItemsCategoryModel;
 import com.example.grocy.Models.ShopItemsModel;
 import com.example.grocy.R;
 import com.example.grocy.activities.CartActivity;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.Query;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -35,11 +30,15 @@ public class ShopItemsAdapter extends RecyclerView.Adapter<ShopItemsAdapter.Shop
 
     Context context;
     ArrayList<ShopItemsModel> singleItem;
+    ArrayList<ShopItemsCategoryModel> shop_items_list;
+    int parent_position;
 
-    public ShopItemsAdapter(Context context, ArrayList<ShopItemsModel> singleItem) {
+    public ShopItemsAdapter(Context context, ArrayList<ShopItemsModel> singleItem, ArrayList<ShopItemsCategoryModel> shop_items_list, int parent_position) {
         super();
         this.context = context;
         this.singleItem = singleItem;
+        this.shop_items_list = shop_items_list;
+        this.parent_position = parent_position;
     }
 
     @NonNull
@@ -72,54 +71,96 @@ public class ShopItemsAdapter extends RecyclerView.Adapter<ShopItemsAdapter.Shop
             Button buttonCart = bottomSheetDialog.findViewById(R.id.buttonCartShow);
             assert buttonCart != null;
             buttonCart.setOnClickListener(v1 -> {
-                bottomSheetDialog.dismiss();
-                BottomSheetDialog bottomSheetDialog1 = new BottomSheetDialog(context);
-                bottomSheetDialog1.setContentView(R.layout.bottom_sheet_cart);
-                bottomSheetDialog1.show();
-
-
-                TextView textViewCartShow = bottomSheetDialog1.findViewById(R.id.textViewCart);
-                textViewCartShow.setOnClickListener(v2 -> {
-                    bottomSheetDialog1.dismiss();
-                    openCart();
-
-                });
+                openBottomSheetCart(bottomSheetDialog, shopItemsModel);
             });
+        });
+    }
+
+    private void openBottomSheetCart(BottomSheetDialog bottomSheetDialog, ShopItemsModel shopItemsModel) {
+        bottomSheetDialog.dismiss();
+        BottomSheetDialog bottomSheetDialog1 = new BottomSheetDialog(context);
+        bottomSheetDialog1.setContentView(R.layout.bottom_sheet_cart);
+
+        System.out.println("--------------------------------------");
+        System.out.println(shop_items_list.toString());
+        for (int i = 0; i < shop_items_list.size(); i++) {
+            System.out.println(shop_items_list.get(i).getShop_items_list().size());
+        }
+        System.out.println("--------------------------------------");
+
+        bottomSheetDialog1.show();
+        boolean found = false;
+        for (int i = 0; i < ShopItemsCategoryAdapter.added_items.size(); i++) {
+            CartItemsModel item = ShopItemsCategoryAdapter.added_items.get(i);
+            if (item.getItemID().equals(shopItemsModel.getItemID()) && shopItemsModel.getItemVariants() == null) {
+                int count = item.getItemCount();
+                ShopItemsCategoryAdapter.added_items.get(i).setItemCount(count + 1);
+                found = true;
+            }
+            if (item.getItemID().equals(shopItemsModel.getItemID()) && shopItemsModel.getItemVariants() != null) {
+                if (item.getItemsPrice().equals(ItemVariantsAdapter.itemVariantsModelArrayList.get(ItemVariantsAdapter.lastCheckedPosition).getItemPrice())
+                        && item.getItemsQuantity().equals(ItemVariantsAdapter.itemVariantsModelArrayList.get(ItemVariantsAdapter.lastCheckedPosition).getItemQuantity())) {
+                    int count = item.getItemCount();
+                    ShopItemsCategoryAdapter.added_items.get(i).setItemCount(count + 1);
+                    found = true;
+                }
+            }
+        }
+        if (found == false) {
+            CartItemsModel cartItemsModel = new CartItemsModel();
+            cartItemsModel.setItemID(shopItemsModel.getItemID());
+            cartItemsModel.setItemsName(shopItemsModel.getItemsProductName());
+            cartItemsModel.setItemsImage(shopItemsModel.getItemsImage());
+            cartItemsModel.setItemCount(shopItemsModel.getCount());
+
+            if (shopItemsModel.getItemVariants() != null) {
+                cartItemsModel.setItemsPrice(ItemVariantsAdapter.itemVariantsModelArrayList.get(ItemVariantsAdapter.lastCheckedPosition).getItemPrice());
+                cartItemsModel.setItemsQuantity(ItemVariantsAdapter.itemVariantsModelArrayList.get(ItemVariantsAdapter.lastCheckedPosition).getItemQuantity());
+            } else {
+                cartItemsModel.setItemsQuantity(shopItemsModel.getItemsQuantity());
+                cartItemsModel.setItemsPrice(shopItemsModel.getItemsPrice());
+            }
+            ShopItemsCategoryAdapter.added_items.add(cartItemsModel);
+        }
+        int price = 0;
+        for (int i = 0; i < ShopItemsCategoryAdapter.added_items.size(); i++) {
+            price = price + Integer.parseInt(ShopItemsCategoryAdapter.added_items.get(i).getItemsPrice()) * ShopItemsCategoryAdapter.added_items.get(i).getItemCount();
+        }
+
+        ShopItemsCategoryAdapter.price_of_currentlyAddedItems = price;
+        ShopItemsCategoryAdapter.no_of_currentlyAddedItems = ShopItemsCategoryAdapter.no_of_currentlyAddedItems + 1;
+        TextView currentlyAddedItems = bottomSheetDialog1.findViewById(R.id.currentlyAddedItems);
+        TextView currentlyAddedItemsPrice = bottomSheetDialog1.findViewById(R.id.currentlyAddedItemsPrice);
+
+        currentlyAddedItems.setText(String.valueOf(ShopItemsCategoryAdapter.no_of_currentlyAddedItems));
+        currentlyAddedItemsPrice.setText(String.valueOf(ShopItemsCategoryAdapter.price_of_currentlyAddedItems));
+
+
+        TextView textViewCartShow = bottomSheetDialog1.findViewById(R.id.textViewCart);
+        textViewCartShow.setOnClickListener(v2 -> {
+            bottomSheetDialog1.dismiss();
+            openCart();
         });
     }
 
     private void setUpItemVariantsRecycler(BottomSheetDialog bottomSheetDialog, int position) {
         final ShopItemsModel shopItemsModel = singleItem.get(position);
 
-        HashMap<String, Object> itemVariants = new HashMap<>();
-        FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
+        HashMap<String, ItemVariantsModel> itemVariants;
+        itemVariants = shopItemsModel.getItemVariants();
         System.out.println("--------------------------");
         System.out.println(shopItemsModel.getItemID());
         System.out.println(shopItemsModel.getShopID());
         System.out.println("--------------------------");
-        DocumentReference documentReference = firebaseFirestore.collection("ShopsMain").document(shopItemsModel.getShopID())
-                .collection("Items").document(shopItemsModel.getItemID());
-
-        Query query = documentReference.collection("Variants");
-
-        query.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                if (task.isSuccessful()) {
-                    for (QueryDocumentSnapshot document : task.getResult()) {
-                        System.out.println("----------------------");
-                        System.out.println(document.getId());
-                        System.out.println(document.getData());
-                        System.out.println("----------------------");
-                        itemVariants.put(document.getId(), document.getData());
-                    }
-                    setAdapter(bottomSheetDialog, itemVariants);
-                }
-            }
-        });
+        if (itemVariants != null) {
+            setAdapter(bottomSheetDialog, itemVariants);
+        } else {
+            openBottomSheetCart(bottomSheetDialog, shopItemsModel);
+            return;
+        }
     }
 
-    private void setAdapter(BottomSheetDialog bottomSheetDialog, HashMap<String, Object> itemVariants) {
+    private void setAdapter(BottomSheetDialog bottomSheetDialog, HashMap<String, ItemVariantsModel> itemVariants) {
 
         RecyclerView variantsRecyclerView;
         ArrayList<ItemVariantsModel> itemVariantsModelArrayList;
@@ -147,6 +188,7 @@ public class ShopItemsAdapter extends RecyclerView.Adapter<ShopItemsAdapter.Shop
 
     private void openCart() {
         Intent intent = new Intent(context, CartActivity.class);
+        intent.putExtra("added_items", ShopItemsCategoryAdapter.added_items);
         context.startActivity(intent);
     }
 

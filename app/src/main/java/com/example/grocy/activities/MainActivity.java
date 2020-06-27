@@ -496,6 +496,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 return true;
             case R.id.favourite_orders:
                 Toast.makeText(this, "Favourite orders are shown here!", Toast.LENGTH_SHORT).show();
+                Intent intentFavOrders = new Intent(this, FavOrderActivity.class);
+                intentFavOrders.putExtra("user_id", "" + userId);
+                startActivity(intentFavOrders);
                 return true;
             case R.id.feedback:
                 showFeedbackDialog();

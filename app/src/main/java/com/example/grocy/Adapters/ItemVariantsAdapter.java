@@ -17,8 +17,8 @@ import androidx.recyclerview.widget.RecyclerView;
 public class ItemVariantsAdapter extends RecyclerView.Adapter<ItemVariantsAdapter.ItemVariantsViewHolder> {
 
     Context context;
-    ArrayList<ItemVariantsModel> itemVariantsModelArrayList;
-    private int lastCheckedPosition = 0;
+    static ArrayList<ItemVariantsModel> itemVariantsModelArrayList;
+    static int lastCheckedPosition = 0;
 
     public ItemVariantsAdapter(Context context, ArrayList<ItemVariantsModel> itemVariantsModelArrayList) {
         this.context = context;
@@ -37,6 +37,7 @@ public class ItemVariantsAdapter extends RecyclerView.Adapter<ItemVariantsAdapte
         ItemVariantsModel itemVariantsModel = itemVariantsModelArrayList.get(position);
         holder.itemVariantQP.setText(itemVariantsModel.getItemPrice() + "\n" + itemVariantsModel.getItemQuantity());
         holder.itemVariantQP.setChecked(position == lastCheckedPosition);
+
     }
 
     @Override
