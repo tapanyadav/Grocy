@@ -1,11 +1,16 @@
 package com.example.grocy.activities;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.res.ColorStateList;
+import android.net.Uri;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RatingBar;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -14,13 +19,18 @@ import androidx.cardview.widget.CardView;
 import androidx.core.content.ContextCompat;
 
 import com.example.grocy.R;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
 import java.util.HashMap;
 import java.util.Objects;
+
 
 public class AddReviewActivity extends AppCompatActivity {
 
@@ -32,10 +42,14 @@ public class AddReviewActivity extends AppCompatActivity {
     Chip chipNotLike1, chipNotLike2, chipNotLike3, chipNotLike4, chipNotLike5;
     ChipGroup chipGroupNotLike;
     Button buttonSubmitReview;
+    EditText editTextDetailReview;
+    ProgressDialog progressDialog;
+    private RatingBar ratingBar;
     HashMap<String, Object> chipData = new HashMap<>();
     FirebaseFirestore firebaseFirestore;
     String user_id;
-    private FirebaseAuth firebaseAuth;
+    private StorageReference storageReference;
+    private Uri mainImageURI;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,7 +61,11 @@ public class AddReviewActivity extends AppCompatActivity {
         cardViewFirst = findViewById(R.id.add_review_first_photo);
         buttonSubmitReview = findViewById(R.id.btn_submit_review);
         firebaseFirestore = FirebaseFirestore.getInstance();
-        firebaseAuth = FirebaseAuth.getInstance();
+        FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+        storageReference = FirebaseStorage.getInstance().getReference();
+        ratingBar = findViewById(R.id.rating_bar);
+        editTextDetailReview = findViewById(R.id.detailedReview);
+
         user_id = Objects.requireNonNull(firebaseAuth.getCurrentUser()).getUid();
 
         Toolbar toolbar = findViewById(R.id.add_review_toolbar);
@@ -61,78 +79,95 @@ public class AddReviewActivity extends AppCompatActivity {
         chipWork();
 
 
+
         buttonSubmitReview.setOnClickListener(v -> {
-            if (chipLike1.isChecked()) {
-                CharSequence data1 = chipLike1.getText();
-                chipData.put("data1", data1);
-            }
-            if (chipLike2.isChecked()) {
-                CharSequence data2 = chipLike2.getText();
-                chipData.put("data2", data2);
-            }
-            if (chipLike3.isChecked()) {
-                CharSequence data3 = chipLike3.getText();
-                chipData.put("data3", data3);
-            }
-            if (chipLike4.isChecked()) {
-                CharSequence data4 = chipLike4.getText();
-                chipData.put("data4", data4);
-            }
-            if (chipLike5.isChecked()) {
-                CharSequence data5 = chipLike5.getText();
-                chipData.put("data5", data5);
-            }
-            if (chipLike6.isChecked()) {
-                CharSequence data6 = chipLike6.getText();
-                chipData.put("data6", data6);
-            }
-            if (chipNotLike1.isChecked()) {
-                CharSequence notData1 = chipNotLike1.getText();
-                chipData.put("notData1", notData1);
-            }
-            if (chipNotLike2.isChecked()) {
-                CharSequence notData2 = chipNotLike2.getText();
-                chipData.put("notData2", notData2);
-            }
-            if (chipNotLike3.isChecked()) {
-                CharSequence notData3 = chipNotLike3.getText();
-                chipData.put("notData3", notData3);
-            }
-            if (chipNotLike4.isChecked()) {
-                CharSequence notData4 = chipNotLike4.getText();
-                chipData.put("notData4", notData4);
-            }
-            if (chipNotLike5.isChecked()) {
-                CharSequence notData5 = chipNotLike5.getText();
-                chipData.put("notData5", notData5);
-            }
-            System.out.println("-----------------------------------------------------------");
-            System.out.println("-----------------------------------------------------------");
-            System.out.println("-----------------------------------------------------------");
-            System.out.println(chipData.toString());
-            System.out.println("-----------------------------------------------------------");
-            System.out.println("-----------------------------------------------------------");
-            System.out.println("-----------------------------------------------------------");
+            float ratingReview = ratingBar.getRating();
+            String detailedReview = editTextDetailReview.getText().toString();
+            if (ratingReview != 0.0 && !TextUtils.isEmpty(detailedReview)) {
+                showProgress();
+                chipData.put("rating", ratingReview);
+                chipData.put("detailedReview", detailedReview);
 
-            sendReviewData();
+                if (chipLike1.isChecked()) {
+                    CharSequence data1 = chipLike1.getText();
+                    chipData.put("data1", data1);
+                }
+                if (chipLike2.isChecked()) {
+                    CharSequence data2 = chipLike2.getText();
+                    chipData.put("data2", data2);
+                }
+                if (chipLike3.isChecked()) {
+                    CharSequence data3 = chipLike3.getText();
+                    chipData.put("data3", data3);
+                }
+                if (chipLike4.isChecked()) {
+                    CharSequence data4 = chipLike4.getText();
+                    chipData.put("data4", data4);
+                }
+                if (chipLike5.isChecked()) {
+                    CharSequence data5 = chipLike5.getText();
+                    chipData.put("data5", data5);
+                }
+                if (chipLike6.isChecked()) {
+                    CharSequence data6 = chipLike6.getText();
+                    chipData.put("data6", data6);
+                }
+                if (chipNotLike1.isChecked()) {
+                    CharSequence notData1 = chipNotLike1.getText();
+                    chipData.put("notData1", notData1);
+                }
+                if (chipNotLike2.isChecked()) {
+                    CharSequence notData2 = chipNotLike2.getText();
+                    chipData.put("notData2", notData2);
+                }
+                if (chipNotLike3.isChecked()) {
+                    CharSequence notData3 = chipNotLike3.getText();
+                    chipData.put("notData3", notData3);
+                }
+                if (chipNotLike4.isChecked()) {
+                    CharSequence notData4 = chipNotLike4.getText();
+                    chipData.put("notData4", notData4);
+                }
+                if (chipNotLike5.isChecked()) {
+                    CharSequence notData5 = chipNotLike5.getText();
+                    chipData.put("notData5", notData5);
+                }
+
+                if (mainImageURI != null) {
+                    UploadTask image_path = storageReference.child("review_images/").child(user_id + ".jpg").putFile(mainImageURI);
+                    image_path.addOnSuccessListener(taskSnapshot -> {
+
+                        Task<Uri> task = Objects.requireNonNull(Objects.requireNonNull(taskSnapshot.getMetadata()).getReference()).getDownloadUrl();
+                        task.addOnSuccessListener(uri -> {
+                            String file = uri.toString();
+                            sendReviewData(file);
+                        });
+
+                    });//TODO add onFailure listener
+                } else {
+                    sendReviewData(null);
+                }
+
+            } else {
+                Toast.makeText(this, "Please enter rating or detailed review", Toast.LENGTH_SHORT).show();
+            }
         });
-
     }
 
-    private void sendReviewData() {
+
+    private void sendReviewData(String image) {
+
+        chipData.put("reviewImage", image);
 
         firebaseFirestore.collection("Users").document(user_id).collection("Reviews").add(chipData).addOnCompleteListener(task1 -> {
 
             if (task1.isSuccessful()) {
-
-
-                Toast.makeText(AddReviewActivity.this, "Reviews are added", Toast.LENGTH_LONG).show();
-                Intent mainIntent = new Intent(AddReviewActivity.this, UserProfileActivity.class);
-                startActivity(mainIntent);
+                progressDialog.dismiss();
+                Toast.makeText(AddReviewActivity.this, "Review is added", Toast.LENGTH_LONG).show();
                 finish();
 
             } else {
-
+                progressDialog.dismiss();
                 String error = Objects.requireNonNull(task1.getException()).getMessage();
                 Toast.makeText(AddReviewActivity.this, "(FIRESTORE Error) : " + error, Toast.LENGTH_LONG).show();
 
@@ -152,7 +187,8 @@ public class AddReviewActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK) {
             if (requestCode == PICK_IMAGES) {
-                imageViewAddReviewPhotoOne.setImageURI(data.getData());
+                mainImageURI = data.getData();
+                imageViewAddReviewPhotoOne.setImageURI(mainImageURI);
                 cardViewFirst.setVisibility(View.VISIBLE);
             }
         }
@@ -214,5 +250,14 @@ public class AddReviewActivity extends AppCompatActivity {
         chipClose.setChecked(false);
         chipClose.setTextColor(getResources().getColor(R.color.black));
         chipClose.setChipBackgroundColor(ColorStateList.valueOf(ContextCompat.getColor(this, R.color.light)));
+    }
+
+    private void showProgress() {
+        progressDialog = new ProgressDialog(AddReviewActivity.this);
+        progressDialog.show();
+        progressDialog.setContentView(R.layout.process_dialog);
+        Objects.requireNonNull(progressDialog.getWindow()).setBackgroundDrawableResource(
+                android.R.color.transparent
+        );
     }
 }

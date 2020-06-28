@@ -51,6 +51,7 @@
                 android:textStyle="bold" />
 
             <RatingBar
+                android:id="@+id/rating_bar"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="12dp"
@@ -355,7 +356,7 @@
                 android:textStyle="bold" />
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/name"
+                android:id="@+id/detailedReview"
                 android:layout_width="match_parent"
                 android:layout_height="55dp"
                 android:layout_marginStart="12dp"

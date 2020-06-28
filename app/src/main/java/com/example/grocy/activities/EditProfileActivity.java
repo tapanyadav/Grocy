@@ -54,7 +54,7 @@ public class EditProfileActivity extends AppCompatActivity {
     private FirebaseAuth firebaseAuth;
     private FirebaseFirestore firebaseFirestore;
     private Bitmap compressedImageFile;
-    private Uri mainImageURI = null;
+    private Uri mainImageURI;
     private StorageReference storageReference;
     private String user_id;
     private boolean isChanged = false;
@@ -179,7 +179,8 @@ public class EditProfileActivity extends AppCompatActivity {
 
                 } else {
 
-                    storeFirestore(null, user_name);
+                    String oldImage = mainImageURI.toString();
+                    storeFirestore(oldImage, user_name);
 
                 }
             }
@@ -221,12 +222,10 @@ public class EditProfileActivity extends AppCompatActivity {
 
                 progressDialog.dismiss();
                 Toast.makeText(EditProfileActivity.this, "The user Settings are updated.", Toast.LENGTH_LONG).show();
-                Intent mainIntent = new Intent(EditProfileActivity.this, UserProfileActivity.class);
-                startActivity(mainIntent);
                 finish();
 
             } else {
-
+                progressDialog.dismiss();
                 String error = Objects.requireNonNull(task1.getException()).getMessage();
                 Toast.makeText(EditProfileActivity.this, "(FIRESTORE Error) : " + error, Toast.LENGTH_LONG).show();
 
