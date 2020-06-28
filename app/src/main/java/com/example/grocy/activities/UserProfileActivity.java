@@ -1,7 +1,9 @@
 package com.example.grocy.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -29,6 +31,8 @@ public class UserProfileActivity extends AppCompatActivity {
     private ViewPager viewPager;
     private PhotosFragment photosFragment;
     private ReviewsFragment reviewsFragment;
+    TextView textViewAddReview, textViewAddPhoto;
+    private ImageView imageViewProfileEdit;
 
     // ImageView imageViewBack;
     @Override
@@ -40,6 +44,9 @@ public class UserProfileActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.profile_toolbar);
         tabLayout = findViewById(R.id.tabLayout);
         viewPager = findViewById(R.id.viewPager);
+        imageViewProfileEdit = findViewById(R.id.image_editProf);
+        textViewAddReview = findViewById(R.id.text_addReview);
+        textViewAddPhoto = findViewById(R.id.text_addPhoto);
 
 
         setSupportActionBar(toolbar);
@@ -48,6 +55,16 @@ public class UserProfileActivity extends AppCompatActivity {
         toolbar.setNavigationIcon(R.drawable.icon_back_new);
         toolbar.setNavigationOnClickListener(v -> {
             onBackPressed();
+        });
+
+        textViewAddReview.setOnClickListener(v -> {
+            Intent intent = new Intent(UserProfileActivity.this, AddReviewActivity.class);
+            startActivity(intent);
+        });
+
+        textViewAddPhoto.setOnClickListener(v -> {
+            Intent intent = new Intent(UserProfileActivity.this, AddPhotoActivity.class);
+            startActivity(intent);
         });
         photosFragment = new PhotosFragment();
         reviewsFragment = new ReviewsFragment();
@@ -65,6 +82,18 @@ public class UserProfileActivity extends AppCompatActivity {
 
         Objects.requireNonNull(tabLayout.getTabAt(0)).setIcon(R.drawable.icon_review);
         Objects.requireNonNull(tabLayout.getTabAt(1)).setIcon(R.drawable.icon_photo);
+
+        openUserProfileImage();
+    }
+
+    private void openUserProfileImage() {
+
+        imageViewProfileEdit.setOnClickListener(v -> {
+
+            Intent intent = new Intent(UserProfileActivity.this, EditProfileActivity.class);
+            startActivity(intent);
+
+        });
     }
 
 

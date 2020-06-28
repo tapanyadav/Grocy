@@ -385,6 +385,7 @@
                         android:src="@drawable/icon_add_photo" />
 
                     <TextView
+                        android:id="@+id/text_addPhoto"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="10dp"
@@ -416,6 +417,7 @@
                         android:src="@drawable/icon_add_review" />
 
                     <TextView
+                        android:id="@+id/text_addReview"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="10dp"

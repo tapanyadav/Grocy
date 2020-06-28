@@ -27,7 +27,7 @@
 
             <ImageView
                 android:id="@+id/aboutTeamImage"
-                android:layout_width="180dp"
+                android:layout_width="140dp"
                 android:layout_height="160dp"
                 android:scaleType="centerCrop"
                 android:src="@drawable/user_profile" />
@@ -45,7 +45,7 @@
                     android:layout_height="wrap_content"
                     android:text="Tapan Yadav"
                     android:textColor="@color/white"
-                    android:textSize="18sp"
+                    android:textSize="16sp"
                     android:textStyle="bold" />
 
                 <TextView
@@ -55,11 +55,12 @@
                     android:layout_marginStart="2dp"
                     android:text="Designation"
                     android:textColor="@color/white"
-                    android:textSize="14sp" />
+                    android:textSize="12sp" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:layout_marginTop="16dp"
                     android:orientation="horizontal">
 
                     <ImageView

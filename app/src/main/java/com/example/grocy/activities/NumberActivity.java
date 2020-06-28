@@ -4,7 +4,6 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -38,30 +37,27 @@ public class NumberActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         fStore = FirebaseFirestore.getInstance();
 
-        buttonSendOTP.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showProgress();
-                String uPhone = editTextNumber.getText().toString();
-                String phone_number = "+91" + uPhone;
-                System.out.println(phone_number);
+        buttonSendOTP.setOnClickListener(v -> {
+            showProgress();
+            String uPhone = editTextNumber.getText().toString();
+            String phone_number = "+91" + uPhone;
+            System.out.println(phone_number);
 
-                Map<String, Object> phone = new HashMap<>();
-                phone.put("pNumber", phone_number);
+            Map<String, Object> phone = new HashMap<>();
+            phone.put("pNumber", phone_number);
 
-                userID = mAuth.getCurrentUser().getUid();
-                fStore.collection("Users").document(userID).update(phone);
+            userID = mAuth.getCurrentUser().getUid();
+            fStore.collection("Users").document(userID).update(phone);
 
-                HashMap<String, String> hm = new HashMap<>();
-                hm.put("phone_number", phone_number);
-                Intent otp_intent = new Intent(NumberActivity.this, OtpActivity.class);
-                otp_intent.putExtra("hm", hm);
-                System.out.println("Hello");
-                startActivity(otp_intent);
-                finish();
-                progressDialog.dismiss();
-                Toast.makeText(NumberActivity.this, "Otp sent!", Toast.LENGTH_SHORT).show();
-            }
+            HashMap<String, String> hm = new HashMap<>();
+            hm.put("phone_number", phone_number);
+            Intent otp_intent = new Intent(NumberActivity.this, OtpActivity.class);
+            otp_intent.putExtra("hm", hm);
+            System.out.println("Hello");
+            startActivity(otp_intent);
+            finish();
+            progressDialog.dismiss();
+            Toast.makeText(NumberActivity.this, "Otp sent!", Toast.LENGTH_SHORT).show();
         });
 
 

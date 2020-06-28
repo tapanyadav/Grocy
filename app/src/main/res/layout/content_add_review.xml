@@ -1,0 +1,409 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="76dp">
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="240dp"
+                android:layout_marginTop="4dp"
+                android:src="@drawable/add_review" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginStart="12dp"
+                android:layout_marginTop="12dp"
+                android:text="Review for Store name"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/addPhone"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                android:layout_marginTop="12dp"
+                android:layout_marginEnd="12dp"
+                android:text="Your reviews helps people in deciding from where to purchase goods"
+                android:textSize="16sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                android:layout_marginTop="18dp"
+                android:text="Rate your experience"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <RatingBar
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                android:layout_marginTop="12dp"
+                android:isIndicator="false"
+                android:rating="2.5"
+                android:stepSize="0.5"
+                android:theme="@style/RatingBar" />
+
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cardEditProf"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginEnd="12dp"
+                android:layout_marginBottom="12dp"
+                android:elevation="6dp"
+                app:cardCornerRadius="12dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginTop="12dp"
+                        android:text="What did you not like?"
+                        android:textSize="20sp"
+                        android:textStyle="bold" />
+
+
+                    <com.google.android.material.chip.ChipGroup
+                        android:id="@+id/chip_group_not"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="12dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginBottom="8dp"
+                        app:chipSpacingVertical="4dp">
+
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/chipNot1"
+                            style="@style/Widget.MaterialComponents.Chip.Choice"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Packaging issue"
+                            app:chipCornerRadius="12dp"
+                            app:closeIcon="@drawable/ic_baseline_close_24"
+                            app:rippleColor="@color/colorAccent" />
+
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/chipNot2"
+                            style="@style/Widget.MaterialComponents.Chip.Choice"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Package was not tamper proof"
+                            app:chipCornerRadius="12dp"
+                            app:closeIcon="@drawable/ic_baseline_close_24"
+                            app:rippleColor="@color/colorAccent" />
+
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/chipNot3"
+                            style="@style/Widget.MaterialComponents.Chip.Choice"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Delivery is not on time"
+                            app:chipCornerRadius="12dp"
+                            app:closeIcon="@drawable/ic_baseline_close_24"
+                            app:rippleColor="@color/colorAccent" />
+
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/chipNot4"
+                            style="@style/Widget.MaterialComponents.Chip.Choice"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Add later"
+                            app:chipCornerRadius="12dp"
+                            app:closeIcon="@drawable/ic_baseline_close_24"
+                            app:rippleColor="@color/colorAccent" />
+
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/chipNot5"
+                            style="@style/Widget.MaterialComponents.Chip.Choice"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="later"
+                            app:chipCornerRadius="12dp"
+                            app:closeIcon="@drawable/ic_baseline_close_24"
+                            app:rippleColor="@color/colorAccent" />
+
+                    </com.google.android.material.chip.ChipGroup>
+
+                </LinearLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginEnd="12dp"
+                android:layout_marginBottom="12dp"
+                android:elevation="6dp"
+                app:cardCornerRadius="12dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginTop="12dp"
+                        android:text="What did you like?"
+                        android:textSize="20sp"
+                        android:textStyle="bold" />
+
+                    <com.google.android.material.chip.ChipGroup
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="12dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginBottom="8dp"
+                        app:chipSpacingVertical="4dp">
+
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/chip1"
+                            style="@style/Widget.MaterialComponents.Chip.Choice"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Good packaging"
+                            app:chipCornerRadius="12dp"
+                            app:closeIcon="@drawable/ic_baseline_close_24"
+                            app:rippleColor="@color/colorAccent" />
+
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/chip2"
+                            style="@style/Widget.MaterialComponents.Chip.Choice"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="More varieties of product"
+                            app:chipCornerRadius="12dp"
+                            app:closeIcon="@drawable/ic_baseline_close_24"
+                            app:rippleColor="@color/colorAccent" />
+
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/chip3"
+                            style="@style/Widget.MaterialComponents.Chip.Choice"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Delivery is on time"
+                            app:chipCornerRadius="12dp"
+                            app:closeIcon="@drawable/ic_baseline_close_24"
+                            app:rippleColor="@color/colorAccent" />
+
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/chip4"
+                            style="@style/Widget.MaterialComponents.Chip.Choice"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Customizations available"
+                            app:chipCornerRadius="12dp"
+                            app:closeIcon="@drawable/ic_baseline_close_24"
+                            app:rippleColor="@color/colorAccent" />
+
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/chip5"
+                            style="@style/Widget.MaterialComponents.Chip.Choice"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Add later"
+                            app:chipCornerRadius="12dp"
+                            app:closeIcon="@drawable/ic_baseline_close_24"
+                            app:rippleColor="@color/colorAccent" />
+
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/chip6"
+                            style="@style/Widget.MaterialComponents.Chip.Choice"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="later"
+                            app:chipCornerRadius="12dp"
+                            app:closeIcon="@drawable/ic_baseline_close_24"
+                            app:rippleColor="@color/colorAccent" />
+                    </com.google.android.material.chip.ChipGroup>
+
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                android:layout_marginTop="12dp"
+                android:text="Add photo"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="140dp"
+                android:layout_marginTop="10dp"
+                android:orientation="horizontal">
+
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/add_review_photo"
+                    android:layout_width="120dp"
+                    android:layout_height="120dp"
+                    android:layout_marginStart="12dp"
+                    android:layout_marginTop="10dp"
+                    android:elevation="6dp"
+                    app:cardCornerRadius="12dp">
+
+                    <ImageView
+                        android:id="@+id/add_review_picker"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:layout_gravity="center"
+                        android:src="@drawable/ic_baseline_add_photo_alternate_24" />
+                </com.google.android.material.card.MaterialCardView>
+
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/add_review_first_photo"
+                    android:layout_width="120dp"
+                    android:layout_height="120dp"
+                    android:layout_marginStart="12dp"
+                    android:layout_marginTop="10dp"
+                    android:elevation="6dp"
+                    android:visibility="invisible"
+                    app:cardCornerRadius="12dp">
+
+                    <ImageView
+                        android:id="@+id/image_first_review"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/user_profile" />
+
+                </com.google.android.material.card.MaterialCardView>
+
+                <!--                <com.google.android.material.card.MaterialCardView-->
+                <!--                    android:id="@+id/add_review_second_photo"-->
+                <!--                    android:layout_width="120dp"-->
+                <!--                    android:layout_height="120dp"-->
+                <!--                    android:layout_marginStart="12dp"-->
+                <!--                    android:layout_marginTop="10dp"-->
+                <!--                    android:elevation="2dp"-->
+                <!--                    android:visibility="invisible"-->
+                <!--                    app:cardCornerRadius="12dp">-->
+
+                <!--                    <ImageView-->
+                <!--                        android:id="@+id/image_second_review"-->
+                <!--                        android:layout_width="match_parent"-->
+                <!--                        android:layout_height="match_parent"-->
+                <!--                        android:scaleType="centerCrop"-->
+                <!--                        android:src="@drawable/ic_baseline_add_photo_alternate_24"-->
+                <!--                        android:layout_gravity="center"/>-->
+                <!--                </com.google.android.material.card.MaterialCardView>-->
+
+                <!--                <com.google.android.material.card.MaterialCardView-->
+                <!--                    android:id="@+id/add_review_third_photo"-->
+                <!--                    android:layout_width="120dp"-->
+                <!--                    android:layout_height="120dp"-->
+                <!--                    android:layout_marginStart="12dp"-->
+                <!--                    android:layout_marginTop="10dp"-->
+                <!--                    android:layout_marginEnd="12dp"-->
+                <!--                    android:elevation="2dp"-->
+                <!--                    android:visibility="invisible"-->
+                <!--                    app:cardCornerRadius="12dp">-->
+
+                <!--                    <ImageView-->
+                <!--                        android:id="@+id/image_third_review"-->
+                <!--                        android:layout_width="match_parent"-->
+                <!--                        android:layout_height="match_parent"-->
+                <!--                        android:scaleType="centerCrop"-->
+                <!--                        android:src="@drawable/ic_baseline_add_photo_alternate_24"-->
+                <!--                        android:layout_gravity="center"/>-->
+                <!--                </com.google.android.material.card.MaterialCardView>-->
+
+            </LinearLayout>
+
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                android:layout_marginTop="12dp"
+                android:text="Write a review"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/name"
+                android:layout_width="match_parent"
+                android:layout_height="55dp"
+                android:layout_marginStart="12dp"
+                android:layout_marginTop="12dp"
+                android:layout_marginEnd="12dp"
+                android:background="@drawable/round_corner"
+                android:drawablePadding="12dp"
+                android:fontFamily="@font/josefin_sans"
+                android:gravity="center_vertical"
+                android:hint="Write detailed review here"
+                android:inputType="textPersonName"
+                android:maxLines="1"
+                android:paddingStart="20dp"
+                android:textColor="#659BF6"
+                android:textColorHint="#9DC0F9"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                android:layout_marginTop="12dp"
+                android:layout_marginEnd="12dp"
+                android:layout_marginBottom="40dp"
+                android:text="Be polite and friendly.This is a place for love and feedback,not hate."
+                android:textSize="16sp" />
+        </LinearLayout>
+
+    </ScrollView>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginTop="20dp"
+        android:background="@color/white"
+        android:orientation="vertical">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_submit_review"
+            android:layout_width="match_parent"
+            android:layout_height="65dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginBottom="12dp"
+            android:text="Submit Review"
+            android:textAllCaps="false"
+            android:textSize="18sp" />
+    </LinearLayout>
+</RelativeLayout>

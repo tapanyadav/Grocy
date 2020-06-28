@@ -212,24 +212,23 @@
                 android:padding="20dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center_horizontal"
                 android:orientation="horizontal">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Grocy"
-                    android:layout_marginStart="26dp"
-                    android:textSize="42sp"
-                    android:fontFamily="@font/kalam_bold"/>
+                    android:layout_marginStart="20dp"
+                    android:textSize="32sp"
+                    android:fontFamily="@font/kalam_bold" />
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="think goods think grocy"
                     android:fontFamily="@font/kaushan"
-                    android:textSize="22sp"
-                    android:layout_marginStart="30dp"/>
+                    android:layout_marginStart="20dp"
+                    android:textSize="20sp" />
 
             </LinearLayout>
 

@@ -11,6 +11,7 @@
     <color name="lightGreen">#3FEFA0</color>
     <color name="lightPink">#FD587E</color>
     <color name="light_grey">#D3D3D3</color>
+    <color name="light">#E0E0E0</color>
     <color name="semiTransparentColor">#80FFFFFF</color>
     <color name="black">#000</color>
     <color name="mainBackground">#fff</color>

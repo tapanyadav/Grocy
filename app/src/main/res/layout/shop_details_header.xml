@@ -27,13 +27,13 @@
                 android:fontFamily="@font/josefin_sans"
                 android:gravity="center_vertical"
                 android:text="Shop Name"
-                android:textSize="20sp"
+                android:textSize="16sp"
                 android:textStyle="bold" />
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginStart="16dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
 
@@ -71,14 +71,12 @@
                         android:id="@+id/shop_rating_items"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginEnd="16dp"
+                        android:layout_marginEnd="12dp"
                         android:background="@drawable/background_signup"
                         android:drawableStart="@drawable/icon_star"
                         android:drawablePadding="3.5dp"
                         android:fontFamily="@font/josefin_sans"
-                        android:gravity="end|center_vertical"
                         android:padding="4dp"
-                        android:paddingTop="2dp"
                         android:text="4.5"
                         android:textColor="@color/colorAccent"
                         android:textSize="12sp"
@@ -96,7 +94,7 @@
             android:layout_marginTop="6dp"
             android:fontFamily="@font/josefin_sans"
             android:text="Shop Address"
-            android:textSize="18sp" />
+            android:textSize="14sp" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -109,14 +107,14 @@
                 android:layout_height="wrap_content"
                 android:text="Open now - "
                 android:textColor="@color/lightGreen"
-                android:textSize="16sp" />
+                android:textSize="12sp" />
 
             <TextView
                 android:id="@+id/shop_item_time"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="shopTime"
-                android:textSize="16sp" />
+                android:textSize="12sp" />
         </LinearLayout>
 
         <View

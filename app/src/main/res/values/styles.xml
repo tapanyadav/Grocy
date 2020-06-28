@@ -38,4 +38,9 @@
     <style name="brandonFont">
         <item name="android:fontFamily">@font/brandon</item>
     </style>
+
+    <style name="RatingBar" parent="Theme.AppCompat">
+        <item name="colorControlNormal">@color/colorPrimary</item>
+        <item name="colorControlActivated">@color/colorPrimary</item>
+    </style>
 </resources>
