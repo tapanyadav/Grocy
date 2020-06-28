@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <ScrollView
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginBottom="54dp">
@@ -13,21 +13,27 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <include layout="@layout/recycler_cart_items" />
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/cart_items_recycler"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical" />
 
-            <include layout="@layout/recycler_cart_items" />
+            <!--            <include layout="@layout/recycler_cart_items" />-->
 
-            <include layout="@layout/recycler_cart_items" />
+            <!--            <include layout="@layout/recycler_cart_items" />-->
 
-            <include layout="@layout/recycler_cart_items" />
+            <!--            <include layout="@layout/recycler_cart_items" />-->
 
-            <include layout="@layout/recycler_cart_items" />
+            <!--            <include layout="@layout/recycler_cart_items" />-->
 
-            <include layout="@layout/recycler_cart_items" />
+            <!--            <include layout="@layout/recycler_cart_items" />-->
 
-            <include layout="@layout/recycler_cart_items" />
+            <!--            <include layout="@layout/recycler_cart_items" />-->
 
-            <include layout="@layout/recycler_cart_items" />
+            <!--            <include layout="@layout/recycler_cart_items" />-->
+
+            <!--            <include layout="@layout/recycler_cart_items" />-->
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -76,7 +82,7 @@
                             android:text="₹" />
 
                         <TextView
-                            android:id="@+id/textView20"
+                            android:id="@+id/items_amount"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="end|center_vertical"
@@ -119,6 +125,7 @@
                             android:text="₹" />
 
                         <TextView
+                            android:id="@+id/tax_amount"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="end|center_vertical"
@@ -163,6 +170,7 @@
                             android:text="₹" />
 
                         <TextView
+                            android:id="@+id/total_amount"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="end|center_vertical"
@@ -283,7 +291,7 @@
 
 
         </LinearLayout>
-    </ScrollView>
+    </androidx.core.widget.NestedScrollView>
 
     <LinearLayout
         android:layout_width="match_parent"

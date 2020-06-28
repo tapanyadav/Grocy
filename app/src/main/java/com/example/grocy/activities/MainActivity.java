@@ -28,21 +28,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.ActionBarDrawerToggle;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.coordinatorlayout.widget.CoordinatorLayout;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-import androidx.core.view.GravityCompat;
-import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.fragment.app.FragmentManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
+import com.bumptech.glide.Glide;
 import com.example.grocy.Adapters.CategoriesAdapter;
 import com.example.grocy.Adapters.FeaturedAdapter;
 import com.example.grocy.Adapters.HorizontalAdapter;
@@ -69,17 +55,36 @@ import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
+import java.util.concurrent.atomic.AtomicReference;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.FragmentManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
@@ -125,11 +130,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     String globalAddress;
     Query queryShops;
     FirestoreRecyclerOptions<ShopsModel> shopsModelFirestoreRecyclerOptions;
-    String flag="0";
+    String flag = "0";
     Intent main_intent;
-    ArrayList<String> checkList=null;
-    double rating=1;
+    ArrayList<String> checkList = null;
+    double rating = 1;
     CircleImageView circleImageView;
+    TextView user_name;
+    HashMap<String, Object> proile_activity_data = new HashMap();
+    AtomicReference<String> userId = new AtomicReference<>();
 
     @SuppressLint({"RestrictedApi", "ClickableViewAccessibility"})
     @Override
@@ -150,6 +158,66 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         mAuth = FirebaseAuth.getInstance();
         FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
+        FirebaseUser user = mAuth.getCurrentUser();
+        System.out.println("----------------------------------------------------------");
+        System.out.println(user.toString());
+        System.out.println("----------------------------------------------------------");
+//        for (UserInfo profile : user.getProviderData().get(0)) {
+//            String email = profile.getEmail();
+//            System.out.println(email);
+//        }
+
+        String user_email = mAuth.getCurrentUser().getEmail();
+        String user_number = mAuth.getCurrentUser().getPhoneNumber();
+        View view = navigationView.getHeaderView(0);
+        user_name = view.findViewById(R.id.menu_slogan);
+        circleImageView = view.findViewById(R.id.profilePic);
+        if (user_email != "" && user_email != null) {
+            String temp = mAuth.getCurrentUser().getUid();
+            userId.set(temp);
+            firebaseFirestore.collection("Users")
+                    .document(String.valueOf(userId))
+                    .get()
+                    .addOnCompleteListener(task -> {
+                        if (task.isSuccessful()) {
+                            DocumentSnapshot document = task.getResult();
+                            user_name.setText((String) document.getData().get("fName"));
+                            proile_activity_data = (HashMap<String, Object>) document.getData();
+                            proile_activity_data.put("userId", document.getId());
+                            if (document.getData().containsKey("profilePic")) {
+                                Glide.with(circleImageView.getContext())
+                                        .load((String) document.getData().get("profilePic"))
+                                        .into(circleImageView);
+                            }
+                            setProfileIntent(proile_activity_data);
+                        } else {
+                            Log.d(TAG, "Error getting documents: ", task.getException());
+                        }
+                    });
+        } else {
+            firebaseFirestore.collection("Users")
+                    .whereEqualTo("pNumber", user_number)
+                    .get()
+                    .addOnCompleteListener(task -> {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                userId.set(document.getId());
+                                user_name.setText((String) document.getData().get("fName"));
+                                proile_activity_data = (HashMap<String, Object>) document.getData();
+                                proile_activity_data.put("userId", document.getId());
+                                Glide.with(circleImageView.getContext())
+                                        .load((String) document.getData().get("profilePic"))
+                                        .into(circleImageView);
+                                setProfileIntent(proile_activity_data);
+                            }
+                        } else {
+                            Log.d(TAG, "Error getting documents: ", task.getException());
+                        }
+                    });
+
+        }
+
+
         fusedLocationProviderClient = new FusedLocationProviderClient(MainActivity.this);
 
         RecyclerView recyclerViewCat = findViewById(R.id.recycler);
@@ -278,13 +346,29 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         //navigationView.setCheckedItem(home);
         toolbar.setNavigationIcon(R.drawable.icon_menu);
         animateNavigationDrawer();
-        View view = navigationView.getHeaderView(0);
-        circleImageView = view.findViewById(R.id.profilePic);
 
         circleImageView.setOnClickListener(v -> {
             Intent intent = new Intent(MainActivity.this, UserProfileActivity.class);
+            if (proile_activity_data.size() != 0) {
+                intent.putExtra("user_data", proile_activity_data);
+            }
             startActivity(intent);
         });
+
+//        String user_email=user.getProviderData().get(0).getEmail();
+//        firebaseFirestore.collection("Users")
+//                .whereEqualTo("Email", user_email)
+//                .get()
+//                .addOnCompleteListener(task->  {
+//                    if (task.isSuccessful()) {
+//                        for (QueryDocumentSnapshot document : task.getResult()) {
+//                            user_name.setText((String)document.getData().get("fName"));
+//                        }
+//                    } else {
+//                        Log.d(TAG, "Error getting documents: ", task.getException());
+//                    }
+//                });
+
 
         Objects.requireNonNull(getSupportActionBar()).setDefaultDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
@@ -351,6 +435,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     }
 
+    void setProfileIntent(HashMap<String, Object> user_info) {
+
+    }
 
     private void animateNavigationDrawer() {
 
@@ -404,10 +491,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case R.id.orders:
                 Toast.makeText(this, "All Orders are shown here!", Toast.LENGTH_SHORT).show();
                 Intent intentOrders = new Intent(this, MyOrdersActivity.class);
+                intentOrders.putExtra("user_id", "" + userId);
                 startActivity(intentOrders);
                 return true;
             case R.id.favourite_orders:
                 Toast.makeText(this, "Favourite orders are shown here!", Toast.LENGTH_SHORT).show();
+                Intent intentFavOrders = new Intent(this, FavOrderActivity.class);
+                intentFavOrders.putExtra("user_id", "" + userId);
+                startActivity(intentFavOrders);
                 return true;
             case R.id.feedback:
                 showFeedbackDialog();

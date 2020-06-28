@@ -6,13 +6,8 @@ import android.view.WindowManager;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import com.example.grocy.Adapters.ShopItemsCategoryAdapter;
+import com.example.grocy.Models.ItemVariantsModel;
 import com.example.grocy.Models.ShopItemsCategoryModel;
 import com.example.grocy.Models.ShopItemsModel;
 import com.example.grocy.R;
@@ -33,6 +28,12 @@ import java.util.Objects;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 public class ShopDetailsActivity extends AppCompatActivity {
 
     FirebaseFirestore firebaseFirestore;
@@ -51,6 +52,7 @@ public class ShopDetailsActivity extends AppCompatActivity {
 
     TextView textViewShopName, textViewShopAddress, textViewShopTime, textViewShopCategoryType, textViewShopOff, textViewShopRating;
 
+    String shopsId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,7 +81,7 @@ public class ShopDetailsActivity extends AppCompatActivity {
         textViewShopRating = findViewById(R.id.shop_rating_items);
 
 
-        String shopsId = Objects.requireNonNull(Objects.requireNonNull(getIntent().getExtras()).get("shopId")).toString();
+        shopsId = Objects.requireNonNull(Objects.requireNonNull(getIntent().getExtras()).get("shopId")).toString();
 
         documentReference = firebaseFirestore.collection("ShopsMain").document(shopsId);
 
@@ -110,13 +112,39 @@ public class ShopDetailsActivity extends AppCompatActivity {
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if (task.isSuccessful()) {
                     for (QueryDocumentSnapshot document : task.getResult()) {
-
+                        String itemID = document.getId();
                         item_list.put(document.getId(), document.getData());
                         item_categories_name.add((String) document.getData().get("itemCategory"));
-                        System.out.println(item_list.toString());
-                        System.out.println("------------------------------------------------------");
-                        System.out.println(item_categories_name);
-                        setAdapter();
+
+                        DocumentReference variantReference = documentReference.collection("Items").document(document.getId());
+                        Query query1 = variantReference.collection("Variants");
+
+                        query1.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                            @Override
+                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                if (task.isSuccessful()) {
+                                    HashMap<String, HashMap> itemVariants = new HashMap<>();
+                                    for (QueryDocumentSnapshot document : task.getResult()) {
+                                        System.out.println("----------------------");
+                                        System.out.println(document.getId());
+                                        System.out.println(document.getData());
+                                        System.out.println("----------------------");
+                                        itemVariants.put(document.getId(), (HashMap) document.getData());
+                                    }
+                                    HashMap<String, Object> hm = (HashMap) item_list.get(itemID);
+                                    if (itemVariants.size() != 0) {
+                                        hm.put("Variants", itemVariants);
+                                    } else {
+                                        hm.put("Variants", null);
+                                    }
+                                    setAdapter();
+                                    System.out.println(item_list.toString());
+                                    System.out.println("------------------------------------------------------");
+                                    System.out.println(item_categories_name);
+                                }
+                            }
+                        });
+
                     }
                 }
             }
@@ -154,6 +182,10 @@ public class ShopDetailsActivity extends AppCompatActivity {
                     shopItemsModel.setItemsProductDescription((String) item.get("itemsProductDescription"));
                     shopItemsModel.setItemsQuantity((String) item.get("itemsQuantity"));
                     shopItemsModel.setItemsProductName((String) item.get("itemsProductName"));
+                    shopItemsModel.setItemID(key);
+                    shopItemsModel.setShopID(shopsId);
+                    shopItemsModel.setCount(1);
+                    shopItemsModel.setItemVariants((HashMap<String, ItemVariantsModel>) item.get("Variants"));
                     items.add(shopItemsModel);
                 }
             }

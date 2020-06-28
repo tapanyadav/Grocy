@@ -1,11 +1,18 @@
 package com.example.grocy.Models;
 
-public class ShopItemsModel {
+import java.io.Serializable;
+import java.util.HashMap;
+
+public class ShopItemsModel implements Serializable {
     private String itemsImage;
     private String itemsPrice;
     private String itemsProductDescription;
     private String itemsProductName;
     private String itemsQuantity;
+    private String itemID;
+    private String shopID;
+    private HashMap<String, ItemVariantsModel> itemVariants;
+    private int count;
 
     public ShopItemsModel() {
 
@@ -57,5 +64,37 @@ public class ShopItemsModel {
 
     public void setItemsQuantity(String itemsQuantity) {
         this.itemsQuantity = itemsQuantity;
+    }
+
+    public String getItemID() {
+        return itemID;
+    }
+
+    public void setItemID(String itemID) {
+        this.itemID = itemID;
+    }
+
+    public String getShopID() {
+        return shopID;
+    }
+
+    public void setShopID(String shopID) {
+        this.shopID = shopID;
+    }
+
+    public HashMap<String, ItemVariantsModel> getItemVariants() {
+        return itemVariants;
+    }
+
+    public void setItemVariants(HashMap<String, ItemVariantsModel> itemVariants) {
+        this.itemVariants = itemVariants;
+    }
+
+    public int getCount() {
+        return count;
+    }
+
+    public void setCount(int count) {
+        this.count = count;
     }
 }
