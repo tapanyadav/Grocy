@@ -44,7 +44,6 @@
             android:textColor="#659BF6"
             android:textStyle="bold"
             android:textSize="22sp"
-
             android:maxLines="1"
             android:inputType="textEmailAddress"
             android:drawableStart="@drawable/icon_email"

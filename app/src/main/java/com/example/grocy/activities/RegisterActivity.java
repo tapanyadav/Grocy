@@ -1,7 +1,6 @@
 package com.example.grocy.activities;
 
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -33,6 +32,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 public class RegisterActivity extends AppCompatActivity {
 
@@ -156,7 +156,7 @@ public class RegisterActivity extends AppCompatActivity {
 
                                 } else {
 
-                                    String errorMessage = task.getException().getMessage();
+                                    String errorMessage = Objects.requireNonNull(task.getException()).getMessage();
                                     Toast.makeText(RegisterActivity.this, "Error : " + errorMessage, Toast.LENGTH_LONG).show();
 
                                 }
@@ -180,7 +180,7 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     private void showProgress() {
-        Context context;
+
         progressDialog = new ProgressDialog(RegisterActivity.this);
         progressDialog.show();
         progressDialog.setContentView(R.layout.process_dialog);

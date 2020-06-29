@@ -1,4 +1,4 @@
-package com.example.grocy;
+package com.example.grocy.helper;
 
 import android.content.Context;
 import android.util.AttributeSet;

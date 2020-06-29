@@ -53,11 +53,12 @@
                         android:src="@drawable/user" />
 
                     <ImageView
+                        android:id="@+id/image_share_profile"
                         android:layout_width="24dp"
                         android:layout_height="24dp"
-                        android:layout_marginStart="16dp"
+                        android:layout_marginStart="8dp"
                         android:layout_marginEnd="10dp"
-                        android:src="@drawable/icon_shares" />
+                        android:src="@drawable/add_addre" />
                 </LinearLayout>
             </LinearLayout>
         </androidx.appcompat.widget.Toolbar>

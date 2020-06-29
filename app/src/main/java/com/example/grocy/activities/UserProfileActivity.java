@@ -4,7 +4,16 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.cardview.widget.CardView;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentPagerAdapter;
+import androidx.viewpager.widget.ViewPager;
 
 import com.bumptech.glide.Glide;
 import com.example.grocy.R;
@@ -23,24 +32,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentPagerAdapter;
-import androidx.viewpager.widget.ViewPager;
-
 public class UserProfileActivity extends AppCompatActivity {
 
-    ImageView imageViewProfile;
-
-    private TabLayout tabLayout;
-    private ViewPager viewPager;
-    private PhotosFragment photosFragment;
-    private ReviewsFragment reviewsFragment;
-    TextView textViewAddReview, textViewAddPhoto;
     private ImageView imageViewProfileEdit;
     FirebaseFirestore firebaseFirestore;
     DocumentReference documentReference;
@@ -48,7 +41,6 @@ public class UserProfileActivity extends AppCompatActivity {
     private ImageView userImage;
     private HashMap user_data = new HashMap<>();
 
-    // ImageView imageViewBack;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,11 +48,14 @@ public class UserProfileActivity extends AppCompatActivity {
         userName = findViewById(R.id.userName);
         number_of_orders = findViewById(R.id.number_of_orders);
         userImage = findViewById(R.id.userImage);
+        CardView cardViewAddPhoto = findViewById(R.id.card_addPhoto);
+        CardView cardViewAddReview = findViewById(R.id.card_addReview);
+        ImageView profileShare = findViewById(R.id.image_share_profile);
 
         firebaseFirestore = FirebaseFirestore.getInstance();
         user_data = (HashMap<String, Object>) getIntent().getSerializableExtra("user_data");
 
-        documentReference = firebaseFirestore.collection("Users").document((String) user_data.get("userId"));
+        documentReference = firebaseFirestore.collection("Users").document((String) Objects.requireNonNull(user_data.get("userId")));
         documentReference.collection("myOrder").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
@@ -76,38 +71,31 @@ public class UserProfileActivity extends AppCompatActivity {
             }
         });
         Toolbar toolbar = findViewById(R.id.profile_toolbar);
-        tabLayout = findViewById(R.id.tabLayout);
-        viewPager = findViewById(R.id.viewPager);
+        TabLayout tabLayout = findViewById(R.id.tabLayout);
+        ViewPager viewPager = findViewById(R.id.viewPager);
         imageViewProfileEdit = findViewById(R.id.image_editProf);
-        textViewAddReview = findViewById(R.id.text_addReview);
-        textViewAddPhoto = findViewById(R.id.text_addPhoto);
 
 
         setSupportActionBar(toolbar);
 
-        //imageViewBack.findViewById(R.id.image_back_btn);
         toolbar.setNavigationIcon(R.drawable.icon_back_new);
         toolbar.setNavigationOnClickListener(v -> {
             onBackPressed();
         });
 
-        textViewAddReview.setOnClickListener(v -> {
+        cardViewAddReview.setOnClickListener(v -> {
             Intent intent = new Intent(UserProfileActivity.this, AddReviewActivity.class);
             startActivity(intent);
         });
 
-        textViewAddPhoto.setOnClickListener(v -> {
+        cardViewAddPhoto.setOnClickListener(v -> {
             Intent intent = new Intent(UserProfileActivity.this, AddPhotoActivity.class);
             startActivity(intent);
         });
-        photosFragment = new PhotosFragment();
-        reviewsFragment = new ReviewsFragment();
+        PhotosFragment photosFragment = new PhotosFragment();
+        ReviewsFragment reviewsFragment = new ReviewsFragment();
 
         tabLayout.setupWithViewPager(viewPager);
-
-//        imageViewBack.setOnClickListener(v -> {
-//            onBackPressed();
-//        });
 
         ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager(), 0);
         viewPagerAdapter.addFragment(reviewsFragment, "Reviews");
@@ -118,6 +106,12 @@ public class UserProfileActivity extends AppCompatActivity {
         Objects.requireNonNull(tabLayout.getTabAt(1)).setIcon(R.drawable.icon_photo);
 
         openUserProfileImage();
+
+        profileShare.setOnClickListener(v -> {
+
+
+        });
+
     }
 
     private void openUserProfileImage() {
@@ -131,6 +125,7 @@ public class UserProfileActivity extends AppCompatActivity {
 
         if (user_data.size() != 0) {
             String user_name = (String) user_data.get("fName");
+            assert user_name != null;
             userName.setText(user_name.split(" ")[0]);
             if (user_data.containsKey("profilePic")) {
                 Glide.with(userImage.getContext())

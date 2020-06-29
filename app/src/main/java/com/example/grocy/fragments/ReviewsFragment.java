@@ -10,7 +10,7 @@ import android.widget.TextView;
 import androidx.fragment.app.Fragment;
 
 import com.example.grocy.R;
-import com.example.grocy.activities.CommentsActivity;
+import com.example.grocy.activities.AddReviewDetailActivity;
 
 public class ReviewsFragment extends Fragment {
 
@@ -41,10 +41,17 @@ public class ReviewsFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_reviews, container, false);
 
 
-        TextView textViewComment = (TextView) view.findViewById(R.id.text_comment_reviews);
+        TextView textViewComment = view.findViewById(R.id.text_comment_reviews);
+        TextView textViewReviewDetails = view.findViewById(R.id.frag_review_details);
+
 
         textViewComment.setOnClickListener(v -> {
-            Intent intent = new Intent(getActivity(), CommentsActivity.class);
+            Intent intent = new Intent(getActivity(), AddReviewDetailActivity.class);
+            startActivity(intent);
+        });
+
+        textViewReviewDetails.setOnClickListener(v -> {
+            Intent intent = new Intent(getActivity(), AddReviewDetailActivity.class);
             startActivity(intent);
         });
         return view;

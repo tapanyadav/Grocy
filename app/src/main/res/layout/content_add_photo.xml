@@ -102,13 +102,13 @@
         android:orientation="vertical">
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/btn_save_changes"
+            android:id="@+id/btn_submit_photo"
             android:layout_width="match_parent"
             android:layout_height="65dp"
             android:layout_marginStart="20dp"
             android:layout_marginEnd="20dp"
             android:layout_marginBottom="12dp"
-            android:text="Submit Review"
+            android:text="Submit Photo"
             android:textAllCaps="false"
             android:textSize="18sp" />
     </LinearLayout>

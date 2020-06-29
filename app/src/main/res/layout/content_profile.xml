@@ -368,6 +368,7 @@
             android:orientation="horizontal">
 
             <com.google.android.material.card.MaterialCardView
+                android:id="@+id/card_addPhoto"
                 android:layout_width="120dp"
                 android:layout_height="50dp"
                 android:elevation="2dp"
@@ -399,6 +400,7 @@
             </com.google.android.material.card.MaterialCardView>
 
             <com.google.android.material.card.MaterialCardView
+                android:id="@+id/card_addReview"
                 android:layout_width="120dp"
                 android:layout_height="50dp"
                 android:layout_marginStart="20dp"
@@ -442,7 +444,7 @@
 
         </com.google.android.material.tabs.TabLayout>
 
-        <com.example.grocy.CustomViewPager
+        <com.example.grocy.helper.CustomViewPager
             android:id="@+id/viewPager"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />

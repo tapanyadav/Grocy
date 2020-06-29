@@ -9,6 +9,7 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.SEND_SMS" />
 
     <application
         android:icon="@mipmap/ic_launcher"
@@ -18,8 +19,9 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:targetApi="m">
-        <activity android:name=".activities.FavOrderActivity"></activity>
-        <activity android:name=".activities.AddPhotoActivity"></activity>
+        <activity android:name=".activities.AddReviewDetailActivity" />
+        <activity android:name=".activities.FavOrderActivity" />
+        <activity android:name=".activities.AddPhotoActivity" />
         <activity android:name=".activities.AddReviewActivity" />
         <activity android:name=".activities.EditProfileActivity" />
         <activity android:name=".activities.WalletActivity" />
@@ -33,7 +35,21 @@
         <activity android:name=".activities.NotificationActivity" />
         <activity android:name=".activities.AboutActivity" />
         <activity android:name=".activities.CommentsActivity" />
-        <activity android:name=".activities.UserProfileActivity" />
+        <activity android:name=".activities.UserProfileActivity">
+            <intent-filter android:autoVerify="true">
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:host="grocy.com/link"
+                    android:scheme="http" />
+                <data
+                    android:host="grocy.com/link"
+                    android:scheme="https" />
+            </intent-filter>
+        </activity>
         <activity
             android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
             android:theme="@style/Base.Theme.AppCompat" />

@@ -1,9 +1,12 @@
 package com.example.grocy.activities;
 
+import android.Manifest;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.content.res.ColorStateList;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
@@ -16,6 +19,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.cardview.widget.CardView;
+import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import com.example.grocy.R;
@@ -73,18 +77,35 @@ public class AddReviewActivity extends AppCompatActivity {
 
         toolbar.setNavigationIcon(R.drawable.icon_back_new);
         toolbar.setNavigationOnClickListener(v -> onBackPressed());
-        cardViewImagePicker.setOnClickListener(v -> getPickImageIntent());
+        //cardViewImagePicker.setOnClickListener(v -> getPickImageIntent());
+        cardViewImagePicker.setOnClickListener(v -> {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
 
+                if (ContextCompat.checkSelfPermission(AddReviewActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+
+                    Toast.makeText(AddReviewActivity.this, "Permission Denied", Toast.LENGTH_LONG).show();
+                    ActivityCompat.requestPermissions(AddReviewActivity.this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
+
+                } else {
+
+                    getPickImageIntent();
+
+                }
+
+            } else {
+
+                getPickImageIntent();
+
+            }
+        });
 
         chipWork();
 
-
-
         buttonSubmitReview.setOnClickListener(v -> {
+            showProgress();
             float ratingReview = ratingBar.getRating();
             String detailedReview = editTextDetailReview.getText().toString();
             if (ratingReview != 0.0 && !TextUtils.isEmpty(detailedReview)) {
-                showProgress();
                 chipData.put("rating", ratingReview);
                 chipData.put("detailedReview", detailedReview);
 
@@ -149,7 +170,12 @@ public class AddReviewActivity extends AppCompatActivity {
                 }
 
             } else {
-                Toast.makeText(this, "Please enter rating or detailed review", Toast.LENGTH_SHORT).show();
+                if (ratingReview != 0.0) {
+                    Toast.makeText(this, "Rating is required", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(this, "Please enter detailed review", Toast.LENGTH_SHORT).show();
+                }
+
             }
         });
     }
