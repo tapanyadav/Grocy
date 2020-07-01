@@ -16,12 +16,6 @@ import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.Toast;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.cardview.widget.CardView;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-
 import com.example.grocy.R;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.chip.Chip;
@@ -34,6 +28,12 @@ import com.google.firebase.storage.UploadTask;
 
 import java.util.HashMap;
 import java.util.Objects;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.cardview.widget.CardView;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 
 public class AddReviewActivity extends AppCompatActivity {
@@ -70,7 +70,7 @@ public class AddReviewActivity extends AppCompatActivity {
         ratingBar = findViewById(R.id.rating_bar);
         editTextDetailReview = findViewById(R.id.detailedReview);
 
-        user_id = Objects.requireNonNull(firebaseAuth.getCurrentUser()).getUid();
+        user_id = (String) MainActivity.proile_activity_data.get("userId");
 
         Toolbar toolbar = findViewById(R.id.add_review_toolbar);
         setSupportActionBar(toolbar);
@@ -108,51 +108,57 @@ public class AddReviewActivity extends AppCompatActivity {
             if (ratingReview != 0.0 && !TextUtils.isEmpty(detailedReview)) {
                 chipData.put("rating", ratingReview);
                 chipData.put("detailedReview", detailedReview);
-
+                HashMap<String, String> hm1 = new HashMap();
+                HashMap<String, String> hm2 = new HashMap();
                 if (chipLike1.isChecked()) {
                     CharSequence data1 = chipLike1.getText();
-                    chipData.put("data1", data1);
+                    hm1.put("data1", (String) data1);
                 }
                 if (chipLike2.isChecked()) {
                     CharSequence data2 = chipLike2.getText();
-                    chipData.put("data2", data2);
+                    hm1.put("data2", (String) data2);
                 }
                 if (chipLike3.isChecked()) {
                     CharSequence data3 = chipLike3.getText();
-                    chipData.put("data3", data3);
+                    hm1.put("data3", (String) data3);
                 }
                 if (chipLike4.isChecked()) {
                     CharSequence data4 = chipLike4.getText();
-                    chipData.put("data4", data4);
+                    hm1.put("data4", (String) data4);
                 }
                 if (chipLike5.isChecked()) {
                     CharSequence data5 = chipLike5.getText();
-                    chipData.put("data5", data5);
+                    hm1.put("data5", (String) data5);
                 }
                 if (chipLike6.isChecked()) {
                     CharSequence data6 = chipLike6.getText();
-                    chipData.put("data6", data6);
+                    hm1.put("data6", (String) data6);
                 }
                 if (chipNotLike1.isChecked()) {
                     CharSequence notData1 = chipNotLike1.getText();
-                    chipData.put("notData1", notData1);
+                    hm2.put("notData1", (String) notData1);
                 }
                 if (chipNotLike2.isChecked()) {
                     CharSequence notData2 = chipNotLike2.getText();
-                    chipData.put("notData2", notData2);
+                    hm2.put("notData2", (String) notData2);
                 }
                 if (chipNotLike3.isChecked()) {
                     CharSequence notData3 = chipNotLike3.getText();
-                    chipData.put("notData3", notData3);
+                    hm2.put("notData3", (String) notData3);
                 }
                 if (chipNotLike4.isChecked()) {
                     CharSequence notData4 = chipNotLike4.getText();
-                    chipData.put("notData4", notData4);
+                    hm2.put("notData4", (String) notData4);
                 }
                 if (chipNotLike5.isChecked()) {
                     CharSequence notData5 = chipNotLike5.getText();
-                    chipData.put("notData5", notData5);
+                    hm2.put("notData5", (String) notData5);
                 }
+
+                chipData.put("likeData", hm1);
+                chipData.put("notLikeData", hm2);
+                chipData.put("numberOfLikes", 0);
+                chipData.put("numberOfComments", 0);
 
                 if (mainImageURI != null) {
                     UploadTask image_path = storageReference.child("review_images/").child(user_id + ".jpg").putFile(mainImageURI);

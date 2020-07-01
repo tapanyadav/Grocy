@@ -3,20 +3,36 @@ package com.example.grocy.activities;
 import android.app.ProgressDialog;
 import android.net.Uri;
 import android.os.Bundle;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-
 import com.bumptech.glide.Glide;
+import com.example.grocy.Adapters.CommentAdapter;
+import com.example.grocy.Models.CommentModel;
+import com.example.grocy.Models.ReviewModel;
 import com.example.grocy.R;
+import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class AddReviewDetailActivity extends AppCompatActivity {
 
@@ -28,6 +44,19 @@ public class AddReviewDetailActivity extends AppCompatActivity {
     private FirebaseAuth firebaseAuth;
     private FirebaseFirestore firebaseFirestore;
 
+    ReviewModel reviewModel = new ReviewModel();
+    CircleImageView userImage;
+    RecyclerView comments_recycler;
+    CommentAdapter commentAdapter;
+    HashMap<String, Object> comment_info = new HashMap();
+    ArrayList<CommentModel> arrayList;
+    private TextView review_info;
+    private ImageView image_review;
+    private TextView numberOfLikes;
+    private TextView numberOfComments;
+    private EditText comment_data;
+    private Button commentPostButton;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,7 +64,7 @@ public class AddReviewDetailActivity extends AppCompatActivity {
 
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseFirestore = FirebaseFirestore.getInstance();
-        String user_id = Objects.requireNonNull(firebaseAuth.getCurrentUser()).getUid();
+        String user_id = (String) MainActivity.proile_activity_data.get("userId");
         Toolbar toolbar = findViewById(R.id.add_review_detail_toolbar);
         setSupportActionBar(toolbar);
         textViewUserName = findViewById(R.id.reviewUserName);
@@ -45,7 +74,10 @@ public class AddReviewDetailActivity extends AppCompatActivity {
         toolbar.setNavigationOnClickListener(v -> onBackPressed());
         showProgress();
 
-        firebaseFirestore.collection("Users").document(user_id).get().addOnCompleteListener(task -> {
+        reviewModel = (ReviewModel) getIntent().getSerializableExtra("review_data");
+
+
+        firebaseFirestore.collection("Users").document((String) MainActivity.proile_activity_data.get("userId")).get().addOnCompleteListener(task -> {
 
             if (task.isSuccessful()) {
                 progressDialog.dismiss();
@@ -76,6 +108,120 @@ public class AddReviewDetailActivity extends AppCompatActivity {
 //            }
 //        });
 
+        review_info = findViewById(R.id.review_info);
+        image_review = findViewById(R.id.image_review);
+        numberOfLikes = findViewById(R.id.numberOfLikes);
+        numberOfComments = findViewById(R.id.numberOfComments);
+
+        review_info.setText(reviewModel.getDetailedReview());
+        Glide.with(image_review.getContext())
+                .load(reviewModel.getReviewImage())
+                .into(image_review);
+
+        numberOfLikes.setText("" + reviewModel.getNumberOfLikes());
+        numberOfComments.setText("" + reviewModel.getNumberOfComments());
+
+        comment_data = findViewById(R.id.comment_data);
+        commentPostButton = findViewById(R.id.commentPostButton);
+        userImage = findViewById(R.id.userImage);
+        Glide.with(userImage.getContext())
+                .load((String) MainActivity.proile_activity_data.get("profilePic"))
+                .into(userImage);
+
+
+        DocumentReference documentReference = firebaseFirestore.collection("Users").document(user_id)
+                .collection("Reviews").document(reviewModel.getReviewId());
+
+        Query query = documentReference.collection("Comments").orderBy("comment_time", Query.Direction.DESCENDING);
+
+
+        commentPostButton.setOnClickListener(v -> {
+
+
+            String comment = comment_data.getText().toString().trim();
+
+            HashMap<String, Object> hm = new HashMap();
+            hm.put("comment", comment);
+            hm.put("profilePic", (String) MainActivity.proile_activity_data.get("profilePic"));
+            hm.put("fName", (String) MainActivity.proile_activity_data.get("fName"));
+            hm.put("comment_time", FieldValue.serverTimestamp());
+            if (comment.equals("") == false) {
+                firebaseFirestore.collection("Users").document(user_id)
+                        .collection("Reviews").document(reviewModel.getReviewId()).collection("Comments")
+                        .add(hm).addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        Toast.makeText(this, "Comment Added Successfully", Toast.LENGTH_SHORT).show();
+                        comment_data.setText("");
+                        query.get().addOnCompleteListener(task1 -> {
+                            if (task1.isSuccessful()) {
+                                for (QueryDocumentSnapshot document : task1.getResult()) {
+                                    comment_info.put(document.getId(), document.getData());
+                                }
+                                HashMap<String, Object> hm1 = new HashMap<>();
+                                hm1.put("numberOfComments", comment_info.size());
+                                firebaseFirestore.collection("Users").document(user_id)
+                                        .collection("Reviews").document(reviewModel.getReviewId()).update(hm1).addOnCompleteListener(task2 -> {
+                                    if (task2.isSuccessful()) {
+                                        Toast.makeText(this, "Number of comments updated successfully", Toast.LENGTH_SHORT).show();
+                                    }
+                                });
+                                numberOfComments.setText(String.valueOf(comment_info.size()));
+                                setAdapter();
+                            }
+                        });
+                    }
+                });
+            } else {
+                Toast.makeText(this, "Please add comment First", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+
+        query.get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                for (QueryDocumentSnapshot document : task.getResult()) {
+                    comment_info.put(document.getId(), document.getData());
+                }
+                numberOfComments.setText(String.valueOf(comment_info.size()));
+                setAdapter();
+            }
+        });
+
+
+    }
+
+    private void setAdapter() {
+
+        arrayList = new ArrayList();
+
+        comments_recycler = findViewById(R.id.comments_recycler);
+        comments_recycler.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
+
+        comments_recycler.setHasFixedSize(false);
+
+        commentAdapter = new CommentAdapter(this, arrayList);
+        comments_recycler.setAdapter(commentAdapter);
+
+        for (Map.Entry mapElement : comment_info.entrySet()) {
+            CommentModel commentModel = new CommentModel();
+            String key = (String) mapElement.getKey();
+            HashMap<String, Object> item = (HashMap<String, Object>) mapElement.getValue();
+            commentModel.setCommentData((String) item.get("comment"));
+            commentModel.setCommentUserImage((String) item.get("profilePic"));
+            commentModel.setCommentUserName((String) item.get("fName"));
+            Timestamp timestamp = (Timestamp) item.get("comment_time");
+            commentModel.setCommentTime(timestamp.toDate());
+            arrayList.add(commentModel);
+        }
+
+        Collections.sort(arrayList,
+                (o1, o2) -> o1.getCommentTime().compareTo(o2.getCommentTime()));
+
+        Collections.reverse(arrayList);
+
+
+        commentAdapter.notifyDataSetChanged();
+
     }
 
     private void showProgress() {
@@ -86,4 +232,6 @@ public class AddReviewDetailActivity extends AppCompatActivity {
                 android.R.color.transparent
         );
     }
+
+
 }
