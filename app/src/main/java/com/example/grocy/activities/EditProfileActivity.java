@@ -16,12 +16,6 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.cardview.widget.CardView;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-
 import com.bumptech.glide.Glide;
 import com.example.grocy.R;
 import com.google.android.gms.tasks.Task;
@@ -40,6 +34,11 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.cardview.widget.CardView;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import id.zelory.compressor.Compressor;
 
 
@@ -85,7 +84,7 @@ public class EditProfileActivity extends AppCompatActivity {
         showProgress();
 
 
-        firebaseFirestore.collection("Users").document(user_id).get().addOnCompleteListener(task -> {
+        firebaseFirestore.collection("Users").document((String) MainActivity.proile_activity_data.get("userId")).get().addOnCompleteListener(task -> {
 
 
             if (task.isSuccessful()) {
@@ -222,6 +221,10 @@ public class EditProfileActivity extends AppCompatActivity {
 
                 progressDialog.dismiss();
                 Toast.makeText(EditProfileActivity.this, "The user Settings are updated.", Toast.LENGTH_LONG).show();
+                MainActivity.proile_activity_data.put("fName", user_name);
+                MainActivity.proile_activity_data.put("profilePic", generatedFilePath);
+                Intent intent = new Intent(EditProfileActivity.this, UserProfileActivity.class);
+                startActivity(intent);
                 finish();
 
             } else {

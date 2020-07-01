@@ -5,16 +5,6 @@ import android.os.Bundle;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.cardview.widget.CardView;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentPagerAdapter;
-import androidx.viewpager.widget.ViewPager;
-
 import com.bumptech.glide.Glide;
 import com.example.grocy.R;
 import com.example.grocy.fragments.PhotosFragment;
@@ -31,6 +21,16 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.cardview.widget.CardView;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentPagerAdapter;
+import androidx.viewpager.widget.ViewPager;
 
 public class UserProfileActivity extends AppCompatActivity {
 
@@ -53,9 +53,9 @@ public class UserProfileActivity extends AppCompatActivity {
         ImageView profileShare = findViewById(R.id.image_share_profile);
 
         firebaseFirestore = FirebaseFirestore.getInstance();
-        user_data = (HashMap<String, Object>) getIntent().getSerializableExtra("user_data");
+//        user_data = (HashMap<String, Object>) getIntent().getSerializableExtra("user_data");
 
-        documentReference = firebaseFirestore.collection("Users").document((String) Objects.requireNonNull(user_data.get("userId")));
+        documentReference = firebaseFirestore.collection("Users").document((String) MainActivity.proile_activity_data.get("userId"));
         documentReference.collection("myOrder").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
@@ -123,13 +123,13 @@ public class UserProfileActivity extends AppCompatActivity {
 
         });
 
-        if (user_data.size() != 0) {
-            String user_name = (String) user_data.get("fName");
+        if (MainActivity.proile_activity_data.size() != 0) {
+            String user_name = (String) MainActivity.proile_activity_data.get("fName");
             assert user_name != null;
             userName.setText(user_name.split(" ")[0]);
-            if (user_data.containsKey("profilePic")) {
+            if (MainActivity.proile_activity_data.containsKey("profilePic")) {
                 Glide.with(userImage.getContext())
-                        .load(user_data.get("profilePic"))
+                        .load((String) MainActivity.proile_activity_data.get("profilePic"))
                         .into(userImage);
             }
         }

@@ -2,7 +2,7 @@
 <com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:layout_marginStart="4dp"
     android:layout_marginEnd="4dp"
     app:cardCornerRadius="8dp"
@@ -55,7 +55,7 @@
                     android:textSize="10sp" />
 
                 <TextView
-                    android:id="@+id/shop_rating"
+                    android:id="@+id/review_rating"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="12dp"
@@ -117,6 +117,7 @@
             android:orientation="horizontal">
 
             <TextView
+                android:id="@+id/no_of_likes"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="0" />
@@ -127,6 +128,7 @@
                 android:text=" Likes, " />
 
             <TextView
+                android:id="@+id/no_of_comments"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="0" />

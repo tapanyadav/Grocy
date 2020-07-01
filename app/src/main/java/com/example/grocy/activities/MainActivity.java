@@ -136,7 +136,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     double rating = 1;
     CircleImageView circleImageView;
     TextView user_name;
-    HashMap<String, Object> proile_activity_data = new HashMap();
+    public static HashMap<String, Object> proile_activity_data = new HashMap();
     AtomicReference<String> userId = new AtomicReference<>();
 
     @SuppressLint({"RestrictedApi", "ClickableViewAccessibility"})
@@ -318,6 +318,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             Toast.makeText(MainActivity.this, "Position: " + position + " and Id is " + resId, Toast.LENGTH_SHORT).show();
             Intent intent = new Intent(MainActivity.this, ShopDetailsActivity.class);
             intent.putExtra("shopId", resId);
+            intent.putExtra("user_data", proile_activity_data);
             startActivity(intent);
 
         });

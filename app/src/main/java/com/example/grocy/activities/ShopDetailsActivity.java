@@ -48,7 +48,7 @@ public class ShopDetailsActivity extends AppCompatActivity {
     ArrayList<ShopItemsCategoryModel> arrayList;
 
     ShopItemsCategoryAdapter shopItemsCategoryAdapter;
-    HashMap<String, Object> shop_detail = new HashMap();
+    static HashMap<String, Object> shop_detail = new HashMap();
 
     TextView textViewShopName, textViewShopAddress, textViewShopTime, textViewShopCategoryType, textViewShopOff, textViewShopRating;
 
