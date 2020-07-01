@@ -7,6 +7,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.example.grocy.Adapters.CategoriesDetailsAdapter;
 import com.example.grocy.Adapters.ShopsAdapter;
 import com.example.grocy.Models.CategoriesDetailsModel;
@@ -22,10 +27,6 @@ import com.google.firebase.firestore.Query;
 import com.squareup.picasso.Picasso;
 
 import java.util.Objects;
-
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 public class CategoriesDetailsActivity extends AppCompatActivity implements EventListener<DocumentSnapshot> {
 
@@ -47,6 +48,13 @@ public class CategoriesDetailsActivity extends AppCompatActivity implements Even
 
         firebaseFirestore = FirebaseFirestore.getInstance();
         recyclerViewCatDetails = findViewById(R.id.recycler_categories_all);
+        Toolbar toolbar = findViewById(R.id.categories_shop_toolbar);
+        setSupportActionBar(toolbar);
+
+        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
+
+        toolbar.setNavigationIcon(R.drawable.icon_back_new);
+        toolbar.setNavigationOnClickListener(v -> onBackPressed());
 
         imageViewCatShopImage = findViewById(R.id.imageCatDetails);
         imageViewCatShopStatusBackground = findViewById(R.id.backgroundStatusImageCat);

@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginTop="10dp"
+    android:orientation="vertical"
     tools:context=".activities.AboutActivity">
+
 
     <!--    <ImageView-->
     <!--        android:id="@+id/item_image"-->
@@ -343,4 +345,30 @@
     <!--        android:text="DELIVERY AT"-->
     <!--        tools:layout_editor_absoluteY="342dp" />-->
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+
+    <TextView
+        android:id="@+id/shop_address"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:text="Shop no 8, Jagat Farm, Gr Noida"
+        android:textSize="10sp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="10dp"
+        android:text="@string/items"
+        android:textSize="10sp" />
+
+    <TextView
+        android:id="@+id/ordered_items"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:text="2* 1kg Tuver Dal, 1*5kg Basmati Rice"
+        android:textColor="@color/quantum_black_text"
+        android:textSize="10sp" />
+
+</LinearLayout>

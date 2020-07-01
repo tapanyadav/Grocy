@@ -170,6 +170,7 @@ public class AddReviewActivity extends AppCompatActivity {
                 }
 
             } else {
+                progressDialog.dismiss();
                 if (ratingReview != 0.0) {
                     Toast.makeText(this, "Rating is required", Toast.LENGTH_SHORT).show();
                 } else {

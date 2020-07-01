@@ -13,7 +13,7 @@
 
 
         <androidx.appcompat.widget.Toolbar
-            android:id="@+id/fav_orders_toolbar"
+            android:id="@+id/my_order_details_toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:background="@color/white">
@@ -31,7 +31,7 @@
                     android:layout_marginEnd="100dp"
                     android:fontFamily="@font/brandon"
                     android:gravity="center_horizontal"
-                    android:text="Favourite Orders"
+                    android:text="Order details"
                     android:textColor="#000"
                     android:textSize="18sp" />
 
@@ -46,17 +46,13 @@
     <!-- Main Content -->
 
 
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="54dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="48dp"
         android:orientation="vertical">
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/fav_recyclerview"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:scrollbars="none" />
-    </RelativeLayout>
+        <include layout="@layout/content_my_order_details" />
+    </LinearLayout>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

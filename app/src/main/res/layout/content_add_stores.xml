@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_height="match_parent">
 
     <LinearLayout
@@ -35,6 +36,7 @@
             android:textSize="16sp" />
 
         <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/text_storePhone"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
@@ -53,10 +55,66 @@
             android:layout_marginStart="20dp"
             android:layout_marginTop="20dp"
             android:layout_marginEnd="20dp"
+            android:inputType="text"
             android:background="@drawable/edit_bg_selector"
             android:ems="2"
             android:textCursorDrawable="@drawable/et_cursor_color"
             android:textSize="16sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="12dp"
+            android:text="Add photo for Store"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="120dp"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal">
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/add_store_photo"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_marginStart="12dp"
+                android:layout_marginTop="10dp"
+                android:elevation="6dp"
+                app:cardCornerRadius="12dp">
+
+                <ImageView
+                    android:id="@+id/add_review_picker"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/ic_baseline_add_photo_alternate_24" />
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/add_store_first_photo"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_marginStart="12dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="12dp"
+                android:elevation="6dp"
+                android:visibility="invisible"
+                app:cardCornerRadius="12dp">
+
+                <ImageView
+                    android:id="@+id/image_first_store"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/user_profile" />
+
+            </com.google.android.material.card.MaterialCardView>
+
+        </LinearLayout>
 
         <TextView
             android:layout_width="wrap_content"
@@ -76,29 +134,34 @@
             android:orientation="vertical">
 
             <com.google.android.material.radiobutton.MaterialRadioButton
+                android:id="@+id/noOwnerManger"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:buttonTint="@color/colorPrimary"
                 android:checked="true"
                 android:paddingStart="10dp"
+                android:paddingEnd="10dp"
                 android:selectAllOnFocus="true"
                 android:text="No,I am not the owner/manager"
                 android:textColor="@drawable/radio_bg" />
 
             <com.google.android.material.radiobutton.MaterialRadioButton
+                android:id="@+id/ownerManger"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:layout_marginBottom="10dp"
                 android:buttonTint="@color/colorPrimary"
                 android:paddingStart="10dp"
+                android:paddingEnd="10dp"
                 android:selectAllOnFocus="true"
                 android:text="Yes,I am the owner/manager"
                 android:textColor="@drawable/radio_bg" />
         </RadioGroup>
 
         <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/text_tellMore"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
@@ -111,17 +174,18 @@
             android:textSize="16sp" />
 
         <TextView
+            android:id="@+id/text_hint"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="30dp"
             android:layout_marginTop="14dp"
-            android:text="Field mark with * are mandatory"
+            android:text=""
             android:textSize="12sp" />
 
         <!--        TODO Add spinner for category-->
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnLove"
+            android:id="@+id/btnSubmit"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="30dp"

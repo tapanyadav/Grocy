@@ -79,9 +79,7 @@ public class UserProfileActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         toolbar.setNavigationIcon(R.drawable.icon_back_new);
-        toolbar.setNavigationOnClickListener(v -> {
-            onBackPressed();
-        });
+        toolbar.setNavigationOnClickListener(v -> onBackPressed());
 
         cardViewAddReview.setOnClickListener(v -> {
             Intent intent = new Intent(UserProfileActivity.this, AddReviewActivity.class);

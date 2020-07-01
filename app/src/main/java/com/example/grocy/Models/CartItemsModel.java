@@ -1,8 +1,6 @@
 package com.example.grocy.Models;
 
-import java.io.Serializable;
-
-public class CartItemsModel implements Serializable {
+public class CartItemsModel {
     private String itemsImage;
     private String itemsPrice;
     private String itemsQuantity;

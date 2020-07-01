@@ -7,7 +7,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.grocy.Models.CartItemsModel;
@@ -21,10 +26,6 @@ import com.google.android.material.bottomsheet.BottomSheetDialog;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-
-import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 public class ShopItemsAdapter extends RecyclerView.Adapter<ShopItemsAdapter.ShopItemsViewHolder> {
 
@@ -67,6 +68,8 @@ public class ShopItemsAdapter extends RecyclerView.Adapter<ShopItemsAdapter.Shop
             bottomSheetDialog.setCanceledOnTouchOutside(true);
             setUpItemVariantsRecycler(bottomSheetDialog, position);
 
+            holder.linearLayoutItemsAdd.setVisibility(View.VISIBLE);
+            holder.buttonAdd.setVisibility(View.INVISIBLE);
 
             Button buttonCart = bottomSheetDialog.findViewById(R.id.buttonCartShow);
             assert buttonCart != null;
@@ -204,6 +207,7 @@ public class ShopItemsAdapter extends RecyclerView.Adapter<ShopItemsAdapter.Shop
         ImageView imageViewItem;
         TextView textViewItemName, textViewItemDescription, textViewItemPrice, textViewItemQuantity;
         Button buttonAdd;
+        LinearLayout linearLayoutItemsAdd;
 
         public ShopItemsViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -214,6 +218,7 @@ public class ShopItemsAdapter extends RecyclerView.Adapter<ShopItemsAdapter.Shop
             textViewItemPrice = itemView.findViewById(R.id.tv_item_price);
             textViewItemQuantity = itemView.findViewById(R.id.tv_quantity_item);
             buttonAdd = itemView.findViewById(R.id.materialButtonAdd);
+            linearLayoutItemsAdd = itemView.findViewById(R.id.linearLayoutItems);
 
         }
     }
