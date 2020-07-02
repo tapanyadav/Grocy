@@ -10,10 +10,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import com.bumptech.glide.Glide;
 import com.example.grocy.Models.CartItemsModel;
 import com.example.grocy.Models.ItemVariantsModel;
@@ -26,6 +22,10 @@ import com.google.android.material.bottomsheet.BottomSheetDialog;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 public class ShopItemsAdapter extends RecyclerView.Adapter<ShopItemsAdapter.ShopItemsViewHolder> {
 
@@ -61,6 +61,80 @@ public class ShopItemsAdapter extends RecyclerView.Adapter<ShopItemsAdapter.Shop
                 .load(shopItemsModel.getItemsImage())
                 .into(holder.imageViewItem);
 
+        for (int i = 0; i < ShopItemsCategoryAdapter.added_items.size(); i++) {
+            CartItemsModel item = ShopItemsCategoryAdapter.added_items.get(i);
+            if (item.getItemID().equals(shopItemsModel.getItemID()) && shopItemsModel.getItemVariants() == null) {
+                holder.linearLayoutItemsAdd.setVisibility(View.VISIBLE);
+                holder.buttonAdd.setVisibility(View.INVISIBLE);
+            }
+        }
+
+        holder.add_one.setOnClickListener(v -> {
+            BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(context);
+            bottomSheetDialog.setContentView(R.layout.bottom_sheet_items_quantity);
+            bottomSheetDialog.show();
+            bottomSheetDialog.setCanceledOnTouchOutside(true);
+            setUpItemVariantsRecycler(bottomSheetDialog, position);
+            for (int i = 0; i < ShopItemsCategoryAdapter.added_items.size(); i++) {
+                CartItemsModel item = ShopItemsCategoryAdapter.added_items.get(i);
+                if (item.getItemID().equals(shopItemsModel.getItemID()) && shopItemsModel.getItemVariants() == null) {
+                    holder.item_count.setText("" + item.getItemCount());
+                }
+            }
+            Button buttonCart = bottomSheetDialog.findViewById(R.id.buttonCartShow);
+            assert buttonCart != null;
+            buttonCart.setOnClickListener(v1 -> {
+                openBottomSheetCart(bottomSheetDialog, shopItemsModel);
+            });
+        });
+
+        holder.remove_one.setOnClickListener(v -> {
+//            BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(context);
+//            bottomSheetDialog.setContentView(R.layout.bottom_sheet_items_quantity);
+//            bottomSheetDialog.show();
+//            bottomSheetDialog.setCanceledOnTouchOutside(true);
+//            setUpItemVariantsRecycler(bottomSheetDialog, position);
+            for (int i = 0; i < ShopItemsCategoryAdapter.added_items.size(); i++) {
+                CartItemsModel item = ShopItemsCategoryAdapter.added_items.get(i);
+                int count = ShopItemsCategoryAdapter.added_items.get(i).getItemCount();
+                if (item.getItemID().equals(shopItemsModel.getItemID()) && shopItemsModel.getItemVariants() == null) {
+                    if (count == 1) {
+                        ShopItemsCategoryAdapter.added_items.remove(i);
+                        holder.linearLayoutItemsAdd.setVisibility(View.INVISIBLE);
+                        holder.buttonAdd.setVisibility(View.VISIBLE);
+                    } else {
+                        item.setItemCount(count - 1);
+                        holder.item_count.setText("" + item.getItemCount());
+                    }
+                }
+            }
+            int price = 0;
+            for (int i = 0; i < ShopItemsCategoryAdapter.added_items.size(); i++) {
+                price = price + Integer.parseInt(ShopItemsCategoryAdapter.added_items.get(i).getItemsPrice()) * ShopItemsCategoryAdapter.added_items.get(i).getItemCount();
+            }
+            ShopItemsCategoryAdapter.price_of_currentlyAddedItems = price;
+            BottomSheetDialog bottomSheetDialog1 = new BottomSheetDialog(context);
+            bottomSheetDialog1.setContentView(R.layout.bottom_sheet_cart);
+            bottomSheetDialog1.show();
+            bottomSheetDialog1.setCanceledOnTouchOutside(true);
+            ShopItemsCategoryAdapter.no_of_currentlyAddedItems = ShopItemsCategoryAdapter.no_of_currentlyAddedItems - 1;
+
+
+            TextView currentlyAddedItems = bottomSheetDialog1.findViewById(R.id.currentlyAddedItems);
+            TextView currentlyAddedItemsPrice = bottomSheetDialog1.findViewById(R.id.currentlyAddedItemsPrice);
+
+            currentlyAddedItems.setText(String.valueOf(ShopItemsCategoryAdapter.no_of_currentlyAddedItems));
+            currentlyAddedItemsPrice.setText(String.valueOf(ShopItemsCategoryAdapter.price_of_currentlyAddedItems));
+
+
+            TextView textViewCartShow = bottomSheetDialog1.findViewById(R.id.textViewCart);
+            textViewCartShow.setOnClickListener(v2 -> {
+                bottomSheetDialog1.dismiss();
+                openCart();
+            });
+        });
+
+
         holder.buttonAdd.setOnClickListener(v -> {
             BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(context);
             bottomSheetDialog.setContentView(R.layout.bottom_sheet_items_quantity);
@@ -68,8 +142,10 @@ public class ShopItemsAdapter extends RecyclerView.Adapter<ShopItemsAdapter.Shop
             bottomSheetDialog.setCanceledOnTouchOutside(true);
             setUpItemVariantsRecycler(bottomSheetDialog, position);
 
-            holder.linearLayoutItemsAdd.setVisibility(View.VISIBLE);
-            holder.buttonAdd.setVisibility(View.INVISIBLE);
+            if (shopItemsModel.getItemVariants() == null) {
+                holder.linearLayoutItemsAdd.setVisibility(View.VISIBLE);
+                holder.buttonAdd.setVisibility(View.INVISIBLE);
+            }
 
             Button buttonCart = bottomSheetDialog.findViewById(R.id.buttonCartShow);
             assert buttonCart != null;
@@ -208,6 +284,9 @@ public class ShopItemsAdapter extends RecyclerView.Adapter<ShopItemsAdapter.Shop
         TextView textViewItemName, textViewItemDescription, textViewItemPrice, textViewItemQuantity;
         Button buttonAdd;
         LinearLayout linearLayoutItemsAdd;
+        TextView add_one;
+        TextView remove_one;
+        TextView item_count;
 
         public ShopItemsViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -219,6 +298,9 @@ public class ShopItemsAdapter extends RecyclerView.Adapter<ShopItemsAdapter.Shop
             textViewItemQuantity = itemView.findViewById(R.id.tv_quantity_item);
             buttonAdd = itemView.findViewById(R.id.materialButtonAdd);
             linearLayoutItemsAdd = itemView.findViewById(R.id.linearLayoutItems);
+            add_one = itemView.findViewById(R.id.add_one);
+            remove_one = itemView.findViewById(R.id.remove_one);
+            item_count = itemView.findViewById(R.id.item_count);
 
         }
     }

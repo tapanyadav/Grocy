@@ -12,9 +12,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
-import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.RecyclerView;
-
 import com.bumptech.glide.Glide;
 import com.example.grocy.Models.MyOrdersModel;
 import com.example.grocy.R;
@@ -29,6 +26,9 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.HashMap;
 import java.util.Objects;
+
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 
 public class MyOrdersAdapter extends FirestoreRecyclerAdapter<MyOrdersModel, MyOrdersAdapter.MyViewHolder> {
 
@@ -58,7 +58,7 @@ public class MyOrdersAdapter extends FirestoreRecyclerAdapter<MyOrdersModel, MyO
 
         holder.name.setText(model.getShopName());
         holder.amount.setText("" + model.getOrderAmount());
-        holder.dateTime.setText(model.getDateTime());
+        holder.dateTime.setText("" + model.getDateTime());
         holder.deliveryStatus.setText(model.getDeliveryStatus());
         Glide.with(holder.image.getContext()).load(model.getShopImage()).into(holder.image);
 
@@ -113,7 +113,7 @@ public class MyOrdersAdapter extends FirestoreRecyclerAdapter<MyOrdersModel, MyO
             holder.toggleButtonFav.setChecked(true);
             holder.favText.setText("Added to favourite");
             updateFavStatus.put("favOrder", true);
-            documentReference.collection("myOrder").document(documentId).update(updateFavStatus).addOnCompleteListener(new OnCompleteListener<Void>() {
+            documentReference.collection("myOrders").document(documentId).update(updateFavStatus).addOnCompleteListener(new OnCompleteListener<Void>() {
                 @Override
                 public void onComplete(@NonNull Task<Void> task) {
                     if (task.isSuccessful()) {
@@ -130,7 +130,7 @@ public class MyOrdersAdapter extends FirestoreRecyclerAdapter<MyOrdersModel, MyO
             holder.toggleButtonFav.startAnimation(scaleAnimation);
             holder.favText.setText("Added to favourite");
             updateFavStatus.put("favOrder", true);
-            documentReference.collection("myOrder").document(documentId).update(updateFavStatus).addOnCompleteListener(new OnCompleteListener<Void>() {
+            documentReference.collection("myOrders").document(documentId).update(updateFavStatus).addOnCompleteListener(new OnCompleteListener<Void>() {
                 @Override
                 public void onComplete(@NonNull Task<Void> task) {
                     if (task.isSuccessful()) {

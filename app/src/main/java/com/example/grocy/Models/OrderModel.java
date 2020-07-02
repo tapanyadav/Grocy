@@ -1,15 +1,19 @@
 package com.example.grocy.Models;
 
+import java.util.Date;
+
 public class OrderModel {
-    public String shopName, shopAddress, orderedItems, dateTime, deliveryStatus, orderAmount, shopImage;
+    public String shopName, shopAddress, orderedItems, deliveryStatus, orderAmount, shopImage;
+    public Date dateTime;
 
     public OrderModel() {
     }
 
-    public OrderModel(String shopName, String shopAddress, String orderedItems, String dateTime, String deliveryStatus, String orderAmount, String shopImage) {
+    public OrderModel(String shopName, String shopAddress, String orderedItems, Date dateTime, String deliveryStatus, String orderAmount, String shopImage) {
         this.shopName = shopName;
         this.shopAddress = shopAddress;
         this.orderedItems = orderedItems;
+
         this.dateTime = dateTime;
         this.deliveryStatus = deliveryStatus;
         this.orderAmount = orderAmount;
@@ -40,11 +44,11 @@ public class OrderModel {
         this.orderedItems = orderedItems;
     }
 
-    public String getDateTime() {
+    public Date getDateTime() {
         return dateTime;
     }
 
-    public void setDateTime(String dateTime) {
+    public void setDateTime(Date dateTime) {
         this.dateTime = dateTime;
     }
 

@@ -6,9 +6,6 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-
 import com.bumptech.glide.Glide;
 import com.example.grocy.Models.CartItemsModel;
 import com.example.grocy.R;
@@ -16,6 +13,9 @@ import com.example.grocy.R;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Objects;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 public class MyOrderDetailsActivity extends AppCompatActivity {
 
@@ -50,22 +50,22 @@ public class MyOrderDetailsActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         @SuppressWarnings("unchecked")
-        HashMap<String, String> hashMapMyOrders = (HashMap<String, String>) intent.getSerializableExtra("myOrderMap");
+        HashMap<String, Object> hashMapMyOrders = (HashMap<String, Object>) intent.getSerializableExtra("myOrderMap");
         String orderID = intent.getStringExtra("getOrderId");
 
         assert hashMapMyOrders != null;
         textViewOrderId.setText(orderID);
-        textViewOrderDateTime.setText(hashMapMyOrders.get("orderDateTime"));
-        textViewOrderAddress.setText(hashMapMyOrders.get("userAddress"));
-        textViewOrderPayment.setText(hashMapMyOrders.get("orderPaymentMode"));
+        textViewOrderDateTime.setText("" + hashMapMyOrders.get("orderDateTime"));
+        textViewOrderAddress.setText((String) hashMapMyOrders.get("userAddress"));
+        textViewOrderPayment.setText((String) hashMapMyOrders.get("orderPaymentMode"));
         Glide.with(this).load(hashMapMyOrders.get("shopImage")).into(imageViewOrderImage);
         if (Objects.equals(hashMapMyOrders.get("deliveryStatus"), "Delivered")) {
-            textViewStatusDelivered.setText(hashMapMyOrders.get("deliveryStatus"));
+            textViewStatusDelivered.setText((String) hashMapMyOrders.get("deliveryStatus"));
             textViewStatusDelivered.setVisibility(View.VISIBLE);
             textViewStatusCancel.setVisibility(View.INVISIBLE);
 
         } else {
-            textViewStatusCancel.setText(hashMapMyOrders.get("deliveryStatus"));
+            textViewStatusCancel.setText((String) hashMapMyOrders.get("deliveryStatus"));
             textViewStatusCancel.setVisibility(View.VISIBLE);
             textViewStatusDelivered.setVisibility(View.INVISIBLE);
         }

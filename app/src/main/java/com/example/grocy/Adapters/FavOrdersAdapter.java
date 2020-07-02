@@ -12,9 +12,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
-import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.RecyclerView;
-
 import com.bumptech.glide.Glide;
 import com.example.grocy.Models.MyOrdersModel;
 import com.example.grocy.R;
@@ -27,6 +24,9 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.HashMap;
 import java.util.Objects;
+
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 
 public class FavOrdersAdapter extends FirestoreRecyclerAdapter<MyOrdersModel, FavOrdersAdapter.MyViewHolder> {
 
@@ -47,7 +47,7 @@ public class FavOrdersAdapter extends FirestoreRecyclerAdapter<MyOrdersModel, Fa
         HashMap<String, Object> updateFavStatus = new HashMap<>();
         holder.name.setText(model.getShopName());
         holder.amount.setText("" + model.getOrderAmount());
-        holder.dateTime.setText(model.getDateTime());
+        holder.dateTime.setText("" + model.getDateTime());
         holder.deliveryStatus.setText(model.getDeliveryStatus());
         Glide.with(holder.image.getContext()).load(model.getShopImage()).into(holder.image);
 
@@ -68,7 +68,7 @@ public class FavOrdersAdapter extends FirestoreRecyclerAdapter<MyOrdersModel, Fa
         holder.toggleButtonRemoveFav.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (!isChecked) {
                 updateFavStatus.put("favOrder", false);
-                documentReference.collection("myOrder").document(document_id).update(updateFavStatus).addOnCompleteListener(task -> {
+                documentReference.collection("myOrders").document(document_id).update(updateFavStatus).addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
                         Toast.makeText(holder.itemView.getContext(), "Successful", Toast.LENGTH_SHORT).show();
                     } else {
@@ -81,7 +81,7 @@ public class FavOrdersAdapter extends FirestoreRecyclerAdapter<MyOrdersModel, Fa
         holder.textViewRemoveFav.setOnClickListener(v -> {
             holder.toggleButtonRemoveFav.startAnimation(scaleAnimation);
             updateFavStatus.put("favOrder", false);
-            documentReference.collection("myOrder").document(document_id).update(updateFavStatus).addOnCompleteListener(task -> {
+            documentReference.collection("myOrders").document(document_id).update(updateFavStatus).addOnCompleteListener(task -> {
                 if (task.isSuccessful()) {
                     Toast.makeText(holder.itemView.getContext(), "Successful", Toast.LENGTH_SHORT).show();
                 } else {
