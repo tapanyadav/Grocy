@@ -1,8 +1,11 @@
 package com.example.grocy.activities;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.view.View;
 import android.view.WindowManager;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -67,6 +70,7 @@ public class ShopDetailsActivity extends AppCompatActivity {
 
 
         toolbar.setNavigationIcon(R.drawable.icon_back_new);
+//        toolbar.setContentInsetStartWithNavigation(R.drawable.icon_back_new);
         toolbar.setNavigationOnClickListener(v -> onBackPressed());
         CollapsingToolbarLayout collapsingToolbarLayout = findViewById(R.id.collapsing_toolbar);
         collapsingToolbarLayout.setTitle("Gupta Grocery Store");
@@ -129,8 +133,10 @@ public class ShopDetailsActivity extends AppCompatActivity {
                                         System.out.println("----------------------");
                                         System.out.println(document.getId());
                                         System.out.println(document.getData());
+                                        HashMap<String, Object> temp = (HashMap<String, Object>) document.getData();
+                                        temp.put("itemId", itemID);
                                         System.out.println("----------------------");
-                                        itemVariants.put(document.getId(), (HashMap) document.getData());
+                                        itemVariants.put(document.getId(), temp);
                                     }
                                     HashMap<String, Object> hm = (HashMap) item_list.get(itemID);
                                     if (itemVariants.size() != 0) {
@@ -151,6 +157,15 @@ public class ShopDetailsActivity extends AppCompatActivity {
             }
         });
 
+        ImageView cart_image = findViewById(R.id.cart_image);
+        cart_image.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(ShopDetailsActivity.this, CartActivity.class);
+                intent.putExtra("added_items", ShopItemsCategoryAdapter.added_items);
+                startActivity(intent);
+            }
+        });
     }
 
     void setAdapter() {

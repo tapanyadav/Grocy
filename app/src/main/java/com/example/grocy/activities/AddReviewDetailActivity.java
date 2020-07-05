@@ -17,17 +17,22 @@ import com.example.grocy.R;
 import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -146,29 +151,12 @@ public class AddReviewDetailActivity extends AppCompatActivity {
             hm.put("fName", (String) MainActivity.proile_activity_data.get("fName"));
             hm.put("comment_time", FieldValue.serverTimestamp());
             if (comment.equals("") == false) {
+                comment_data.setText("");
                 firebaseFirestore.collection("Users").document(user_id)
                         .collection("Reviews").document(reviewModel.getReviewId()).collection("Comments")
                         .add(hm).addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
                         Toast.makeText(this, "Comment Added Successfully", Toast.LENGTH_SHORT).show();
-                        comment_data.setText("");
-                        query.get().addOnCompleteListener(task1 -> {
-                            if (task1.isSuccessful()) {
-                                for (QueryDocumentSnapshot document : task1.getResult()) {
-                                    comment_info.put(document.getId(), document.getData());
-                                }
-                                HashMap<String, Object> hm1 = new HashMap<>();
-                                hm1.put("numberOfComments", comment_info.size());
-                                firebaseFirestore.collection("Users").document(user_id)
-                                        .collection("Reviews").document(reviewModel.getReviewId()).update(hm1).addOnCompleteListener(task2 -> {
-                                    if (task2.isSuccessful()) {
-                                        Toast.makeText(this, "Number of comments updated successfully", Toast.LENGTH_SHORT).show();
-                                    }
-                                });
-                                numberOfComments.setText(String.valueOf(comment_info.size()));
-                                setAdapter();
-                            }
-                        });
                     }
                 });
             } else {
@@ -177,9 +165,24 @@ public class AddReviewDetailActivity extends AppCompatActivity {
         });
 
 
-        query.get().addOnCompleteListener(task -> {
-            if (task.isSuccessful()) {
-                for (QueryDocumentSnapshot document : task.getResult()) {
+//        query.get().add(task -> {
+//            if (task.isSuccessful()) {
+//                for (QueryDocumentSnapshot document : task.getResult()) {
+//                    comment_info.put(document.getId(), document.getData());
+//                }
+//                numberOfComments.setText(String.valueOf(comment_info.size()));
+//                setAdapter();
+//            }
+//        });
+        query.addSnapshotListener(new EventListener<QuerySnapshot>() {
+            @Override
+            public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
+                if (e != null) {
+                    Toast.makeText(AddReviewDetailActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
                     comment_info.put(document.getId(), document.getData());
                 }
                 numberOfComments.setText(String.valueOf(comment_info.size()));
@@ -202,6 +205,7 @@ public class AddReviewDetailActivity extends AppCompatActivity {
         commentAdapter = new CommentAdapter(this, arrayList);
         comments_recycler.setAdapter(commentAdapter);
 
+
         for (Map.Entry mapElement : comment_info.entrySet()) {
             CommentModel commentModel = new CommentModel();
             String key = (String) mapElement.getKey();
@@ -210,7 +214,11 @@ public class AddReviewDetailActivity extends AppCompatActivity {
             commentModel.setCommentUserImage((String) item.get("profilePic"));
             commentModel.setCommentUserName((String) item.get("fName"));
             Timestamp timestamp = (Timestamp) item.get("comment_time");
-            commentModel.setCommentTime(timestamp.toDate());
+            if (timestamp != null) {
+                commentModel.setCommentTime(timestamp.toDate());
+            } else {
+                commentModel.setCommentTime(Calendar.getInstance().getTime());
+            }
             arrayList.add(commentModel);
         }
 

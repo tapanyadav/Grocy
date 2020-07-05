@@ -59,6 +59,7 @@ public class UserProfileActivity extends AppCompatActivity {
         textViewFollowingCount = findViewById(R.id.text_following_count);
         textViewCity = findViewById(R.id.text_city);
 
+        String user_id = (String) MainActivity.proile_activity_data.get("userId");
         firebaseFirestore = FirebaseFirestore.getInstance();
 //        user_data = (HashMap<String, Object>) getIntent().getSerializableExtra("user_data");
 
@@ -124,6 +125,19 @@ public class UserProfileActivity extends AppCompatActivity {
             if (task.isSuccessful()) {
                 textViewFollowersCount.setText("" + task.getResult().size());
 
+        documentReference = firebaseFirestore.collection("Users").document(user_id);
+        documentReference.collection("myOrder").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    Object a = task.getResult();
+                    number_of_orders.setText("" + task.getResult().size());
+                    for (QueryDocumentSnapshot document : task.getResult()) {
+                        System.out.println("------------------------------");
+                        System.out.println(document.getId());
+                        System.out.println("---------------------------------------");
+                    }
+                }
             }
         });
         documentReference.collection("Following").get().addOnCompleteListener(task -> {

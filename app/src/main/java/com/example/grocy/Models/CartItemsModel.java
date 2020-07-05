@@ -9,6 +9,7 @@ public class CartItemsModel implements Serializable {
     private String itemsName;
     private int itemCount;
     private String itemID;
+    private String variantID = null;
 
     public CartItemsModel() {
     }
@@ -67,5 +68,13 @@ public class CartItemsModel implements Serializable {
 
     public void setItemID(String itemID) {
         this.itemID = itemID;
+    }
+
+    public String getVariantID() {
+        return variantID;
+    }
+
+    public void setVariantID(String variantID) {
+        this.variantID = variantID;
     }
 }

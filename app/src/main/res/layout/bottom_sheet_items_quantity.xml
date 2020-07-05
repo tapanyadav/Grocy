@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
@@ -11,11 +10,11 @@
         android:orientation="horizontal">
 
         <TextView
-            android:id="@+id/textView3"
+            android:id="@+id/item_name"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="12dp"
-            android:layout_marginTop="11dp"
+            android:layout_marginTop="10dp"
             android:layout_weight="1"
             android:text="Item Name"
             android:textColor="@color/black"
@@ -23,12 +22,12 @@
             android:textStyle="bold" />
 
         <ImageView
-            android:id="@+id/imageView2"
+            android:id="@+id/close_image_view"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="10dp"
             android:layout_marginEnd="12dp"
-            android:src="@drawable/ic_baseline_close_24" />
+            android:src="@drawable/ic_clear_black_24dp" />
     </LinearLayout>
 
 
@@ -37,96 +36,98 @@
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
         android:background="@color/light_grey" />
 
-    <TextView
-        android:id="@+id/textView4"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="16dp"
-        android:text="Quantity"
-        android:textColor="@color/black"
-        android:textSize="18sp"
-        android:textStyle="bold" />
+    <!--    <TextView-->
+    <!--        android:id="@+id/textView4"-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:layout_marginStart="10dp"-->
+    <!--        android:layout_marginTop="16dp"-->
+    <!--        android:text="Quantity"-->
+    <!--        android:textColor="@color/black"-->
+    <!--        android:textSize="18sp"-->
+    <!--        android:textStyle="bold" />-->
 
-    <TextView
-        android:id="@+id/textView5"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="12dp"
-        android:layout_marginTop="5dp"
-        android:text="Please select any one option"
-        android:textSize="14sp" />
+    <!--    <TextView-->
+    <!--        android:id="@+id/textView5"-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:layout_marginStart="12dp"-->
+    <!--        android:layout_marginTop="5dp"-->
+    <!--        android:text="Please select any one option"-->
+    <!--        android:textSize="14sp" />-->
     <!--  TODO Radio button in recycler-->
-    <RadioGroup
-        android:id="@+id/radioGroup"
+    <!--    <RadioGroup-->
+    <!--        android:id="@+id/radioGroup"-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:layout_marginStart="20dp"-->
+    <!--        android:layout_marginTop="12dp"-->
+    <!--        android:orientation="vertical">-->
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/variantsRecyclerView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="12dp"
-        android:orientation="vertical">
+        android:layout_marginBottom="12dp"
+        android:orientation="vertical" />
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/variantsRecyclerView"
-            android:orientation="vertical" />
+    <!--    </RadioGroup>-->
 
-    </RadioGroup>
+    <!--    <LinearLayout-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:layout_height="55dp"-->
+    <!--        android:layout_marginTop="40dp"-->
+    <!--        android:layout_marginBottom="40dp"-->
+    <!--        android:orientation="horizontal">-->
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="55dp"
-        android:layout_marginTop="40dp"
-        android:layout_marginBottom="40dp"
-        android:orientation="horizontal">
+    <!--        <LinearLayout-->
+    <!--            android:layout_width="90dp"-->
+    <!--            android:layout_height="40dp"-->
+    <!--            android:layout_gravity="center_vertical"-->
+    <!--            android:layout_marginStart="20dp"-->
+    <!--            android:background="@drawable/background_signup"-->
+    <!--            android:orientation="horizontal">-->
 
-        <LinearLayout
-            android:layout_width="90dp"
-            android:layout_height="40dp"
-            android:layout_gravity="center_vertical"
-            android:layout_marginStart="20dp"
-            android:background="@drawable/background_signup"
-            android:orientation="horizontal">
+    <!--            <ImageView-->
+    <!--                android:layout_width="0dp"-->
+    <!--                android:layout_height="match_parent"-->
+    <!--                android:layout_weight="1"-->
+    <!--                android:gravity="center"-->
+    <!--                android:alpha="0.6"-->
+    <!--                android:src="@drawable/ic_baseline_remove_24" />-->
 
-            <ImageView
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:alpha="0.6"
-                android:src="@drawable/ic_baseline_remove_24" />
+    <!--            <TextView-->
+    <!--                android:layout_width="0dp"-->
+    <!--                android:layout_height="match_parent"-->
+    <!--                android:layout_weight="1"-->
+    <!--                android:background="@color/lightBlue"-->
+    <!--                android:gravity="center"-->
+    <!--                android:text="1"-->
+    <!--                android:textColor="@color/white"-->
+    <!--                android:textStyle="bold" />-->
 
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:background="@color/lightBlue"
-                android:gravity="center"
-                android:text="1"
-                android:textColor="@color/white"
-                android:textStyle="bold" />
+    <!--            <ImageView-->
+    <!--                android:layout_width="0dp"-->
+    <!--                android:layout_height="match_parent"-->
+    <!--                android:layout_weight="1"-->
+    <!--                android:gravity="center"-->
+    <!--                android:alpha="0.6"-->
+    <!--                android:src="@drawable/ic_baseline_add_24" />-->
+    <!--        </LinearLayout>-->
 
-            <ImageView
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:alpha="0.6"
-                android:src="@drawable/ic_baseline_add_24" />
-        </LinearLayout>
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/buttonCartShow"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginStart="20dp"
-            android:layout_marginEnd="10dp"
-            android:text="Add + Rs"
-            tools:layout_editor_absoluteX="122dp"
-            tools:layout_editor_absoluteY="363dp" />
-    </LinearLayout>
+    <!--&lt;!&ndash;        <com.google.android.material.button.MaterialButton&ndash;&gt;-->
+    <!--&lt;!&ndash;            android:id="@+id/buttonCartShow"&ndash;&gt;-->
+    <!--&lt;!&ndash;            android:layout_width="match_parent"&ndash;&gt;-->
+    <!--&lt;!&ndash;            android:layout_height="match_parent"&ndash;&gt;-->
+    <!--&lt;!&ndash;            android:layout_marginStart="20dp"&ndash;&gt;-->
+    <!--&lt;!&ndash;            android:layout_marginEnd="10dp"&ndash;&gt;-->
+    <!--&lt;!&ndash;            android:text="Add + Rs"&ndash;&gt;-->
+    <!--&lt;!&ndash;            tools:layout_editor_absoluteX="122dp"&ndash;&gt;-->
+    <!--&lt;!&ndash;            tools:layout_editor_absoluteY="363dp" />&ndash;&gt;-->
+    <!--    </LinearLayout>-->
 
 
 </LinearLayout>

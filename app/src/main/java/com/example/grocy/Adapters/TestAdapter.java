@@ -7,14 +7,14 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.RecyclerView;
-
 import com.bumptech.glide.Glide;
 import com.example.grocy.Models.MyOrdersModel;
 import com.example.grocy.R;
 
 import java.util.ArrayList;
+
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 
 public class TestAdapter extends RecyclerView.Adapter<TestAdapter.MyViewHolder> {
 
@@ -39,6 +39,7 @@ public class TestAdapter extends RecyclerView.Adapter<TestAdapter.MyViewHolder> 
         holder.name.setText(myOrdersModel.getShopName());
         holder.amount.setText("" + myOrdersModel.getOrderAmount());
         holder.dateTime.setText(myOrdersModel.getDateTime().toString());
+        holder.dateTime.setText("" + myOrdersModel.getDateTime());
         holder.deliveryStatus.setText(myOrdersModel.getDeliveryStatus());
         Glide.with(holder.image.getContext()).load(myOrdersModel.getShopImage()).into(holder.image);
     }
