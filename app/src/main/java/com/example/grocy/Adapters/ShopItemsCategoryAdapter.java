@@ -24,7 +24,7 @@ public class ShopItemsCategoryAdapter extends RecyclerView.Adapter<ShopItemsCate
     ArrayList<ShopItemsCategoryModel> shop_items_list;
     static int price_of_currentlyAddedItems = 0;
     static int no_of_currentlyAddedItems = 0;
-    static ArrayList<CartItemsModel> added_items = new ArrayList();
+    public static ArrayList<CartItemsModel> added_items = new ArrayList();
 
     public ShopItemsCategoryAdapter(Context context, ArrayList<ShopItemsCategoryModel> shop_items_list) {
         super();

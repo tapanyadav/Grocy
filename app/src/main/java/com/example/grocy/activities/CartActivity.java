@@ -101,7 +101,7 @@ public class CartActivity extends AppCompatActivity {
         hm.put("taxAmount", taxAmt);
         hm.put("itemAmount", itemsAmt);
         hm.put("userAddress", (String) MainActivity.proile_activity_data.get("address"));
-        hm.put("dateTime", FieldValue.serverTimestamp());
+        hm.put("dateTime", FieldValue.serverTimestamp().toString());
         hm.put("shopName", (String) ShopDetailsActivity.shop_detail.get("shopName"));
         hm.put("shopImage", (String) ShopDetailsActivity.shop_detail.get("shopImage"));
         order_button.setOnClickListener(v -> {

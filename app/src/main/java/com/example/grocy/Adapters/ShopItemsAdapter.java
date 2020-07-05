@@ -81,19 +81,16 @@ public class ShopItemsAdapter extends RecyclerView.Adapter<ShopItemsAdapter.Shop
                     holder.item_count.setText("" + item.getItemCount());
                 }
             }
-            Button buttonCart = bottomSheetDialog.findViewById(R.id.buttonCartShow);
-            assert buttonCart != null;
-            buttonCart.setOnClickListener(v1 -> {
-                openBottomSheetCart(bottomSheetDialog, shopItemsModel);
-            });
+//            Button buttonCart = bottomSheetDialog.findViewById(R.id.buttonCartShow);
+//            assert buttonCart != null;
+//            buttonCart.setOnClickListener(v1 -> {
+//                openBottomSheetCart(bottomSheetDialog, shopItemsModel);
+//            });
+
         });
 
         holder.remove_one.setOnClickListener(v -> {
-//            BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(context);
-//            bottomSheetDialog.setContentView(R.layout.bottom_sheet_items_quantity);
-//            bottomSheetDialog.show();
-//            bottomSheetDialog.setCanceledOnTouchOutside(true);
-//            setUpItemVariantsRecycler(bottomSheetDialog, position);
+
             for (int i = 0; i < ShopItemsCategoryAdapter.added_items.size(); i++) {
                 CartItemsModel item = ShopItemsCategoryAdapter.added_items.get(i);
                 int count = ShopItemsCategoryAdapter.added_items.get(i).getItemCount();
@@ -146,19 +143,50 @@ public class ShopItemsAdapter extends RecyclerView.Adapter<ShopItemsAdapter.Shop
                 holder.linearLayoutItemsAdd.setVisibility(View.VISIBLE);
                 holder.buttonAdd.setVisibility(View.INVISIBLE);
             }
+            ImageView close_image_view = bottomSheetDialog.findViewById(R.id.close_image_view);
+            close_image_view.setOnClickListener(v1 -> {
+                bottomSheetDialog.dismiss();
+                int price = 0;
+                for (int i = 0; i < ShopItemsCategoryAdapter.added_items.size(); i++) {
+                    price = price + Integer.parseInt(ShopItemsCategoryAdapter.added_items.get(i).getItemsPrice()) * ShopItemsCategoryAdapter.added_items.get(i).getItemCount();
+                }
+                ShopItemsCategoryAdapter.price_of_currentlyAddedItems = price;
+                BottomSheetDialog bottomSheetDialog1 = new BottomSheetDialog(context);
+                bottomSheetDialog1.setContentView(R.layout.bottom_sheet_cart);
+                bottomSheetDialog1.show();
+                bottomSheetDialog1.setCanceledOnTouchOutside(true);
+//                ShopItemsCategoryAdapter.no_of_currentlyAddedItems = ShopItemsCategoryAdapter.no_of_currentlyAddedItems - 1;
 
-            Button buttonCart = bottomSheetDialog.findViewById(R.id.buttonCartShow);
-            assert buttonCart != null;
-            buttonCart.setOnClickListener(v1 -> {
-                openBottomSheetCart(bottomSheetDialog, shopItemsModel);
+
+                TextView currentlyAddedItems = bottomSheetDialog1.findViewById(R.id.currentlyAddedItems);
+                TextView currentlyAddedItemsPrice = bottomSheetDialog1.findViewById(R.id.currentlyAddedItemsPrice);
+
+                currentlyAddedItems.setText(String.valueOf(ShopItemsCategoryAdapter.no_of_currentlyAddedItems));
+                currentlyAddedItemsPrice.setText(String.valueOf(ShopItemsCategoryAdapter.price_of_currentlyAddedItems));
+
+
+                TextView textViewCartShow = bottomSheetDialog1.findViewById(R.id.textViewCart);
+                textViewCartShow.setOnClickListener(v2 -> {
+                    bottomSheetDialog1.dismiss();
+                    openCart();
+                });
             });
+
+//            Button buttonCart = bottomSheetDialog.findViewById(R.id.buttonCartShow);
+//            assert buttonCart != null;
+//            buttonCart.setOnClickListener(v1 -> {
+//                openBottomSheetCart(bottomSheetDialog, shopItemsModel);
+//            });
         });
+
+
     }
 
     private void openBottomSheetCart(BottomSheetDialog bottomSheetDialog, ShopItemsModel shopItemsModel) {
         bottomSheetDialog.dismiss();
         BottomSheetDialog bottomSheetDialog1 = new BottomSheetDialog(context);
         bottomSheetDialog1.setContentView(R.layout.bottom_sheet_cart);
+
 
         System.out.println("--------------------------------------");
         System.out.println(shop_items_list.toString());
@@ -224,7 +252,6 @@ public class ShopItemsAdapter extends RecyclerView.Adapter<ShopItemsAdapter.Shop
 
     private void setUpItemVariantsRecycler(BottomSheetDialog bottomSheetDialog, int position) {
         final ShopItemsModel shopItemsModel = singleItem.get(position);
-
         HashMap<String, ItemVariantsModel> itemVariants;
         itemVariants = shopItemsModel.getItemVariants();
         System.out.println("--------------------------");
@@ -232,14 +259,17 @@ public class ShopItemsAdapter extends RecyclerView.Adapter<ShopItemsAdapter.Shop
         System.out.println(shopItemsModel.getShopID());
         System.out.println("--------------------------");
         if (itemVariants != null) {
-            setAdapter(bottomSheetDialog, itemVariants);
+            setAdapter(bottomSheetDialog, itemVariants, shopItemsModel);
         } else {
             openBottomSheetCart(bottomSheetDialog, shopItemsModel);
             return;
         }
     }
 
-    private void setAdapter(BottomSheetDialog bottomSheetDialog, HashMap<String, ItemVariantsModel> itemVariants) {
+    private void setAdapter(BottomSheetDialog bottomSheetDialog, HashMap<String, ItemVariantsModel> itemVariants, ShopItemsModel shopItemsModel) {
+
+        TextView item_name = bottomSheetDialog.findViewById(R.id.item_name);
+        item_name.setText(shopItemsModel.getItemsProductName());
 
         RecyclerView variantsRecyclerView;
         ArrayList<ItemVariantsModel> itemVariantsModelArrayList;
@@ -250,7 +280,7 @@ public class ShopItemsAdapter extends RecyclerView.Adapter<ShopItemsAdapter.Shop
 
         variantsRecyclerView.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false));
 
-        itemVariantsAdapter = new ItemVariantsAdapter(context, itemVariantsModelArrayList);
+        itemVariantsAdapter = new ItemVariantsAdapter(context, itemVariantsModelArrayList, shopItemsModel);
 
         variantsRecyclerView.setAdapter(itemVariantsAdapter);
         for (Map.Entry mapElement : itemVariants.entrySet()) {
@@ -259,6 +289,8 @@ public class ShopItemsAdapter extends RecyclerView.Adapter<ShopItemsAdapter.Shop
             ItemVariantsModel itemVariantsModel = new ItemVariantsModel();
             itemVariantsModel.setItemPrice((String) item.get("itemPrice"));
             itemVariantsModel.setItemQuantity((String) item.get("itemQuantity"));
+            itemVariantsModel.setItemID((String) item.get("itemId"));
+            itemVariantsModel.setVariant_id(key);
             itemVariantsModelArrayList.add(itemVariantsModel);
         }
         itemVariantsAdapter.notifyDataSetChanged();

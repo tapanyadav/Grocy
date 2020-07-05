@@ -51,11 +51,11 @@ public class UserProfileActivity extends AppCompatActivity {
         CardView cardViewAddPhoto = findViewById(R.id.card_addPhoto);
         CardView cardViewAddReview = findViewById(R.id.card_addReview);
         ImageView profileShare = findViewById(R.id.image_share_profile);
-
+        String user_id = (String) MainActivity.proile_activity_data.get("userId");
         firebaseFirestore = FirebaseFirestore.getInstance();
 //        user_data = (HashMap<String, Object>) getIntent().getSerializableExtra("user_data");
 
-        documentReference = firebaseFirestore.collection("Users").document((String) MainActivity.proile_activity_data.get("userId"));
+        documentReference = firebaseFirestore.collection("Users").document(user_id);
         documentReference.collection("myOrder").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
