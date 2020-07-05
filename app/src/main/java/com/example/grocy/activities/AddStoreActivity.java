@@ -36,6 +36,7 @@ import com.google.firebase.storage.UploadTask;
 
 import java.util.HashMap;
 import java.util.Objects;
+import java.util.UUID;
 
 public class AddStoreActivity extends AppCompatActivity {
 
@@ -123,7 +124,7 @@ public class AddStoreActivity extends AppCompatActivity {
 
         if (!TextUtils.isEmpty(storeName) && !TextUtils.isEmpty(storeLocation)) {
             if (mainImageURI != null) {
-                UploadTask image_path = storageReference.child("store_images/").child(user_id + ".jpg").putFile(mainImageURI);
+                UploadTask image_path = storageReference.child("store_images/").child(user_id + " (" + UUID.randomUUID() + " )" + ".jpg").putFile(mainImageURI);
                 image_path.addOnSuccessListener(taskSnapshot -> {
 
                     Task<Uri> task = Objects.requireNonNull(Objects.requireNonNull(taskSnapshot.getMetadata()).getReference()).getDownloadUrl();

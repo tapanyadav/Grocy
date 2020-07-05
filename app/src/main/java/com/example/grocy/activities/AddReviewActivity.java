@@ -16,6 +16,12 @@ import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.cardview.widget.CardView;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+
 import com.example.grocy.R;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.chip.Chip;
@@ -28,12 +34,7 @@ import com.google.firebase.storage.UploadTask;
 
 import java.util.HashMap;
 import java.util.Objects;
-
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.cardview.widget.CardView;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
+import java.util.UUID;
 
 
 public class AddReviewActivity extends AppCompatActivity {
@@ -161,7 +162,7 @@ public class AddReviewActivity extends AppCompatActivity {
                 chipData.put("numberOfComments", 0);
 
                 if (mainImageURI != null) {
-                    UploadTask image_path = storageReference.child("review_images/").child(user_id + ".jpg").putFile(mainImageURI);
+                    UploadTask image_path = storageReference.child("review_images/").child(user_id + " (" + UUID.randomUUID() + " )" + ".jpg").putFile(mainImageURI);
                     image_path.addOnSuccessListener(taskSnapshot -> {
 
                         Task<Uri> task = Objects.requireNonNull(Objects.requireNonNull(taskSnapshot.getMetadata()).getReference()).getDownloadUrl();

@@ -98,6 +98,19 @@
                 app:layout_collapseMode="pin"
                 app:popupTheme="@style/ThemeOverlay.MaterialComponents.Light">
 
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="12dp"
+                    android:gravity="end">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/bookmark_fill" />
+                </RelativeLayout>
+
+
             </androidx.appcompat.widget.Toolbar>
 
         </com.google.android.material.appbar.CollapsingToolbarLayout>

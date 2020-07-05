@@ -38,7 +38,7 @@ public class TestAdapter extends RecyclerView.Adapter<TestAdapter.MyViewHolder> 
         MyOrdersModel myOrdersModel = ordersModelArrayList.get(position);
         holder.name.setText(myOrdersModel.getShopName());
         holder.amount.setText("" + myOrdersModel.getOrderAmount());
-        holder.dateTime.setText(myOrdersModel.getDateTime());
+        holder.dateTime.setText(myOrdersModel.getDateTime().toString());
         holder.deliveryStatus.setText(myOrdersModel.getDeliveryStatus());
         Glide.with(holder.image.getContext()).load(myOrdersModel.getShopImage()).into(holder.image);
     }

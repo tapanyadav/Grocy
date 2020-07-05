@@ -7,44 +7,50 @@
     tools:context=".fragments.PhotosFragment">
 
     <!-- TODO: Update blank fragment layout -->
-    <!--    <androidx.recyclerview.widget.RecyclerView-->
-    <!--        android:id="@+id/recycler"-->
-    <!--        android:scrollbars="none"-->
-    <!--        android:layout_width="match_parent"-->
-    <!--        android:layout_height="match_parent"-->
-    <!--        android:layout_marginTop="6dp"-->
-    <!--        android:padding="6dp"/>-->
-
-    <LinearLayout
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycler_photos"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:layout_height="match_parent"
+        android:layout_marginTop="6dp"
+        android:padding="6dp"
+        android:scrollbars="none" />
 
-        <include
-            layout="@layout/recycler_items_frag_photos"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginStart="4dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginEnd="4dp" />
+    <!--    <LinearLayout-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:orientation="vertical">-->
 
-        <include
-            layout="@layout/recycler_items_frag_photos"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginStart="4dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginEnd="4dp" />
+    <!--        <androidx.recyclerview.widget.RecyclerView-->
+    <!--            android:layout_width="match_parent"-->
+    <!--            android:id="@+id/review_recycler"-->
+    <!--            android:layout_height="wrap_content"-->
+    <!--            android:orientation="vertical" />-->
+    <!--        -->
+    <!--        <include-->
+    <!--            layout="@layout/recycler_items_frag_photos"-->
+    <!--            android:layout_width="match_parent"-->
+    <!--            android:layout_height="match_parent"-->
+    <!--            android:layout_marginStart="4dp"-->
+    <!--            android:layout_marginTop="10dp"-->
+    <!--            android:layout_marginEnd="4dp" />-->
 
-        <include
-            layout="@layout/recycler_items_frag_photos"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginStart="4dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginEnd="4dp"
-            android:layout_marginBottom="10dp" />
-    </LinearLayout>
+    <!--        <include-->
+    <!--            layout="@layout/recycler_items_frag_photos"-->
+    <!--            android:layout_width="match_parent"-->
+    <!--            android:layout_height="match_parent"-->
+    <!--            android:layout_marginStart="4dp"-->
+    <!--            android:layout_marginTop="10dp"-->
+    <!--            android:layout_marginEnd="4dp" />-->
+
+    <!--        <include-->
+    <!--            layout="@layout/recycler_items_frag_photos"-->
+    <!--            android:layout_width="match_parent"-->
+    <!--            android:layout_height="match_parent"-->
+    <!--            android:layout_marginStart="4dp"-->
+    <!--            android:layout_marginTop="10dp"-->
+    <!--            android:layout_marginEnd="4dp"-->
+    <!--            android:layout_marginBottom="10dp" />-->
+    <!--    </LinearLayout>-->
 
 
 </LinearLayout>

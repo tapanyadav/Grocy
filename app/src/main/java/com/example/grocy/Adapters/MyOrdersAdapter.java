@@ -55,6 +55,7 @@ public class MyOrdersAdapter extends FirestoreRecyclerAdapter<MyOrdersModel, MyO
         favOrders.put("orderAmount", model.getOrderAmount());
         favOrders.put("userAddress", model.getUserAddress());
         favOrders.put("orderPaymentMode", model.getOrderPaymentMode());
+        //favOrders.put("items",model.getItems());
 
         holder.name.setText(model.getShopName());
         holder.amount.setText("" + model.getOrderAmount());

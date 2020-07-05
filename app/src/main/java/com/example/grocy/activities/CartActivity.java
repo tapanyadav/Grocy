@@ -5,20 +5,19 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.example.grocy.Adapters.CartItemsAdapter;
 import com.example.grocy.Models.CartItemsModel;
 import com.example.grocy.R;
-import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Objects;
-
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 public class CartActivity extends AppCompatActivity {
 
@@ -100,8 +99,10 @@ public class CartActivity extends AppCompatActivity {
         hm.put("orderAmount", totalAmt);
         hm.put("taxAmount", taxAmt);
         hm.put("itemAmount", itemsAmt);
+        hm.put("orderPaymentMode", "Upi payment");
+        hm.put("deliverStatus", "Order cancelled");
         hm.put("userAddress", (String) MainActivity.proile_activity_data.get("address"));
-        hm.put("dateTime", FieldValue.serverTimestamp());
+        // hm.put("dateTime", FieldValue.serverTimestamp().toString());
         hm.put("shopName", (String) ShopDetailsActivity.shop_detail.get("shopName"));
         hm.put("shopImage", (String) ShopDetailsActivity.shop_detail.get("shopImage"));
         order_button.setOnClickListener(v -> {

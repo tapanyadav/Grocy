@@ -1,6 +1,5 @@
 package com.example.grocy.Adapters;
 
-import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,18 +12,22 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.grocy.Models.StoresAddedModel;
 import com.example.grocy.R;
+import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
+import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 
-import java.util.ArrayList;
+public class StoresAddedAdapter extends FirestoreRecyclerAdapter<StoresAddedModel, StoresAddedAdapter.MyViewHolder> {
 
-public class StoresAddedAdapter extends RecyclerView.Adapter<StoresAddedAdapter.MyViewHolder> {
-
-    Context context;
-    ArrayList<StoresAddedModel> store_list;
-
-    public StoresAddedAdapter(Context context, ArrayList<StoresAddedModel> store_list) {
-        this.context = context;
-        this.store_list = store_list;
+    public StoresAddedAdapter(@NonNull FirestoreRecyclerOptions<StoresAddedModel> options) {
+        super(options);
     }
+
+//    Context context;
+//    ArrayList<StoresAddedModel> store_list;
+
+//    public StoresAddedAdapter(Context context, ArrayList<StoresAddedModel> store_list) {
+//        this.context = context;
+//        this.store_list = store_list;
+//    }
 
 
     @NonNull
@@ -35,18 +38,26 @@ public class StoresAddedAdapter extends RecyclerView.Adapter<StoresAddedAdapter.
     }
 
     @Override
-    public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
-        StoresAddedModel model = store_list.get(position);
-        Glide.with(holder.imageViewStore.getContext()).load(model.getStoreImage()).into(holder.imageViewStore);
+    protected void onBindViewHolder(@NonNull MyViewHolder holder, int position, @NonNull StoresAddedModel model) {
+        Glide.with(holder.imageViewStore.getContext()).load(model.getStoreImage()).placeholder(R.drawable.user_profile).into(holder.imageViewStore);
         holder.textViewStoreName.setText(model.getStoreName());
         holder.textViewRequestStatus.setText(model.getStoreAddStatus());
         holder.textViewStoreLocation.setText(model.getStoreLocation());
     }
 
-    @Override
-    public int getItemCount() {
-        return store_list.size();
-    }
+//    @Override
+//    public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
+//        StoresAddedModel model = store_list.get(position);
+//        Glide.with(holder.imageViewStore.getContext()).load(model.getStoreImage()).into(holder.imageViewStore);
+//        holder.textViewStoreName.setText(model.getStoreName());
+//        holder.textViewRequestStatus.setText(model.getStoreAddStatus());
+//        holder.textViewStoreLocation.setText(model.getStoreLocation());
+//    }
+
+//    @Override
+//    public int getItemCount() {
+//        return store_list.size();
+//    }
 
     public static class MyViewHolder extends RecyclerView.ViewHolder {
         TextView textViewStoreName, textViewStoreLocation, textViewRequestStatus;

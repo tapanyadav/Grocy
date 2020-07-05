@@ -58,13 +58,14 @@
             </LinearLayout>
 
             <TextView
+                android:id="@+id/text_city"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="4dp"
                 android:drawableStart="@drawable/location"
                 android:drawablePadding="4dp"
-                android:text="Agra" />
+                android:text="America" />
 
             <TextView
                 android:layout_width="wrap_content"

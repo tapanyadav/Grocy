@@ -6,6 +6,12 @@ import android.view.WindowManager;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.example.grocy.Adapters.ShopItemsCategoryAdapter;
 import com.example.grocy.Models.ItemVariantsModel;
 import com.example.grocy.Models.ShopItemsCategoryModel;
@@ -27,12 +33,6 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.SortedSet;
 import java.util.TreeSet;
-
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 public class ShopDetailsActivity extends AppCompatActivity {
 
@@ -64,6 +64,7 @@ public class ShopDetailsActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.shop_toolbar);
         setSupportActionBar(toolbar);
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
+
 
         toolbar.setNavigationIcon(R.drawable.icon_back_new);
         toolbar.setNavigationOnClickListener(v -> onBackPressed());

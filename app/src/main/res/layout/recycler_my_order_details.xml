@@ -6,7 +6,7 @@
     android:orientation="horizontal">
 
     <com.google.android.material.card.MaterialCardView
-        android:id="@+id/materialCardView10"
+        android:id="@+id/itemImages"
         android:layout_width="60dp"
         android:layout_height="60dp"
         android:layout_marginStart="10dp"
@@ -17,7 +17,7 @@
         app:cardCornerRadius="8dp">
 
         <ImageView
-            android:id="@+id/cart_item_image"
+            android:id="@+id/cart_order_item_image"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scaleType="centerCrop"
@@ -33,7 +33,7 @@
         android:paddingStart="6dp">
 
         <TextView
-            android:id="@+id/cart_item_name"
+            android:id="@+id/cart_item_name_order"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="6dp"
@@ -56,6 +56,7 @@
                 android:textSize="12sp" />
 
             <TextView
+                android:id="@+id/text_items_count"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="1dp"
@@ -77,7 +78,7 @@
                 android:textSize="12sp" />
 
             <TextView
-                android:id="@+id/cart_item_quantity"
+                android:id="@+id/cart_item_quantity_order"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="2dp"
@@ -104,7 +105,7 @@
             android:textSize="14sp" />
 
         <TextView
-            android:id="@+id/cart_item_total_price"
+            android:id="@+id/text_item_total_price"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="2dp"

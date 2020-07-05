@@ -45,7 +45,7 @@ public class MyOrdersActivity extends AppCompatActivity {
         toolbarMyOrders.setNavigationOnClickListener(v -> onBackPressed());
 
         documentReference = firebaseFirestore.collection("Users").document(userId);
-        Query query = documentReference.collection("myOrder");
+        Query query = documentReference.collection("myOrders");
         FirestoreRecyclerOptions<MyOrdersModel> options = new FirestoreRecyclerOptions.Builder<MyOrdersModel>().setQuery(query, MyOrdersModel.class).build();
 
         myOrdersAdapter = new MyOrdersAdapter(options);

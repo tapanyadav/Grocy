@@ -10,15 +10,12 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.grocy.Adapters.StoresAddedAdapter;
 import com.example.grocy.Models.StoresAddedModel;
 import com.example.grocy.R;
+import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Objects;
 
 public class StoresAddedActivity extends AppCompatActivity {
@@ -29,8 +26,8 @@ public class StoresAddedActivity extends AppCompatActivity {
     StoresAddedAdapter storesAddedAdapter;
     DocumentReference documentReference;
     RecyclerView recyclerViewStoresAdded;
-    ArrayList<StoresAddedModel> arrayList;
-    HashMap<String, Object> store_info = new HashMap();
+//    ArrayList<StoresAddedModel> arrayList = new ArrayList();
+//    HashMap<String, Object> store_info = new HashMap();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,34 +51,57 @@ public class StoresAddedActivity extends AppCompatActivity {
         documentReference = firebaseFirestore.collection("Users").document(userId);
         Query query = documentReference.collection("storesSuggestions");
 
-        query.get().addOnCompleteListener(task -> {
-            if (task.isSuccessful()) {
-                for (QueryDocumentSnapshot document : task.getResult()) {
-                    store_info.put(document.getId(), document.getData());
-                }
-                setAdapter();
-            }
-        });
 
-    }
+        FirestoreRecyclerOptions<StoresAddedModel> storesAddedModelFirestoreRecyclerOptions = new FirestoreRecyclerOptions.Builder<StoresAddedModel>()
+                .setQuery(query, StoresAddedModel.class).build();
 
-    private void setAdapter() {
-        arrayList = new ArrayList();
-        storesAddedAdapter = new StoresAddedAdapter(this, arrayList);
+        storesAddedAdapter = new StoresAddedAdapter(storesAddedModelFirestoreRecyclerOptions);
         recyclerViewStoresAdded.setHasFixedSize(true);
         recyclerViewStoresAdded.setLayoutManager(new LinearLayoutManager(this));
-        recyclerViewStoresAdded.setAdapter(storesAddedAdapter);
-        for (Map.Entry mapElement : store_info.entrySet()) {
-            StoresAddedModel storesAddedModel = new StoresAddedModel();
-            String key = (String) mapElement.getKey();
-            HashMap<String, Object> item = (HashMap<String, Object>) mapElement.getValue();
-            storesAddedModel.setStoreAddStatus((String) item.get("storeAddStatus"));
-            storesAddedModel.setStoreImage((String) item.get("storeImage"));
-            storesAddedModel.setStoreLocation((String) item.get("storeLocation"));
-            storesAddedModel.setStoreName((String) item.get("storeName"));
-            arrayList.add(storesAddedModel);
-
-        }
         storesAddedAdapter.notifyDataSetChanged();
+        recyclerViewStoresAdded.setAdapter(storesAddedAdapter);
+
+//        query.get().addOnCompleteListener(task -> {
+//            if (task.isSuccessful()) {
+//                for (QueryDocumentSnapshot document : task.getResult()) {
+//                    store_info.put(document.getId(), document.getData());
+//                }
+//                setAdapter();
+//            }
+//        });
+
     }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        storesAddedAdapter.startListening();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        storesAddedAdapter.stopListening();
+    }
+    //    private void setAdapter() {
+//        storesAddedAdapter = new StoresAddedAdapter(this, arrayList);
+//        recyclerViewStoresAdded.setHasFixedSize(true);
+//        recyclerViewStoresAdded.setLayoutManager(new LinearLayoutManager(getApplicationContext(),LinearLayoutManager.VERTICAL,false));
+//
+//        for (Map.Entry mapElement : store_info.entrySet()) {
+//            StoresAddedModel storesAddedModel = new StoresAddedModel();
+//            String key = (String) mapElement.getKey();
+//            HashMap<String, Object> item = (HashMap<String, Object>) mapElement.getValue();
+//            storesAddedModel.setStoreAddStatus((String) item.get("storeAddStatus"));
+//            storesAddedModel.setStoreImage((String) item.get("storeImage"));
+//            storesAddedModel.setStoreLocation((String) item.get("storeLocation"));
+//            storesAddedModel.setStoreName((String) item.get("storeName"));
+//            arrayList.add(storesAddedModel);
+//
+//        }
+//
+//        recyclerViewStoresAdded.setAdapter(storesAddedAdapter);
+//        storesAddedAdapter.notifyDataSetChanged();
+////        storesAddedAdapter.remove(storesAddedAdapter.getItem(position));
+//    }
 }

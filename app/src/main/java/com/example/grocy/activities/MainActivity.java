@@ -28,6 +28,21 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.FragmentManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.bumptech.glide.Glide;
 import com.example.grocy.Adapters.CategoriesAdapter;
 import com.example.grocy.Adapters.FeaturedAdapter;
@@ -71,20 +86,6 @@ import java.util.Locale;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicReference;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.ActionBarDrawerToggle;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.coordinatorlayout.widget.CoordinatorLayout;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-import androidx.core.view.GravityCompat;
-import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.fragment.app.FragmentManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
@@ -111,8 +112,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     EditText editTextSearch;
     ImageButton imageButtonFilter;
     ShimmerFrameLayout shimmerFrameLayout;
+    HashMap<String, Object> userDefaultData = new HashMap<>();
 
     EditText editTextLocation;
+    String city;
     PlacesClient placesClient;
     String apiKey = "AIzaSyD3RtCpsidRz7EMJiR2EkWrYzoXFuwaUkI";
 
@@ -129,6 +132,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public static FragmentManager fragmentManager;
     String globalAddress;
     Query queryShops;
+    FirebaseFirestore firebaseFirestore;
     FirestoreRecyclerOptions<ShopsModel> shopsModelFirestoreRecyclerOptions;
     String flag = "0";
     Intent main_intent;
@@ -157,7 +161,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         //AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
 
         mAuth = FirebaseAuth.getInstance();
-        FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
+        firebaseFirestore = FirebaseFirestore.getInstance();
         FirebaseUser user = mAuth.getCurrentUser();
         System.out.println("----------------------------------------------------------");
         System.out.println(user.toString());
@@ -219,6 +223,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
 
         fusedLocationProviderClient = new FusedLocationProviderClient(MainActivity.this);
+
+        userDefaultData.put("userLevel", "1");
+        userDefaultData.put("userDetailedLevel", "Rookie");
+
 
         RecyclerView recyclerViewCat = findViewById(R.id.recycler);
         RecyclerView recyclerViewFea = findViewById(R.id.recycler_featured);
@@ -391,6 +399,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
         // Retrieve a PlacesClient (previously initialized - see MainActivity)
         placesClient = Places.createClient(MainActivity.this);
+
+        firebaseFirestore.collection("Users").document(Objects.requireNonNull(mAuth.getCurrentUser()).getUid()).update(userDefaultData).addOnCompleteListener(task1 -> {
+            if (task1.isSuccessful()) {
+                Toast.makeText(this, "Default data added", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(this, "Default data added error", Toast.LENGTH_SHORT).show();
+            }
+        });
 
         toolbarTitle.setOnClickListener(v -> {
             bottomSheetDialog = new BottomSheetDialog(MainActivity.this);
@@ -752,6 +768,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
                                 finalAddress = address.getSubLocality() + "," + address.getSubAdminArea();
                                 toolbarTitle.setText(finalAddress);
+                                city = address.getLocality();
+
+                                userDefaultData.put("userCity", city);
+
+                                //profile_activity_data = (HashMap<String, Object>) document.getData();
+                                proile_activity_data.put("userCity", city);
+                                Toast.makeText(this, "City:" + city, Toast.LENGTH_SHORT).show();
                                 Toast.makeText(this, finalAddress, Toast.LENGTH_SHORT).show();
 
                             }

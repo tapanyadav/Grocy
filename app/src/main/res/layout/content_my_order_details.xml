@@ -6,7 +6,7 @@
     android:layout_height="match_parent">
 
 
-    <ScrollView
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginBottom="62dp">
@@ -40,7 +40,7 @@
                 android:orientation="horizontal">
 
                 <LinearLayout
-                    android:layout_width="match_parent"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:orientation="vertical">
@@ -57,7 +57,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Order Id - "
-                            android:textSize="16sp"
+                            android:textSize="14sp"
                             android:textStyle="bold" />
 
                         <TextView
@@ -65,7 +65,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="75745673465"
-                            android:textSize="16sp"
+                            android:textSize="14sp"
                             android:textStyle="bold" />
 
                     </LinearLayout>
@@ -81,7 +81,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Yesterday,"
-                            android:textSize="16sp"
+                            android:textSize="14sp"
                             android:textStyle="bold" />
 
                         <TextView
@@ -118,7 +118,7 @@
                         android:drawableStart="@drawable/close"
                         android:drawablePadding="6dp"
                         android:text="Cancelled"
-                        android:textSize="16sp"
+                        android:textSize="14sp"
                         android:textStyle="bold"
                         android:visibility="invisible" />
                 </RelativeLayout>
@@ -131,7 +131,7 @@
                 android:layout_marginStart="12dp"
                 android:layout_marginTop="8dp"
                 android:text="Delivered to"
-                android:textSize="16sp" />
+                android:textSize="14sp" />
 
             <TextView
                 android:id="@+id/orderDeliveredAddress"
@@ -141,7 +141,7 @@
                 android:layout_marginStart="12dp"
                 android:layout_marginEnd="12dp"
                 android:text="Sri nikunj colony,Agra,282001"
-                android:textSize="16sp"
+                android:textSize="14sp"
                 android:textStyle="bold" />
 
             <TextView
@@ -150,7 +150,7 @@
                 android:layout_marginStart="12dp"
                 android:layout_marginTop="8dp"
                 android:text="Payment Mode"
-                android:textSize="16sp" />
+                android:textSize="14sp" />
 
             <TextView
                 android:id="@+id/orderPaymentMode"
@@ -160,7 +160,7 @@
                 android:layout_marginStart="12dp"
                 android:layout_marginEnd="12dp"
                 android:text="Upi payment"
-                android:textSize="16sp"
+                android:textSize="14sp"
                 android:textStyle="bold" />
 
             <View
@@ -184,17 +184,24 @@
                 android:textStyle="bold" />
 
 
-            <include layout="@layout/recycler_my_order_details" />
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recycler_details_items"
+                android:layout_width="match_parent"
+                android:layout_height="400dp"
+                android:orientation="vertical"
+                android:scrollbars="none" />
 
-            <include layout="@layout/recycler_my_order_details" />
+            <!--            <include layout="@layout/recycler_my_order_details" />-->
 
-            <include layout="@layout/recycler_my_order_details" />
+            <!--            <include layout="@layout/recycler_my_order_details" />-->
 
-            <include layout="@layout/recycler_my_order_details" />
+            <!--            <include layout="@layout/recycler_my_order_details" />-->
 
-            <include layout="@layout/recycler_my_order_details" />
+            <!--            <include layout="@layout/recycler_my_order_details" />-->
 
-            <include layout="@layout/recycler_my_order_details" />
+            <!--            <include layout="@layout/recycler_my_order_details" />-->
+
+            <!--            <include layout="@layout/recycler_my_order_details" />-->
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -335,7 +342,7 @@
             </LinearLayout>
 
         </LinearLayout>
-    </ScrollView>
+    </androidx.core.widget.NestedScrollView>
 
     <LinearLayout
         android:layout_width="match_parent"
