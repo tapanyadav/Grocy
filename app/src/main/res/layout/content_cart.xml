@@ -82,7 +82,7 @@
                             android:text="₹" />
 
                         <TextView
-                            android:id="@+id/items_amount"
+                            android:id="@+id/items_amount1"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="end|center_vertical"
@@ -125,7 +125,7 @@
                             android:text="₹" />
 
                         <TextView
-                            android:id="@+id/tax_amount"
+                            android:id="@+id/tax_amount1"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="end|center_vertical"
@@ -170,7 +170,7 @@
                             android:text="₹" />
 
                         <TextView
-                            android:id="@+id/total_amount"
+                            android:id="@+id/total_amount1"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="end|center_vertical"

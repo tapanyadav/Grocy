@@ -72,6 +72,7 @@ public class ItemVariantsAdapter extends RecyclerView.Adapter<ItemVariantsAdapte
                 cartItemsModel.setItemsName(shop_item.getItemsProductName());
                 cartItemsModel.setItemsImage(shop_item.getItemsImage());
                 cartItemsModel.setItemCount(shop_item.getCount());
+                cartItemsModel.setShopId(shop_item.getShopID());
 
                 cartItemsModel.setItemsPrice(itemVariantsModel.getItemPrice());
                 cartItemsModel.setItemsQuantity(itemVariantsModel.getItemQuantity());

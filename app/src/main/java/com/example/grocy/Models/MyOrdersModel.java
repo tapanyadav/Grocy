@@ -1,8 +1,5 @@
 package com.example.grocy.Models;
 
-import java.sql.Timestamp;
-import java.util.Date;
-
 public class MyOrdersModel {
 
     public String shopName, deliveryStatus;
@@ -12,12 +9,12 @@ public class MyOrdersModel {
     public String orderId;
     public String userAddress;
     public String orderPaymentMode;
-    public Date dateTime;
+    public String dateTime;
 
     public MyOrdersModel() {
     }
 
-    public MyOrdersModel(String shopName, Timestamp dateTime, String deliveryStatus, double orderAmount, String shopImage, boolean favOrder, String orderId, String userAddress, String orderPaymentMode) {
+    public MyOrdersModel(String shopName, String dateTime, String deliveryStatus, double orderAmount, String shopImage, boolean favOrder, String orderId, String userAddress, String orderPaymentMode) {
         this.shopName = shopName;
         this.dateTime = dateTime;
         this.deliveryStatus = deliveryStatus;
@@ -34,7 +31,7 @@ public class MyOrdersModel {
         return shopName;
     }
 
-    public Date getDateTime() {
+    public String getDateTime() {
         return dateTime;
     }
 

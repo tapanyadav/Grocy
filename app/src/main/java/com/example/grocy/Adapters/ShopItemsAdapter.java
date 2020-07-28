@@ -1,5 +1,7 @@
 package com.example.grocy.Adapters;
 
+import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.view.LayoutInflater;
@@ -63,9 +65,24 @@ public class ShopItemsAdapter extends RecyclerView.Adapter<ShopItemsAdapter.Shop
 
         for (int i = 0; i < ShopItemsCategoryAdapter.added_items.size(); i++) {
             CartItemsModel item = ShopItemsCategoryAdapter.added_items.get(i);
-            if (item.getItemID().equals(shopItemsModel.getItemID()) && shopItemsModel.getItemVariants() == null) {
-                holder.linearLayoutItemsAdd.setVisibility(View.VISIBLE);
-                holder.buttonAdd.setVisibility(View.INVISIBLE);
+            if (item.getItemID().equals(shopItemsModel.getItemID())) {
+                if (shopItemsModel.getItemVariants() == null) {
+                    holder.linearLayoutItemsAdd.setVisibility(View.VISIBLE);
+                    holder.buttonAdd.setVisibility(View.INVISIBLE);
+                    holder.item_count.setText("" + item.getItemCount());
+                } else {
+                    int variants_count = 0;
+                    for (int j = 0; j < ShopItemsCategoryAdapter.added_items.size(); j++) {
+                        if (shopItemsModel.getItemID().equals(ShopItemsCategoryAdapter.added_items.get(j).getItemID())) {
+                            variants_count = variants_count + ShopItemsCategoryAdapter.added_items.get(j).getItemCount();
+                        }
+                    }
+                    if (variants_count > 0) {
+                        holder.linearLayoutItemsAdd.setVisibility(View.VISIBLE);
+                        holder.buttonAdd.setVisibility(View.INVISIBLE);
+                        holder.item_count.setText("" + variants_count);
+                    }
+                }
             }
         }
 
@@ -73,12 +90,15 @@ public class ShopItemsAdapter extends RecyclerView.Adapter<ShopItemsAdapter.Shop
             BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(context);
             bottomSheetDialog.setContentView(R.layout.bottom_sheet_items_quantity);
             bottomSheetDialog.show();
-            bottomSheetDialog.setCanceledOnTouchOutside(true);
+            bottomSheetDialog.setCanceledOnTouchOutside(false);
+
             setUpItemVariantsRecycler(bottomSheetDialog, position);
-            for (int i = 0; i < ShopItemsCategoryAdapter.added_items.size(); i++) {
-                CartItemsModel item = ShopItemsCategoryAdapter.added_items.get(i);
-                if (item.getItemID().equals(shopItemsModel.getItemID()) && shopItemsModel.getItemVariants() == null) {
-                    holder.item_count.setText("" + item.getItemCount());
+            if (shopItemsModel.getItemVariants() == null) {
+                for (int i = 0; i < ShopItemsCategoryAdapter.added_items.size(); i++) {
+                    CartItemsModel item = ShopItemsCategoryAdapter.added_items.get(i);
+                    if (item.getItemID().equals(shopItemsModel.getItemID()) && shopItemsModel.getItemVariants() == null) {
+                        holder.item_count.setText("" + item.getItemCount());
+                    }
                 }
             }
 //            Button buttonCart = bottomSheetDialog.findViewById(R.id.buttonCartShow);
@@ -87,56 +107,167 @@ public class ShopItemsAdapter extends RecyclerView.Adapter<ShopItemsAdapter.Shop
 //                openBottomSheetCart(bottomSheetDialog, shopItemsModel);
 //            });
 
+            ImageView close_image_view = bottomSheetDialog.findViewById(R.id.close_image_view);
+            close_image_view.setOnClickListener(v1 -> {
+                bottomSheetDialog.dismiss();
+                int price = 0;
+                for (int i = 0; i < ShopItemsCategoryAdapter.added_items.size(); i++) {
+                    price = price + Integer.parseInt(ShopItemsCategoryAdapter.added_items.get(i).getItemsPrice()) * ShopItemsCategoryAdapter.added_items.get(i).getItemCount();
+                }
+                int variants_count = 0;
+                for (int i = 0; i < ShopItemsCategoryAdapter.added_items.size(); i++) {
+                    if (shopItemsModel.getItemID().equals(ShopItemsCategoryAdapter.added_items.get(i).getItemID())) {
+                        variants_count = variants_count + ShopItemsCategoryAdapter.added_items.get(i).getItemCount();
+                    }
+                }
+                if (variants_count > 0) {
+                    holder.linearLayoutItemsAdd.setVisibility(View.VISIBLE);
+                    holder.buttonAdd.setVisibility(View.INVISIBLE);
+                    holder.item_count.setText("" + variants_count);
+                }
+                ShopItemsCategoryAdapter.price_of_currentlyAddedItems = price;
+                BottomSheetDialog bottomSheetDialog1 = new BottomSheetDialog(context);
+                bottomSheetDialog1.setContentView(R.layout.bottom_sheet_cart);
+                bottomSheetDialog1.show();
+                bottomSheetDialog1.setCanceledOnTouchOutside(true);
+//                ShopItemsCategoryAdapter.no_of_currentlyAddedItems = ShopItemsCategoryAdapter.no_of_currentlyAddedItems - 1;
+
+
+                TextView currentlyAddedItems = bottomSheetDialog1.findViewById(R.id.currentlyAddedItems);
+                TextView currentlyAddedItemsPrice = bottomSheetDialog1.findViewById(R.id.currentlyAddedItemsPrice);
+
+                currentlyAddedItems.setText(String.valueOf(ShopItemsCategoryAdapter.no_of_currentlyAddedItems));
+                currentlyAddedItemsPrice.setText(String.valueOf(ShopItemsCategoryAdapter.price_of_currentlyAddedItems));
+
+
+                TextView textViewCartShow = bottomSheetDialog1.findViewById(R.id.textViewCart);
+                textViewCartShow.setOnClickListener(v2 -> {
+                    bottomSheetDialog1.dismiss();
+                    openCart();
+                });
+            });
+
+
         });
 
         holder.remove_one.setOnClickListener(v -> {
-
-            for (int i = 0; i < ShopItemsCategoryAdapter.added_items.size(); i++) {
-                CartItemsModel item = ShopItemsCategoryAdapter.added_items.get(i);
-                int count = ShopItemsCategoryAdapter.added_items.get(i).getItemCount();
-                if (item.getItemID().equals(shopItemsModel.getItemID()) && shopItemsModel.getItemVariants() == null) {
-                    if (count == 1) {
-                        ShopItemsCategoryAdapter.added_items.remove(i);
-                        holder.linearLayoutItemsAdd.setVisibility(View.INVISIBLE);
-                        holder.buttonAdd.setVisibility(View.VISIBLE);
-                    } else {
-                        item.setItemCount(count - 1);
-                        holder.item_count.setText("" + item.getItemCount());
+            BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(context);
+            bottomSheetDialog.setContentView(R.layout.bottom_sheet_items_quantity);
+//            setUpItemVariantsRecycler(bottomSheetDialog, position);
+            if (shopItemsModel.getItemVariants() == null) {
+                for (int i = 0; i < ShopItemsCategoryAdapter.added_items.size(); i++) {
+                    CartItemsModel item = ShopItemsCategoryAdapter.added_items.get(i);
+                    int count = ShopItemsCategoryAdapter.added_items.get(i).getItemCount();
+                    if (item.getItemID().equals(shopItemsModel.getItemID()) && shopItemsModel.getItemVariants() == null) {
+                        if (count == 1) {
+                            ShopItemsCategoryAdapter.added_items.remove(i);
+                            holder.linearLayoutItemsAdd.setVisibility(View.INVISIBLE);
+                            holder.buttonAdd.setVisibility(View.VISIBLE);
+                        } else {
+                            item.setItemCount(count - 1);
+                            holder.item_count.setText("" + item.getItemCount());
+                        }
                     }
                 }
+                int price = 0;
+                for (int i = 0; i < ShopItemsCategoryAdapter.added_items.size(); i++) {
+                    price = price + Integer.parseInt(ShopItemsCategoryAdapter.added_items.get(i).getItemsPrice()) * ShopItemsCategoryAdapter.added_items.get(i).getItemCount();
+                }
+                ShopItemsCategoryAdapter.price_of_currentlyAddedItems = price;
+                BottomSheetDialog bottomSheetDialog1 = new BottomSheetDialog(context);
+                bottomSheetDialog1.setContentView(R.layout.bottom_sheet_cart);
+                bottomSheetDialog1.show();
+                bottomSheetDialog1.setCanceledOnTouchOutside(true);
+                ShopItemsCategoryAdapter.no_of_currentlyAddedItems = ShopItemsCategoryAdapter.no_of_currentlyAddedItems - 1;
+
+
+                TextView currentlyAddedItems = bottomSheetDialog1.findViewById(R.id.currentlyAddedItems);
+                TextView currentlyAddedItemsPrice = bottomSheetDialog1.findViewById(R.id.currentlyAddedItemsPrice);
+
+                currentlyAddedItems.setText(String.valueOf(ShopItemsCategoryAdapter.no_of_currentlyAddedItems));
+                currentlyAddedItemsPrice.setText(String.valueOf(ShopItemsCategoryAdapter.price_of_currentlyAddedItems));
+
+
+                TextView textViewCartShow = bottomSheetDialog1.findViewById(R.id.textViewCart);
+                textViewCartShow.setOnClickListener(v2 -> {
+                    bottomSheetDialog1.dismiss();
+                    openCart();
+                });
+            } else {
+                bottomSheetDialog.show();
+                bottomSheetDialog.setCanceledOnTouchOutside(false);
+                HashMap<String, ItemVariantsModel> itemVariants;
+                itemVariants = shopItemsModel.getItemVariants();
+                setAdapter(bottomSheetDialog, itemVariants, shopItemsModel);
             }
-            int price = 0;
-            for (int i = 0; i < ShopItemsCategoryAdapter.added_items.size(); i++) {
-                price = price + Integer.parseInt(ShopItemsCategoryAdapter.added_items.get(i).getItemsPrice()) * ShopItemsCategoryAdapter.added_items.get(i).getItemCount();
-            }
-            ShopItemsCategoryAdapter.price_of_currentlyAddedItems = price;
-            BottomSheetDialog bottomSheetDialog1 = new BottomSheetDialog(context);
-            bottomSheetDialog1.setContentView(R.layout.bottom_sheet_cart);
-            bottomSheetDialog1.show();
-            bottomSheetDialog1.setCanceledOnTouchOutside(true);
-            ShopItemsCategoryAdapter.no_of_currentlyAddedItems = ShopItemsCategoryAdapter.no_of_currentlyAddedItems - 1;
+
+            ImageView close_image_view = bottomSheetDialog.findViewById(R.id.close_image_view);
+            close_image_view.setOnClickListener(v1 -> {
+                bottomSheetDialog.dismiss();
+                int price = 0;
+                for (int i = 0; i < ShopItemsCategoryAdapter.added_items.size(); i++) {
+                    price = price + Integer.parseInt(ShopItemsCategoryAdapter.added_items.get(i).getItemsPrice()) * ShopItemsCategoryAdapter.added_items.get(i).getItemCount();
+                }
+                int variants_count = 0;
+                for (int i = 0; i < ShopItemsCategoryAdapter.added_items.size(); i++) {
+                    if (shopItemsModel.getItemID().equals(ShopItemsCategoryAdapter.added_items.get(i).getItemID())) {
+                        variants_count = variants_count + ShopItemsCategoryAdapter.added_items.get(i).getItemCount();
+                    }
+                }
+                if (variants_count > 0) {
+                    holder.linearLayoutItemsAdd.setVisibility(View.VISIBLE);
+                    holder.buttonAdd.setVisibility(View.INVISIBLE);
+                    holder.item_count.setText("" + variants_count);
+                } else {
+
+                    holder.linearLayoutItemsAdd.setVisibility(View.INVISIBLE);
+                    holder.buttonAdd.setVisibility(View.VISIBLE);
+                    holder.item_count.setText("" + 0);
+                }
+                ShopItemsCategoryAdapter.price_of_currentlyAddedItems = price;
+                BottomSheetDialog bottomSheetDialog1 = new BottomSheetDialog(context);
+                bottomSheetDialog1.setContentView(R.layout.bottom_sheet_cart);
+                bottomSheetDialog1.show();
+                bottomSheetDialog1.setCanceledOnTouchOutside(true);
+//                ShopItemsCategoryAdapter.no_of_currentlyAddedItems = ShopItemsCategoryAdapter.no_of_currentlyAddedItems - 1;
 
 
-            TextView currentlyAddedItems = bottomSheetDialog1.findViewById(R.id.currentlyAddedItems);
-            TextView currentlyAddedItemsPrice = bottomSheetDialog1.findViewById(R.id.currentlyAddedItemsPrice);
+                TextView currentlyAddedItems = bottomSheetDialog1.findViewById(R.id.currentlyAddedItems);
+                TextView currentlyAddedItemsPrice = bottomSheetDialog1.findViewById(R.id.currentlyAddedItemsPrice);
 
-            currentlyAddedItems.setText(String.valueOf(ShopItemsCategoryAdapter.no_of_currentlyAddedItems));
-            currentlyAddedItemsPrice.setText(String.valueOf(ShopItemsCategoryAdapter.price_of_currentlyAddedItems));
+                currentlyAddedItems.setText(String.valueOf(ShopItemsCategoryAdapter.no_of_currentlyAddedItems));
+                currentlyAddedItemsPrice.setText(String.valueOf(ShopItemsCategoryAdapter.price_of_currentlyAddedItems));
 
 
-            TextView textViewCartShow = bottomSheetDialog1.findViewById(R.id.textViewCart);
-            textViewCartShow.setOnClickListener(v2 -> {
-                bottomSheetDialog1.dismiss();
-                openCart();
+                TextView textViewCartShow = bottomSheetDialog1.findViewById(R.id.textViewCart);
+                textViewCartShow.setOnClickListener(v2 -> {
+                    bottomSheetDialog1.dismiss();
+                    openCart();
+                });
             });
+
         });
 
 
         holder.buttonAdd.setOnClickListener(v -> {
+            if (ShopItemsCategoryAdapter.added_items.size() != 0 && !ShopItemsCategoryAdapter.added_items.get(0).getShopId().equals(shopItemsModel.getShopID())) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                builder.setMessage("You can't add items from different shops!").setPositiveButton("Go to Cart", ((dialog, which) -> {
+                    openCart();
+                }))
+                        .setNegativeButton("Empty Cart!", (dialog, which) -> {
+                            ShopItemsCategoryAdapter.added_items = new ArrayList<>();
+                        });
+                AlertDialog alert = builder.create();
+                alert.show();
+                ShopItemsCategoryAdapter.no_of_currentlyAddedItems = 0;
+                ShopItemsCategoryAdapter.price_of_currentlyAddedItems = 0;
+                return;
+            }
             BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(context);
             bottomSheetDialog.setContentView(R.layout.bottom_sheet_items_quantity);
             bottomSheetDialog.show();
-            bottomSheetDialog.setCanceledOnTouchOutside(true);
+            bottomSheetDialog.setCanceledOnTouchOutside(false);
             setUpItemVariantsRecycler(bottomSheetDialog, position);
 
             if (shopItemsModel.getItemVariants() == null) {
@@ -149,6 +280,17 @@ public class ShopItemsAdapter extends RecyclerView.Adapter<ShopItemsAdapter.Shop
                 int price = 0;
                 for (int i = 0; i < ShopItemsCategoryAdapter.added_items.size(); i++) {
                     price = price + Integer.parseInt(ShopItemsCategoryAdapter.added_items.get(i).getItemsPrice()) * ShopItemsCategoryAdapter.added_items.get(i).getItemCount();
+                }
+                int variants_count = 0;
+                for (int i = 0; i < ShopItemsCategoryAdapter.added_items.size(); i++) {
+                    if (shopItemsModel.getItemID().equals(ShopItemsCategoryAdapter.added_items.get(i).getItemID())) {
+                        variants_count = variants_count + ShopItemsCategoryAdapter.added_items.get(i).getItemCount();
+                    }
+                }
+                if (variants_count > 0) {
+                    holder.linearLayoutItemsAdd.setVisibility(View.VISIBLE);
+                    holder.buttonAdd.setVisibility(View.INVISIBLE);
+                    holder.item_count.setText("" + variants_count);
                 }
                 ShopItemsCategoryAdapter.price_of_currentlyAddedItems = price;
                 BottomSheetDialog bottomSheetDialog1 = new BottomSheetDialog(context);
@@ -181,6 +323,7 @@ public class ShopItemsAdapter extends RecyclerView.Adapter<ShopItemsAdapter.Shop
 
 
     }
+
 
     private void openBottomSheetCart(BottomSheetDialog bottomSheetDialog, ShopItemsModel shopItemsModel) {
         bottomSheetDialog.dismiss();
@@ -219,6 +362,7 @@ public class ShopItemsAdapter extends RecyclerView.Adapter<ShopItemsAdapter.Shop
             cartItemsModel.setItemsName(shopItemsModel.getItemsProductName());
             cartItemsModel.setItemsImage(shopItemsModel.getItemsImage());
             cartItemsModel.setItemCount(shopItemsModel.getCount());
+            cartItemsModel.setShopId(shopItemsModel.getShopID());
 
             if (shopItemsModel.getItemVariants() != null) {
                 cartItemsModel.setItemsPrice(ItemVariantsAdapter.itemVariantsModelArrayList.get(ItemVariantsAdapter.lastCheckedPosition).getItemPrice());
@@ -301,6 +445,7 @@ public class ShopItemsAdapter extends RecyclerView.Adapter<ShopItemsAdapter.Shop
         Intent intent = new Intent(context, CartActivity.class);
         intent.putExtra("added_items", ShopItemsCategoryAdapter.added_items);
         context.startActivity(intent);
+        ((Activity) context).finish();
     }
 
 

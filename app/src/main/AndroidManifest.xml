@@ -19,7 +19,8 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:targetApi="m">
-        <activity android:name=".activities.MyOrderDetailsActivity"></activity>
+        <activity android:name=".activities.MainSearchActivity"></activity>
+        <activity android:name=".activities.MyOrderDetailsActivity" />
         <activity android:name=".activities.AddReviewDetailActivity" />
         <activity android:name=".activities.FavOrderActivity" />
         <activity android:name=".activities.AddPhotoActivity" />

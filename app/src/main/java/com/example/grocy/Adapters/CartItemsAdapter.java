@@ -10,6 +10,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.example.grocy.Models.CartItemsModel;
 import com.example.grocy.R;
+import com.example.grocy.activities.CartActivity;
 
 import java.util.ArrayList;
 
@@ -46,6 +47,146 @@ public class CartItemsAdapter extends RecyclerView.Adapter<CartItemsAdapter.Cart
         holder.cart_item_quantity.setText(cartItemsModel.getItemsQuantity());
         holder.cart_item_total_price.setText(String.valueOf(Integer.parseInt(cartItemsModel.getItemsPrice()) * cartItemsModel.getItemCount()));
         holder.item_count.setText(String.valueOf(cartItemsModel.getItemCount()));
+
+        holder.add_one.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                for (int i = 0; i < cart_items_list.size(); i++) {
+                    CartItemsModel item = cart_items_list.get(i);
+                    if (cartItemsModel.getVariantID() == null) {
+                        if (cartItemsModel.getItemID().equals(item.getItemID())) {
+                            cart_items_list.get(i).setItemCount(item.getItemCount() + 1);
+                            holder.item_count.setText("" + cart_items_list.get(i).getItemCount());
+                            holder.cart_item_price.setText(cart_items_list.get(i).getItemsPrice());
+                            holder.cart_item_total_price.setText(String.valueOf(Integer.parseInt(cart_items_list.get(i).getItemsPrice()) * cart_items_list.get(i).getItemCount()));
+                        }
+                    } else {
+                        if (cartItemsModel.getItemID().equals(item.getItemID()) && cartItemsModel.getVariantID().equals(item.getVariantID())) {
+
+                            if (cartItemsModel.getItemID().equals(item.getItemID())) {
+                                cart_items_list.get(i).setItemCount(item.getItemCount() + 1);
+                                holder.item_count.setText("" + cart_items_list.get(i).getItemCount());
+                                holder.cart_item_price.setText(cart_items_list.get(i).getItemsPrice());
+                                holder.cart_item_total_price.setText(String.valueOf(Integer.parseInt(cart_items_list.get(i).getItemsPrice()) * cart_items_list.get(i).getItemCount()));
+                            }
+
+                        }
+                    }
+                }
+
+                double itemsAmt = 0, taxAmt = 0, totalAmt = 0;
+                for (int i = 0; i < cart_items_list.size(); i++) {
+                    itemsAmt = itemsAmt + Integer.parseInt(cart_items_list.get(i).getItemsPrice()) * cart_items_list.get(i).getItemCount();
+                }
+                taxAmt = 0.02 * itemsAmt;
+                totalAmt = itemsAmt + taxAmt;
+
+
+                CartActivity.items_amount.setText(String.format("%.2f", itemsAmt));
+                CartActivity.tax_amount.setText(String.format("%.2f", taxAmt));
+                CartActivity.total_amount.setText(String.format("%.2f", totalAmt));
+
+                for (int i = 0; i < ShopItemsCategoryAdapter.added_items.size(); i++) {
+                    CartItemsModel item = ShopItemsCategoryAdapter.added_items.get(i);
+                    if (cartItemsModel.getVariantID() == null) {
+                        if (cartItemsModel.getItemID().equals(item.getItemID())) {
+                            ShopItemsCategoryAdapter.added_items.get(i).setItemCount(item.getItemCount() + 1);
+                        }
+                    } else {
+                        if (cartItemsModel.getItemID().equals(item.getItemID()) && cartItemsModel.getVariantID().equals(item.getVariantID())) {
+
+                            if (cartItemsModel.getItemID().equals(item.getItemID())) {
+                                ShopItemsCategoryAdapter.added_items.get(i).setItemCount(item.getItemCount() + 1);
+                            }
+
+                        }
+                    }
+                }
+            }
+        });
+
+
+        holder.remove_one.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                for (int i = 0; i < cart_items_list.size(); i++) {
+                    CartItemsModel item = cart_items_list.get(i);
+                    if (cartItemsModel.getVariantID() == null) {
+                        if (cartItemsModel.getItemID().equals(item.getItemID())) {
+                            if (cartItemsModel.getItemCount() > 1) {
+                                cart_items_list.get(i).setItemCount(item.getItemCount() - 1);
+                                holder.item_count.setText("" + cart_items_list.get(i).getItemCount());
+                                holder.cart_item_price.setText(cart_items_list.get(i).getItemsPrice());
+                                holder.cart_item_total_price.setText(String.valueOf(Integer.parseInt(cart_items_list.get(i).getItemsPrice()) * cart_items_list.get(i).getItemCount()));
+                            } else {
+                                cart_items_list.remove(i);
+                                notifyDataSetChanged();
+                            }
+                        }
+                    } else {
+                        if (cartItemsModel.getItemID().equals(item.getItemID()) && cartItemsModel.getVariantID().equals(item.getVariantID())) {
+
+                            if (cartItemsModel.getItemID().equals(item.getItemID())) {
+                                if (cartItemsModel.getItemCount() > 1) {
+                                    cart_items_list.get(i).setItemCount(item.getItemCount() - 1);
+                                    holder.item_count.setText("" + cart_items_list.get(i).getItemCount());
+                                    holder.cart_item_price.setText(cart_items_list.get(i).getItemsPrice());
+                                    holder.cart_item_total_price.setText(String.valueOf(Integer.parseInt(cart_items_list.get(i).getItemsPrice()) * cart_items_list.get(i).getItemCount()));
+                                } else {
+                                    cart_items_list.remove(i);
+                                    notifyDataSetChanged();
+
+                                }
+                            }
+
+                        }
+                    }
+                }
+
+                double itemsAmt = 0, taxAmt = 0, totalAmt = 0;
+                for (int i = 0; i < cart_items_list.size(); i++) {
+                    itemsAmt = itemsAmt + Integer.parseInt(cart_items_list.get(i).getItemsPrice()) * cart_items_list.get(i).getItemCount();
+                }
+                taxAmt = 0.02 * itemsAmt;
+                totalAmt = itemsAmt + taxAmt;
+
+                CartActivity.items_amount.setText(String.format("%.2f", itemsAmt));
+                CartActivity.tax_amount.setText(String.format("%.2f", taxAmt));
+                CartActivity.total_amount.setText(String.format("%.2f", totalAmt));
+
+                for (int i = 0; i < ShopItemsCategoryAdapter.added_items.size(); i++) {
+                    CartItemsModel item = ShopItemsCategoryAdapter.added_items.get(i);
+                    if (cartItemsModel.getVariantID() == null) {
+                        if (cartItemsModel.getItemID().equals(item.getItemID())) {
+                            if (cartItemsModel.getItemCount() > 1) {
+                                ShopItemsCategoryAdapter.added_items.get(i).setItemCount(item.getItemCount() - 1);
+                            } else {
+                                ShopItemsCategoryAdapter.added_items.remove(i);
+                            }
+                        }
+                    } else {
+                        if (cartItemsModel.getItemID().equals(item.getItemID()) && cartItemsModel.getVariantID().equals(item.getVariantID())) {
+
+                            if (cartItemsModel.getItemID().equals(item.getItemID())) {
+                                if (cartItemsModel.getItemCount() > 1) {
+                                    ShopItemsCategoryAdapter.added_items.get(i).setItemCount(item.getItemCount() - 1);
+                                } else {
+                                    ShopItemsCategoryAdapter.added_items.remove(i);
+
+                                }
+                            }
+
+                        }
+                    }
+                }
+
+
+            }
+        });
+
+
     }
 
     @Override
@@ -60,6 +201,11 @@ public class CartItemsAdapter extends RecyclerView.Adapter<CartItemsAdapter.Cart
         TextView cart_item_quantity;
         TextView cart_item_total_price;
         TextView item_count;
+        TextView add_one;
+        TextView remove_one;
+//        TextView items_amount;
+//        TextView tax_amount;
+//        TextView total_amount;
 
         public CartItemsViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -69,6 +215,11 @@ public class CartItemsAdapter extends RecyclerView.Adapter<CartItemsAdapter.Cart
             cart_item_quantity = itemView.findViewById(R.id.cart_item_quantity);
             cart_item_total_price = itemView.findViewById(R.id.cart_item_total_price);
             item_count = itemView.findViewById(R.id.item_count);
+            add_one = itemView.findViewById(R.id.add_one);
+            remove_one = itemView.findViewById(R.id.remove_one);
+//            items_amount=itemView.findViewById(R.id.items_amount1);
+//            tax_amount=itemView.findViewById(R.id.tax_amount1);
+//            total_amount=itemView.findViewById(R.id.total_amount1);
         }
     }
 }

@@ -1,5 +1,6 @@
 package com.example.grocy.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.TextView;
@@ -8,13 +9,20 @@ import android.widget.Toast;
 import com.example.grocy.Adapters.CartItemsAdapter;
 import com.example.grocy.Models.CartItemsModel;
 import com.example.grocy.R;
-import com.google.firebase.firestore.FieldValue;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Objects;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -29,7 +37,7 @@ public class CartActivity extends AppCompatActivity {
 
     ArrayList<CartItemsModel> arrayList;
 
-    TextView items_amount, tax_amount, total_amount, user_name, user_phone, user_address;
+    public static TextView items_amount, tax_amount, total_amount, user_name, user_phone, user_address;
 
     Button order_button;
 
@@ -83,9 +91,9 @@ public class CartActivity extends AppCompatActivity {
         taxAmt = 0.02 * itemsAmt;
         totalAmt = itemsAmt + taxAmt;
 
-        items_amount = findViewById(R.id.items_amount);
-        tax_amount = findViewById(R.id.tax_amount);
-        total_amount = findViewById(R.id.total_amount);
+        items_amount = findViewById(R.id.items_amount1);
+        tax_amount = findViewById(R.id.tax_amount1);
+        total_amount = findViewById(R.id.total_amount1);
 
         items_amount.setText(String.format("%.2f", itemsAmt));
         tax_amount.setText(String.format("%.2f", taxAmt));
@@ -101,15 +109,75 @@ public class CartActivity extends AppCompatActivity {
         hm.put("taxAmount", taxAmt);
         hm.put("itemAmount", itemsAmt);
         hm.put("userAddress", (String) MainActivity.proile_activity_data.get("address"));
-        hm.put("dateTime", FieldValue.serverTimestamp().toString());
+        Calendar cal = Calendar.getInstance();
+        Date currentLocalTime = cal.getTime();
+        DateFormat date = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss a");
+        String localTime = date.format(currentLocalTime);
+        hm.put("dateTime", localTime);
         hm.put("shopName", (String) ShopDetailsActivity.shop_detail.get("shopName"));
         hm.put("shopImage", (String) ShopDetailsActivity.shop_detail.get("shopImage"));
+        hm.put("shopId", ShopDetailsActivity.shopsId);
+        hm.put("shopKeeperId", ShopDetailsActivity.shop_detail.get("shopKeeperId"));
+        String[] dateTime = localTime.split(" ");
+        String[] dates = dateTime[0].split("/");
+        String[] times = dateTime[1].split(":");
+        String orderNumberId = dates[0] + dates[1] + times[0] + times[1] + times[2];
+        hm.put("orderNumberId", orderNumberId);
         order_button.setOnClickListener(v -> {
+            order_button.setEnabled(false);
             firebaseFirestore.collection("Users").document((String) MainActivity.proile_activity_data.get("userId"))
-                    .collection("myOrders").add(hm).addOnCompleteListener(task -> {
-                Toast.makeText(this, "Data Submitted", Toast.LENGTH_SHORT).show();
+                    .collection("myOrders").add(hm).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                @Override
+                public void onSuccess(DocumentReference documentReference) {
+                    HashMap<String, Object> temp = new HashMap();
+                    int currentOrdersCount = Integer.parseInt("" + MainActivity.proile_activity_data.get("ordersCount"));
+                    temp.put("ordersCount", currentOrdersCount + 1);
+                    firebaseFirestore.collection("Users").document((String) MainActivity.proile_activity_data.get("userId")).update(temp).addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void aVoid) {
+                            MainActivity.proile_activity_data.put("ordersCount", currentOrdersCount + 1);
+                            Toast.makeText(CartActivity.this, "Count updated", Toast.LENGTH_LONG).show();
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Toast.makeText(CartActivity.this, "Count not updated" + e.getMessage(), Toast.LENGTH_LONG).show();
+                        }
+                    });
+//
+                    hm.put("userName", MainActivity.proile_activity_data.get("fName"));
+//                    hm.put("ordersCount", currentOrdersCount+1);
+
+                    DocumentReference document = firebaseFirestore.collection("ShopKeeper").document((String) ShopDetailsActivity.shop_detail.get("shopKeeperId"));
+                    document.collection("Notifications").document(documentReference.getId()).set(hm).addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void aVoid) {
+                            Toast.makeText(CartActivity.this, "Order Placed", Toast.LENGTH_LONG).show();
+                            order_button.setEnabled(true);
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Toast.makeText(CartActivity.this, "Order not Placed" + e.getMessage(), Toast.LENGTH_LONG).show();
+                            order_button.setEnabled(true);
+                        }
+                    });
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    order_button.setEnabled(true);
+                }
             });
         });
 
+    }
+
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(CartActivity.this, ShopDetailsActivity.class);
+        intent.putExtra("shopId", ShopDetailsActivity.shopsId);
+        startActivity(intent);
+        finish();
     }
 }

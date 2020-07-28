@@ -55,7 +55,7 @@ public class ShopDetailsActivity extends AppCompatActivity {
 
     TextView textViewShopName, textViewShopAddress, textViewShopTime, textViewShopCategoryType, textViewShopOff, textViewShopRating;
 
-    String shopsId;
+    static String shopsId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -118,6 +118,8 @@ public class ShopDetailsActivity extends AppCompatActivity {
                     for (QueryDocumentSnapshot document : task.getResult()) {
                         String itemID = document.getId();
                         item_list.put(document.getId(), document.getData());
+                        HashMap<String, Object> hm = (HashMap<String, Object>) document.getData();
+                        String category = (String) hm.get("itemCategory");
                         item_categories_name.add((String) document.getData().get("itemCategory"));
 
                         DocumentReference variantReference = documentReference.collection("Items").document(document.getId());

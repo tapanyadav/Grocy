@@ -36,6 +36,7 @@ import com.example.grocy.Adapters.ShopsAdapter;
 import com.example.grocy.Models.CategoriesModel;
 import com.example.grocy.Models.FeaturedModel;
 import com.example.grocy.Models.HorizontalModel;
+import com.example.grocy.Models.SearchShopModel;
 import com.example.grocy.Models.ShopsModel;
 import com.example.grocy.R;
 import com.facebook.shimmer.ShimmerFrameLayout;
@@ -108,7 +109,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     NavigationView navigationView;
     BottomSheetDialog bottomSheetDialog;
     TextView toolbarTitle, textViewFeaturedAll;
-    EditText editTextSearch;
+    TextView editTextSearch;
     ImageButton imageButtonFilter;
     ShimmerFrameLayout shimmerFrameLayout;
 
@@ -138,6 +139,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     TextView user_name;
     public static HashMap<String, Object> proile_activity_data = new HashMap();
     AtomicReference<String> userId = new AtomicReference<>();
+    TextView etSearch;
+    ArrayList<SearchShopModel> search_data = new ArrayList();
 
     @SuppressLint({"RestrictedApi", "ClickableViewAccessibility"})
     @Override
@@ -155,6 +158,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         coordinatorLayout = findViewById(R.id.cordLay);
 
         //AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+
+
+        etSearch = findViewById(R.id.etSearch);
 
         mAuth = FirebaseAuth.getInstance();
         FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
@@ -431,6 +437,35 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
             bottomSheetDialogFilter.show(getSupportFragmentManager(), "exampleBottomSheet");
 
+        });
+
+        etSearch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Query query = firebaseFirestore.collection("ShopsMain").orderBy("shopArrange");
+                query.get().addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+
+                        for (QueryDocumentSnapshot document : task.getResult()) {
+                            SearchShopModel searchShopModel = new SearchShopModel();
+                            HashMap<String, Object> item = (HashMap<String, Object>) document.getData();
+                            searchShopModel.setShopId(document.getId());
+                            searchShopModel.setShopName((String) item.get("shopName"));
+                            searchShopModel.setShopCategory((String) item.get("shopCategory"));
+                            searchShopModel.setShopType((String) item.get("shopType"));
+                            searchShopModel.setShopAddress((String) item.get("shopAddress"));
+                            searchShopModel.setShopRating(Double.parseDouble("" + item.get("shopRating")));
+                            searchShopModel.setShopLimits((String) item.get("shopLimits"));
+                            searchShopModel.setShopOff((String) item.get("shopOff"));
+                            searchShopModel.setShopStatus((String) item.get("shopStatus"));
+                            search_data.add(searchShopModel);
+                        }
+                        Intent intent = new Intent(MainActivity.this, MainSearchActivity.class);
+                        intent.putExtra("search_data", search_data);
+                        startActivity(intent);
+                    }
+                });
+            }
         });
 
 
