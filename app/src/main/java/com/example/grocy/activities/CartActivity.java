@@ -146,6 +146,8 @@ public class CartActivity extends AppCompatActivity {
                     });
 //
                     hm.put("userName", MainActivity.proile_activity_data.get("fName"));
+                    hm.put("freshNotification", true);
+                    hm.put("userImage", MainActivity.proile_activity_data.get("profilePic"));
 //                    hm.put("ordersCount", currentOrdersCount+1);
 
                     DocumentReference document = firebaseFirestore.collection("ShopKeeper").document((String) ShopDetailsActivity.shop_detail.get("shopKeeperId"));
