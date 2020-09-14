@@ -1,5 +1,6 @@
 package com.example.grocy.Adapters;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,23 +14,17 @@ import com.bumptech.glide.Glide;
 import com.example.grocy.Models.PhotosModel;
 import com.example.grocy.R;
 import com.example.grocy.helper.ImagePreviewer;
-import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
-import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 
-public class PhotosAdapter extends FirestoreRecyclerAdapter<PhotosModel, PhotosAdapter.MyViewHolder> {
+import java.util.ArrayList;
 
-    public PhotosAdapter(@NonNull FirestoreRecyclerOptions<PhotosModel> options) {
-        super(options);
-    }
+public class PhotosAdapter extends RecyclerView.Adapter<PhotosAdapter.MyViewHolder> {
 
-    @Override
-    protected void onBindViewHolder(@NonNull MyViewHolder holder, int position, @NonNull PhotosModel model) {
-        Glide.with(holder.imageViewPhotos.getContext()).load(model.getPhotoImage()).into(holder.imageViewPhotos);
-        holder.imageViewPhotos.setOnLongClickListener(v -> {
-            new ImagePreviewer().show(holder.imageViewPhotos.getContext(), holder.imageViewPhotos);
-            return false;
-        });
+    Context context;
+    ArrayList<PhotosModel> photos_list;
 
+    public PhotosAdapter(Context context, ArrayList<PhotosModel> photos_list) {
+        this.context = context;
+        this.photos_list = photos_list;
     }
 
 
@@ -40,16 +35,40 @@ public class PhotosAdapter extends FirestoreRecyclerAdapter<PhotosModel, PhotosA
         return new MyViewHolder(view);
     }
 
+    @Override
+    public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
+
+        PhotosModel photosModel = photos_list.get(position);
+        Glide.with(holder.imageViewPhotos.getContext()).load(photosModel.getPhotoImage()).into(holder.imageViewPhotos);
+        holder.imageViewPhotos.setOnLongClickListener(v -> {
+            new ImagePreviewer().show(holder.imageViewPhotos.getContext(), holder.imageViewPhotos);
+            return false;
+        });
+
+        holder.textViewShopAddress.setText(photosModel.getShopAddress());
+        holder.textViewShopName.setText(photosModel.getShopName());
+        holder.textViewCaption.setText(photosModel.getPhotoCaption());
+        Glide.with(holder.imageViewShopImage.getContext()).load(photosModel.getShopImage()).into(holder.imageViewShopImage);
+    }
+
+    @Override
+    public int getItemCount() {
+        return photos_list.size();
+    }
+
 
     public static class MyViewHolder extends RecyclerView.ViewHolder {
-        ImageView imageViewPhotos;
-        TextView textViewCaption;
+        ImageView imageViewPhotos, imageViewShopImage;
+        TextView textViewCaption, textViewShopName, textViewShopAddress;
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
 
             imageViewPhotos = itemView.findViewById(R.id.image_photo);
-            //textViewCaption = itemView.findViewById(R.id.);
+            textViewCaption = itemView.findViewById(R.id.text_photoCaption);
+            imageViewShopImage = itemView.findViewById(R.id.image_shopPhoto);
+            textViewShopName = itemView.findViewById(R.id.text_shopName);
+            textViewShopAddress = itemView.findViewById(R.id.text_shop_address);
         }
     }
 }

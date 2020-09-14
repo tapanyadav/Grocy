@@ -3,17 +3,26 @@ package com.example.grocy.activities;
 import android.app.ProgressDialog;
 import android.net.Uri;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.cardview.widget.CardView;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.bumptech.glide.Glide;
 import com.example.grocy.Adapters.CommentAdapter;
 import com.example.grocy.Models.CommentModel;
 import com.example.grocy.Models.ReviewModel;
 import com.example.grocy.R;
+import com.google.android.material.chip.Chip;
 import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
@@ -32,11 +41,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class AddReviewDetailActivity extends AppCompatActivity {
@@ -45,10 +49,14 @@ public class AddReviewDetailActivity extends AppCompatActivity {
     TextView textViewUserName;
     ImageView imageViewImageProfile;
     Uri profileImageUri;
-    DocumentReference documentReference;
+    DocumentReference documentReference2;
+
+
     private FirebaseAuth firebaseAuth;
     private FirebaseFirestore firebaseFirestore;
 
+    private Chip chipLike1, chipLike2, chipLike3, chipLike4, chipLike5, chipLike6;
+    private Chip chipNotLike1, chipNotLike2, chipNotLike3, chipNotLike4, chipNotLike5;
     ReviewModel reviewModel = new ReviewModel();
     CircleImageView userImage;
     RecyclerView comments_recycler;
@@ -61,6 +69,7 @@ public class AddReviewDetailActivity extends AppCompatActivity {
     private TextView numberOfComments;
     private EditText comment_data;
     private Button commentPostButton;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,12 +86,15 @@ public class AddReviewDetailActivity extends AppCompatActivity {
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
         toolbar.setNavigationIcon(R.drawable.icon_back_new);
         toolbar.setNavigationOnClickListener(v -> onBackPressed());
+        TextView textViewFollowersDetails = findViewById(R.id.text_followers_details);
+        TextView textViewReviewsDetails = findViewById(R.id.text_reviews_details);
         showProgress();
 
         reviewModel = (ReviewModel) getIntent().getSerializableExtra("review_data");
 
 
-        firebaseFirestore.collection("Users").document((String) MainActivity.proile_activity_data.get("userId")).get().addOnCompleteListener(task -> {
+        DocumentReference documentReference1 = firebaseFirestore.collection("Users").document((String) MainActivity.proile_activity_data.get("userId"));
+        documentReference1.get().addOnCompleteListener(task -> {
 
             if (task.isSuccessful()) {
                 progressDialog.dismiss();
@@ -98,20 +110,20 @@ public class AddReviewDetailActivity extends AppCompatActivity {
                 Toast.makeText(AddReviewDetailActivity.this, "(FIRESTORE Retrieve Error) : " + error, Toast.LENGTH_LONG).show();
             }
         });
+        documentReference1.collection("Followers").get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                textViewFollowersDetails.setText("" + task.getResult().size());
 
-        //TODO Get position from and review document id profile activity and then show data
-//        documentReference = firebaseFirestore.collection("Users").document(user_id);
-//        documentReference.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-//            @Override
-//            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-//                if (task.isSuccessful()){
-//                    DocumentSnapshot documentSnapshot = task.getResult();
-//                    assert documentSnapshot != null;
-//                    String reviewId = documentSnapshot.getId();
-//
-//                }
-//            }
-//        });
+            }
+        });
+
+        documentReference1.collection("Reviews").get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                textViewReviewsDetails.setText("" + task.getResult().size());
+
+            }
+        });
+
 
         review_info = findViewById(R.id.review_info);
         image_review = findViewById(R.id.image_review);
@@ -119,9 +131,15 @@ public class AddReviewDetailActivity extends AppCompatActivity {
         numberOfComments = findViewById(R.id.numberOfComments);
 
         review_info.setText(reviewModel.getDetailedReview());
-        Glide.with(image_review.getContext())
-                .load(reviewModel.getReviewImage())
-                .into(image_review);
+        if (reviewModel.getReviewImage() != null) {
+            CardView cardViewImageReview = findViewById(R.id.cardImageReview);
+            cardViewImageReview.setVisibility(View.VISIBLE);
+            Glide.with(image_review.getContext())
+                    .load(reviewModel.getReviewImage())
+                    .into(image_review);
+
+        }
+
 
         numberOfLikes.setText("" + reviewModel.getNumberOfLikes());
         numberOfComments.setText("" + reviewModel.getNumberOfComments());
@@ -190,6 +208,8 @@ public class AddReviewDetailActivity extends AppCompatActivity {
             }
         });
 
+        chipDataSet();
+
 
     }
 
@@ -232,6 +252,49 @@ public class AddReviewDetailActivity extends AppCompatActivity {
 
     }
 
+    void chipDataSet() {
+        //chipGroupNotLike = findViewById(R.id.chip_group_not);
+
+        chipLike1 = findViewById(R.id.chip1);
+        chipLike2 = findViewById(R.id.chip2);
+        chipLike3 = findViewById(R.id.chip3);
+        chipLike4 = findViewById(R.id.chip4);
+        chipLike5 = findViewById(R.id.chip5);
+        chipLike6 = findViewById(R.id.chip6);
+        Chip[] like = {chipLike1, chipLike2, chipLike3, chipLike4, chipLike5, chipLike6};
+        chipNotLike1 = findViewById(R.id.chipNot1);
+        chipNotLike2 = findViewById(R.id.chipNot2);
+        chipNotLike3 = findViewById(R.id.chipNot3);
+        chipNotLike4 = findViewById(R.id.chipNot4);
+        chipNotLike5 = findViewById(R.id.chipNot5);
+        Chip[] notLike = {chipNotLike1, chipNotLike2, chipNotLike3, chipNotLike4, chipNotLike5};
+
+        HashMap<String, String> chipDataLike = new HashMap<>();
+        HashMap<String, String> chipDataNotLike = new HashMap<>();
+        chipDataLike = reviewModel.getLikeData();
+        chipDataNotLike = reviewModel.getNotLikeData();
+        int count = 0;
+        for (Map.Entry mapElement : chipDataLike.entrySet()) {
+            String key = (String) mapElement.getKey();
+            String value = (String) mapElement.getValue();
+            Chip chip = like[count];
+            chip.setText(value);
+            chip.setVisibility(View.VISIBLE);
+            count++;
+        }
+        count = 0;
+        for (Map.Entry mapElement : chipDataNotLike.entrySet()) {
+            String key = (String) mapElement.getKey();
+            String value = (String) mapElement.getValue();
+            Chip chip = notLike[count];
+            chip.setText(value);
+            chip.setVisibility(View.VISIBLE);
+            count++;
+        }
+
+
+    }
+
     private void showProgress() {
         progressDialog = new ProgressDialog(AddReviewDetailActivity.this);
         progressDialog.show();
@@ -240,6 +303,5 @@ public class AddReviewDetailActivity extends AppCompatActivity {
                 android.R.color.transparent
         );
     }
-
 
 }

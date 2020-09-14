@@ -17,7 +17,7 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="74dp"
             android:orientation="horizontal">
 
             <com.google.android.material.card.MaterialCardView
@@ -29,6 +29,7 @@
                 app:cardCornerRadius="10dp">
 
                 <ImageView
+                    android:id="@+id/image_shopPhoto"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:scaleType="centerCrop"
@@ -43,6 +44,7 @@
                 android:orientation="vertical">
 
                 <TextView
+                    android:id="@+id/text_shopName"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Gupta Store"
@@ -51,10 +53,11 @@
                     android:textStyle="bold" />
 
                 <TextView
+                    android:id="@+id/text_shop_address"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Greater noida"
-                    android:textSize="10sp" />
+                    android:textSize="12sp" />
 
             </LinearLayout>
 
@@ -74,10 +77,12 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:scaleType="centerCrop"
+                android:adjustViewBounds="true"
                 android:src="@drawable/back_image_new" />
         </com.google.android.material.card.MaterialCardView>
 
         <TextView
+            android:id="@+id/text_photoCaption"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_marginStart="12dp"

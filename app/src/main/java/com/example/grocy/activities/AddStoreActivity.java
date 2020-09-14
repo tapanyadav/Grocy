@@ -218,7 +218,7 @@ public class AddStoreActivity extends AppCompatActivity {
         int startL = spannable.length();
         spannable.append(coloredLoc);
         int endL = spannable.length();
-        spannable.setSpan(new ForegroundColorSpan(Color.RED), startL, endL, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+            spannable.setSpan(new ForegroundColorSpan(Color.RED), startL, endL, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
         editTextLocation.setHint(spannable);
     }
 

@@ -13,13 +13,20 @@ public class ReviewModel implements Serializable {
     long numberOfLikes;
     long numberOfComments;
     String reviewId;
+    String shopImage, shopName, shopAddress;
 
-    public ReviewModel(String detailedReview, HashMap<String, String> likeData, HashMap<String, String> notLikeData, double rating, String reviewImage) {
+    public ReviewModel(String detailedReview, HashMap<String, String> likeData, HashMap<String, String> notLikeData, double rating, String reviewImage, long numberOfLikes, long numberOfComments, String reviewId, String shopImage, String shopName, String shopAddress) {
         this.detailedReview = detailedReview;
         this.likeData = likeData;
         this.notLikeData = notLikeData;
         this.rating = rating;
         this.reviewImage = reviewImage;
+        this.numberOfLikes = numberOfLikes;
+        this.numberOfComments = numberOfComments;
+        this.reviewId = reviewId;
+        this.shopImage = shopImage;
+        this.shopName = shopName;
+        this.shopAddress = shopAddress;
     }
 
     public ReviewModel() {
@@ -88,5 +95,29 @@ public class ReviewModel implements Serializable {
 
     public void setReviewId(String reviewId) {
         this.reviewId = reviewId;
+    }
+
+    public String getShopImage() {
+        return shopImage;
+    }
+
+    public void setShopImage(String shopImage) {
+        this.shopImage = shopImage;
+    }
+
+    public String getShopName() {
+        return shopName;
+    }
+
+    public void setShopName(String shopName) {
+        this.shopName = shopName;
+    }
+
+    public String getShopAddress() {
+        return shopAddress;
+    }
+
+    public void setShopAddress(String shopAddress) {
+        this.shopAddress = shopAddress;
     }
 }

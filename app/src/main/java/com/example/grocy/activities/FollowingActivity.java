@@ -19,8 +19,6 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 
-import java.util.Objects;
-
 public class FollowingActivity extends AppCompatActivity {
 
     Button buttonFindUsers;
@@ -49,7 +47,9 @@ public class FollowingActivity extends AppCompatActivity {
 
         firebaseAuth = FirebaseAuth.getInstance();
 
-        String userId = Objects.requireNonNull(firebaseAuth.getCurrentUser()).getUid();
+//        String userId = Objects.requireNonNull(firebaseAuth.getCurrentUser()).getUid();
+        String userId = getIntent().getStringExtra("Id");
+
         firebaseFirestore = FirebaseFirestore.getInstance();
 
         recyclerViewUsersFollowing = findViewById(R.id.recycler_friends_list);

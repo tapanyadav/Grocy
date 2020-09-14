@@ -19,7 +19,17 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:targetApi="m">
-        <activity android:name=".activities.SearchUserActivity"></activity>
+        <!--        <service-->
+        <!--            android:name=".java.MyFirebaseMessagingService"-->
+        <!--            android:exported="false">-->
+        <!--            <intent-filter>-->
+        <!--                <action android:name="com.google.firebase.MESSAGING_EVENT" />-->
+        <!--            </intent-filter>-->
+        <!--        </service>-->
+        <activity android:name=".activities.BookmarksActivity" />
+        <activity android:name=".activities.ShopListImageActivity" />
+        <activity android:name=".activities.ShopListReviewActivity" />
+        <activity android:name=".activities.SearchUserActivity" />
         <activity android:name=".activities.UserSearchBarActivity" />
         <activity android:name=".activities.FollowersActivity" />
         <activity android:name=".activities.FollowingActivity" />

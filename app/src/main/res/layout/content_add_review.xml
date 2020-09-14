@@ -21,15 +21,33 @@
                 android:layout_marginTop="4dp"
                 android:src="@drawable/add_review" />
 
-            <TextView
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
-                android:layout_marginStart="12dp"
-                android:layout_marginTop="12dp"
-                android:text="Review for Store name"
-                android:textSize="18sp"
-                android:textStyle="bold" />
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="12dp"
+                    android:text="Review for"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/review_storeName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginTop="12dp"
+                    android:text="Store name"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
 
             <TextView
                 android:id="@+id/addPhone"
@@ -105,6 +123,10 @@
                             android:layout_height="wrap_content"
                             android:text="Packaging issue"
                             app:chipCornerRadius="12dp"
+                            android:textColor="@color/colorPrimary"
+                            app:chipBackgroundColor="@color/white"
+                            app:chipStrokeColor="@color/colorPrimary"
+                            app:chipStrokeWidth="0.7dp"
                             app:closeIcon="@drawable/ic_baseline_close_24"
                             app:rippleColor="@color/colorAccent" />
 
@@ -115,6 +137,10 @@
                             android:layout_height="wrap_content"
                             android:text="Package was not tamper proof"
                             app:chipCornerRadius="12dp"
+                            android:textColor="@color/colorPrimary"
+                            app:chipBackgroundColor="@color/white"
+                            app:chipStrokeColor="@color/colorPrimary"
+                            app:chipStrokeWidth="0.7dp"
                             app:closeIcon="@drawable/ic_baseline_close_24"
                             app:rippleColor="@color/colorAccent" />
 
@@ -125,6 +151,10 @@
                             android:layout_height="wrap_content"
                             android:text="Delivery is not on time"
                             app:chipCornerRadius="12dp"
+                            android:textColor="@color/colorPrimary"
+                            app:chipBackgroundColor="@color/white"
+                            app:chipStrokeColor="@color/colorPrimary"
+                            app:chipStrokeWidth="0.7dp"
                             app:closeIcon="@drawable/ic_baseline_close_24"
                             app:rippleColor="@color/colorAccent" />
 
@@ -135,6 +165,10 @@
                             android:layout_height="wrap_content"
                             android:text="Add later"
                             app:chipCornerRadius="12dp"
+                            android:textColor="@color/colorPrimary"
+                            app:chipBackgroundColor="@color/white"
+                            app:chipStrokeColor="@color/colorPrimary"
+                            app:chipStrokeWidth="0.7dp"
                             app:closeIcon="@drawable/ic_baseline_close_24"
                             app:rippleColor="@color/colorAccent" />
 
@@ -145,6 +179,10 @@
                             android:layout_height="wrap_content"
                             android:text="later"
                             app:chipCornerRadius="12dp"
+                            android:textColor="@color/colorPrimary"
+                            app:chipBackgroundColor="@color/white"
+                            app:chipStrokeColor="@color/colorPrimary"
+                            app:chipStrokeWidth="0.7dp"
                             app:closeIcon="@drawable/ic_baseline_close_24"
                             app:rippleColor="@color/colorAccent" />
 
@@ -195,6 +233,10 @@
                             android:layout_height="wrap_content"
                             android:text="Good packaging"
                             app:chipCornerRadius="12dp"
+                            android:textColor="@color/colorPrimary"
+                            app:chipBackgroundColor="@color/white"
+                            app:chipStrokeColor="@color/colorPrimary"
+                            app:chipStrokeWidth="0.7dp"
                             app:closeIcon="@drawable/ic_baseline_close_24"
                             app:rippleColor="@color/colorAccent" />
 
@@ -205,6 +247,10 @@
                             android:layout_height="wrap_content"
                             android:text="More varieties of product"
                             app:chipCornerRadius="12dp"
+                            android:textColor="@color/colorPrimary"
+                            app:chipBackgroundColor="@color/white"
+                            app:chipStrokeColor="@color/colorPrimary"
+                            app:chipStrokeWidth="0.7dp"
                             app:closeIcon="@drawable/ic_baseline_close_24"
                             app:rippleColor="@color/colorAccent" />
 
@@ -215,6 +261,10 @@
                             android:layout_height="wrap_content"
                             android:text="Delivery is on time"
                             app:chipCornerRadius="12dp"
+                            android:textColor="@color/colorPrimary"
+                            app:chipBackgroundColor="@color/white"
+                            app:chipStrokeColor="@color/colorPrimary"
+                            app:chipStrokeWidth="0.7dp"
                             app:closeIcon="@drawable/ic_baseline_close_24"
                             app:rippleColor="@color/colorAccent" />
 
@@ -225,6 +275,10 @@
                             android:layout_height="wrap_content"
                             android:text="Customizations available"
                             app:chipCornerRadius="12dp"
+                            android:textColor="@color/colorPrimary"
+                            app:chipBackgroundColor="@color/white"
+                            app:chipStrokeColor="@color/colorPrimary"
+                            app:chipStrokeWidth="0.7dp"
                             app:closeIcon="@drawable/ic_baseline_close_24"
                             app:rippleColor="@color/colorAccent" />
 
@@ -235,6 +289,10 @@
                             android:layout_height="wrap_content"
                             android:text="Add later"
                             app:chipCornerRadius="12dp"
+                            android:textColor="@color/colorPrimary"
+                            app:chipBackgroundColor="@color/white"
+                            app:chipStrokeColor="@color/colorPrimary"
+                            app:chipStrokeWidth="0.7dp"
                             app:closeIcon="@drawable/ic_baseline_close_24"
                             app:rippleColor="@color/colorAccent" />
 
@@ -245,6 +303,10 @@
                             android:layout_height="wrap_content"
                             android:text="later"
                             app:chipCornerRadius="12dp"
+                            android:textColor="@color/colorPrimary"
+                            app:chipBackgroundColor="@color/white"
+                            app:chipStrokeColor="@color/colorPrimary"
+                            app:chipStrokeWidth="0.7dp"
                             app:closeIcon="@drawable/ic_baseline_close_24"
                             app:rippleColor="@color/colorAccent" />
                     </com.google.android.material.chip.ChipGroup>
@@ -359,7 +421,7 @@
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/detailedReview"
                 android:layout_width="match_parent"
-                android:layout_height="55dp"
+                android:layout_height="wrap_content"
                 android:layout_marginStart="12dp"
                 android:layout_marginTop="12dp"
                 android:layout_marginEnd="12dp"
@@ -368,10 +430,8 @@
                 android:fontFamily="@font/josefin_sans"
                 android:gravity="center_vertical"
                 android:hint="Write detailed review here"
-                android:inputType="textPersonName"
-                android:maxLines="1"
-                android:paddingStart="12dp"
-                android:paddingEnd="12dp"
+                android:padding="14dp"
+                android:scrollHorizontally="true"
                 android:textColor="#659BF6"
                 android:textColorHint="#9DC0F9"
                 android:textSize="18sp"

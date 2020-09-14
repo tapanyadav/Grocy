@@ -33,11 +33,15 @@ import com.google.android.libraries.places.widget.Autocomplete;
 import com.google.android.libraries.places.widget.AutocompleteActivity;
 import com.google.android.libraries.places.widget.model.AutocompleteActivityMode;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.Arrays;
+import java.util.HashMap;
 
 public class StartLocationActivity extends AppCompatActivity {
 
+    HashMap<String, Object> userDefaultData = new HashMap<>();
     //Location
     private static final int AUTOCOMPLETE_REQUEST_CODE = 1;
 
@@ -52,7 +56,9 @@ public class StartLocationActivity extends AppCompatActivity {
     TextView textViewCurrentLocationDialog;
     EditText editTextLocation;
     PlacesClient placesClient;
+    FirebaseFirestore firebaseFirestore;
     String apiKey = "AIzaSyD3RtCpsidRz7EMJiR2EkWrYzoXFuwaUkI";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,8 +66,11 @@ public class StartLocationActivity extends AppCompatActivity {
         setContentView(R.layout.activity_start_location);
 
         Button buttonLocNext = findViewById(R.id.startLocNext);
+        firebaseFirestore = FirebaseFirestore.getInstance();
+        FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
 
-        Button buttonLocation= findViewById(R.id.startLocation);
+        String userStartId = getIntent().getStringExtra("userStartId");
+        Button buttonLocation = findViewById(R.id.startLocation);
         if (!Places.isInitialized()) {
             Places.initialize(StartLocationActivity.this, apiKey);
         }
@@ -69,6 +78,20 @@ public class StartLocationActivity extends AppCompatActivity {
         placesClient = Places.createClient(StartLocationActivity.this);
 
         buttonLocation.setOnClickListener(v -> {
+            userDefaultData.put("noOfBookmarks", "0");
+            userDefaultData.put("userLevel", "1");
+            userDefaultData.put("userDetailedStatus", "Bronze");
+            userDefaultData.put("reviewCount", 0);
+            userDefaultData.put("photoCount", 0);
+            userDefaultData.put("ordersCount", 0);
+            userDefaultData.put("profilePic", "https://firebasestorage.googleapis.com/v0/b/grocy-6c5b5.appspot.com/o/profile_images%2Fuser_profile.jpg?alt=media&token=607a6dd4-b477-4293-9aaf-1b43f929a450");
+
+            assert userStartId != null;
+            firebaseFirestore.collection("Users").document(userStartId).update(userDefaultData).addOnCompleteListener(task1 -> {
+                if (task1.isSuccessful()) {
+                    Toast.makeText(this, "Default data added", Toast.LENGTH_SHORT).show();
+                }
+            });
             bottomSheetDialogStartLocation = new BottomSheetDialog(StartLocationActivity.this);
             //View bottomSheetView=LayoutInflater.from(new ContextThemeWrapper(getApplicationContext(),R.style.AppTheme)).inflate(R.layout.content_dialog_bottom_sheet, (LinearLayout)findViewById(R.id.bottomSheetLayout));
             bottomSheetDialogStartLocation.setContentView(R.layout.content_dialog_bottom_sheet);
@@ -107,7 +130,22 @@ public class StartLocationActivity extends AppCompatActivity {
 
         buttonLocNext.setEnabled(providerEnabled);
         buttonLocNext.setOnClickListener(v -> {
-            Intent intent=new Intent(StartLocationActivity.this,MainActivity.class);
+
+            userDefaultData.put("noOfBookmarks", "0");
+            userDefaultData.put("userLevel", "1");
+            userDefaultData.put("userDetailedStatus", "Bronze");
+            userDefaultData.put("reviewCount", 0);
+            userDefaultData.put("photoCount", 0);
+            userDefaultData.put("ordersCount", 0);
+            userDefaultData.put("profilePic", "https://firebasestorage.googleapis.com/v0/b/grocy-6c5b5.appspot.com/o/profile_images%2Fuser_profile.jpg?alt=media&token=607a6dd4-b477-4293-9aaf-1b43f929a450");
+
+            firebaseFirestore.collection("Users").document(userStartId).update(userDefaultData).addOnCompleteListener(task1 -> {
+                if (task1.isSuccessful()) {
+                    Toast.makeText(this, "Default data added", Toast.LENGTH_SHORT).show();
+                }
+            });
+
+            Intent intent = new Intent(StartLocationActivity.this, MainActivity.class);
             startActivity(intent);
             finish();
         });

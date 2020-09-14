@@ -13,6 +13,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.grocy.Adapters.CartItemsAdapter;
 import com.example.grocy.Models.CartItemsModel;
 import com.example.grocy.R;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
@@ -30,7 +32,9 @@ public class CartActivity extends AppCompatActivity {
 
     TextView items_amount, tax_amount, total_amount, user_name, user_phone, user_address;
 
+    FirebaseAuth firebaseAuth;
     Button order_button;
+    int orderCount;
 
     FirebaseFirestore firebaseFirestore;
 
@@ -53,6 +57,7 @@ public class CartActivity extends AppCompatActivity {
         toolbar.setNavigationIcon(R.drawable.icon_back_new);
         toolbar.setNavigationOnClickListener(v -> onBackPressed());
         firebaseFirestore = FirebaseFirestore.getInstance();
+        firebaseAuth = FirebaseAuth.getInstance();
 //
 //        buttonOrder.setOnClickListener(v -> {
 //            Intent intent = new Intent(CartActivity.this, PaymentActivity.class);
@@ -100,17 +105,49 @@ public class CartActivity extends AppCompatActivity {
         hm.put("taxAmount", taxAmt);
         hm.put("itemAmount", itemsAmt);
         hm.put("orderPaymentMode", "Upi payment");
-        hm.put("deliverStatus", "Order cancelled");
+        hm.put("deliveryStatus", "Order cancelled");
         hm.put("userAddress", (String) MainActivity.proile_activity_data.get("address"));
         // hm.put("dateTime", FieldValue.serverTimestamp().toString());
-        hm.put("dateTime", FieldValue.serverTimestamp().toString());
+        // hm.put("dateTime", FieldValue.serverTimestamp().toString());
         hm.put("shopName", (String) ShopDetailsActivity.shop_detail.get("shopName"));
         hm.put("shopImage", (String) ShopDetailsActivity.shop_detail.get("shopImage"));
+
+        HashMap<String, Object> hashMapOrderCount = new HashMap<>();
+
+        firebaseFirestore.collection("Users").document(firebaseAuth.getCurrentUser().getUid()).get().addOnCompleteListener(task -> {
+            DocumentSnapshot documentSnapshot = task.getResult();
+            if (documentSnapshot.getData().containsKey("ordersCount")) {
+                orderCount = Integer.parseInt("" + documentSnapshot.get("ordersCount"));
+                //Toast.makeText(this, "Bookmarks:"+documentSnapshot.get("noOfBookmarks"), Toast.LENGTH_SHORT).show();
+            } else {
+                orderCount = 0;
+            }
+            Toast.makeText(this, "Count: " + orderCount, Toast.LENGTH_SHORT).show();
+        });
+
+
         order_button.setOnClickListener(v -> {
+
+
             firebaseFirestore.collection("Users").document((String) MainActivity.proile_activity_data.get("userId"))
                     .collection("myOrders").add(hm).addOnCompleteListener(task -> {
-                Toast.makeText(this, "Data Submitted", Toast.LENGTH_SHORT).show();
+                if (task.isSuccessful()) {
+                    orderCount += 1;
+                    hashMapOrderCount.put("ordersCount", orderCount);
+                    firebaseFirestore.collection("Users").document((String) MainActivity.proile_activity_data.get("userId")).update(hashMapOrderCount).addOnCompleteListener(task1 -> {
+                        if (task1.isSuccessful()) {
+                            Toast.makeText(this, "Order Count successfully updated", Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(this, "Firestore error!", Toast.LENGTH_SHORT).show();
+
+                        }
+                    });
+                    Toast.makeText(this, "Data Submitted", Toast.LENGTH_SHORT).show();
+                }
+
             });
+
+
         });
 
     }

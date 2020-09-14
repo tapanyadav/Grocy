@@ -16,7 +16,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.provider.Settings;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -35,7 +34,6 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
-import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -193,6 +191,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                                         .load((String) document.getData().get("profilePic"))
                                         .into(circleImageView);
                             }
+                            proile_activity_data.put("reviewCount", document.get("reviewCount"));
+                            proile_activity_data.put("photoCount", document.get("photoCount"));
+                            proile_activity_data.put("ordersCount", document.get("ordersCount"));
+
                             setProfileIntent(proile_activity_data);
                         } else {
                             Log.d(TAG, "Error getting documents: ", task.getException());
@@ -213,6 +215,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                                         .load((String) document.getData().get("profilePic"))
                                         .into(circleImageView);
                                 setProfileIntent(proile_activity_data);
+
                             }
                         } else {
                             Log.d(TAG, "Error getting documents: ", task.getException());
@@ -222,10 +225,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
 
 
+
         fusedLocationProviderClient = new FusedLocationProviderClient(MainActivity.this);
 
-        userDefaultData.put("userLevel", "1");
-        userDefaultData.put("userDetailedLevel", "Rookie");
 
 
         RecyclerView recyclerViewCat = findViewById(R.id.recycler);
@@ -394,15 +396,51 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 currentLocation();
             }
         }
+
+
         if (!Places.isInitialized()) {
             Places.initialize(MainActivity.this, apiKey);
         }
         // Retrieve a PlacesClient (previously initialized - see MainActivity)
         placesClient = Places.createClient(MainActivity.this);
 
+
+        //TODO Add this data in database from signup
+//        userDefaultData.put("noOfBookmarks","0");
+//        userDefaultData.put("userLevel","1");
+//        userDefaultData.put("userDetailedStatus","Bronze");
+//        userDefaultData.put("reviewCount",0);
+//        userDefaultData.put("photoCount",0);
+//        userDefaultData.put("ordersCount",0);
+//        userDefaultData.put("profilePic","https://firebasestorage.googleapis.com/v0/b/grocy-6c5b5.appspot.com/o/profile_images%2Fuser_profile.jpg?alt=media&token=607a6dd4-b477-4293-9aaf-1b43f929a450");
+
+        //profile_activity_data = (HashMap<String, Object>) document.getData();
+
+
         firebaseFirestore.collection("Users").document(Objects.requireNonNull(mAuth.getCurrentUser()).getUid()).update(userDefaultData).addOnCompleteListener(task1 -> {
             if (task1.isSuccessful()) {
                 Toast.makeText(this, "Default data added", Toast.LENGTH_SHORT).show();
+                firebaseFirestore.collection("Users").document(mAuth.getCurrentUser().getUid()).get().addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        DocumentSnapshot document = task.getResult();
+                        if (document.getData().containsKey("noOfBookmarks")) {
+                            proile_activity_data.put("noOfBookmarks", document.get("noOfBookmarks"));
+                            Toast.makeText(this, "Bookmarks:" + document.get("noOfBookmarks"), Toast.LENGTH_SHORT).show();
+                        }
+                        if (document.getData().containsKey("userLevel")) {
+                            proile_activity_data.put("userLevel", document.get("userLevel"));
+                            Toast.makeText(this, "Level:" + document.get("userLevel"), Toast.LENGTH_SHORT).show();
+                        }
+
+                        if (document.getData().containsKey("userDetailedStatus")) {
+                            proile_activity_data.put("userDetailedStatus", document.get("userDetailedStatus"));
+                        }
+                        if (document.getData().containsKey("userCity")) {
+                            proile_activity_data.put("userCity", document.get("userCity"));
+                            Toast.makeText(this, "userCity" + document.get("userCity"), Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
             } else {
                 Toast.makeText(this, "Default data added error", Toast.LENGTH_SHORT).show();
             }
@@ -499,20 +537,18 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
             case R.id.home:
                 Toast.makeText(this, "Home", Toast.LENGTH_SHORT).show();
-                drawerLayout.closeDrawer(Gravity.LEFT);
+                drawerLayout.closeDrawer(GravityCompat.START);
                 return true;
             case R.id.notification:
                 Intent intentNoti = new Intent(this, NotificationActivity.class);
                 startActivity(intentNoti);
                 return true;
             case R.id.orders:
-                Toast.makeText(this, "All Orders are shown here!", Toast.LENGTH_SHORT).show();
                 Intent intentOrders = new Intent(this, MyOrdersActivity.class);
                 intentOrders.putExtra("user_id", "" + userId);
                 startActivity(intentOrders);
                 return true;
             case R.id.favourite_orders:
-                Toast.makeText(this, "Favourite orders are shown here!", Toast.LENGTH_SHORT).show();
                 Intent intentFavOrders = new Intent(this, FavOrderActivity.class);
                 intentFavOrders.putExtra("user_id", "" + userId);
                 startActivity(intentFavOrders);
@@ -741,20 +777,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         return false;
     }
 
-    private void currentLocation() {
+    private String currentLocation() {
         initGoogleMap();
         if (isGpsEnabled()) {
             Toast.makeText(MainActivity.this, "All set up!", Toast.LENGTH_SHORT).show();
-            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                // TODO: Consider calling
-                //    ActivityCompat#requestPermissions
-                // here to request the missing permissions, and then overriding
-                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                //                                          int[] grantResults)
-                // to handle the case where the user grants the permission. See the documentation
-                // for ActivityCompat#requestPermissions for more details.
-                return;
-            }
+            checkLocationPermission();
             fusedLocationProviderClient.getLastLocation().addOnCompleteListener(task -> {
                 if (task.isSuccessful()) {
                     Location location = task.getResult();
@@ -769,11 +796,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                                 finalAddress = address.getSubLocality() + "," + address.getSubAdminArea();
                                 toolbarTitle.setText(finalAddress);
                                 city = address.getLocality();
-
                                 userDefaultData.put("userCity", city);
-
-                                //profile_activity_data = (HashMap<String, Object>) document.getData();
-                                proile_activity_data.put("userCity", city);
+                                firebaseFirestore.collection("Users").document(Objects.requireNonNull(mAuth.getCurrentUser()).getUid()).update(userDefaultData);
                                 Toast.makeText(this, "City:" + city, Toast.LENGTH_SHORT).show();
                                 Toast.makeText(this, finalAddress, Toast.LENGTH_SHORT).show();
 
@@ -792,6 +816,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 }
             });
         }
+        Toast.makeText(this, "City Return:" + city, Toast.LENGTH_SHORT).show();
+        return city;
 
     }
 

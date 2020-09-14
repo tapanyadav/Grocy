@@ -15,6 +15,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.grocy.Adapters.ShopItemsCategoryAdapter;
 import com.example.grocy.Models.ItemVariantsModel;
 import com.example.grocy.Models.ShopItemsCategoryModel;
@@ -23,7 +24,6 @@ import com.example.grocy.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
-import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
@@ -42,7 +42,6 @@ public class ShopDetailsActivity extends AppCompatActivity {
     FirebaseFirestore firebaseFirestore;
     RecyclerView recyclerViewShopDetails;
     DocumentReference documentReference;
-    private BottomSheetDialog bottomSheetDialog;
 
     SortedSet<String> item_categories_name = new TreeSet();
 
@@ -54,7 +53,7 @@ public class ShopDetailsActivity extends AppCompatActivity {
     static HashMap<String, Object> shop_detail = new HashMap();
 
     TextView textViewShopName, textViewShopAddress, textViewShopTime, textViewShopCategoryType, textViewShopOff, textViewShopRating;
-
+    ImageView imageViewCollapseShopImage;
     String shopsId;
 
     @Override
@@ -65,6 +64,7 @@ public class ShopDetailsActivity extends AppCompatActivity {
         getWindow().setStatusBarColor(Color.WHITE);
         setContentView(R.layout.activity_shop_details);
         Toolbar toolbar = findViewById(R.id.shop_toolbar);
+        imageViewCollapseShopImage = findViewById(R.id.recyclerIvShopDetails);
         setSupportActionBar(toolbar);
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
 
@@ -99,6 +99,7 @@ public class ShopDetailsActivity extends AppCompatActivity {
 
                 System.out.println("----------------------------------------------------");
                 collapsingToolbarLayout.setTitle((String) shop_detail.get("shopName"));
+                Glide.with(this).load(shop_detail.get("shopImage")).into(imageViewCollapseShopImage);
                 textViewShopName.setText((String) shop_detail.get("shopName"));
                 textViewShopAddress.setText((String) shop_detail.get("shopAddress"));
                 textViewShopCategoryType.setText((String) shop_detail.get("shopCategory"));
@@ -116,7 +117,7 @@ public class ShopDetailsActivity extends AppCompatActivity {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if (task.isSuccessful()) {
-                    for (QueryDocumentSnapshot document : task.getResult()) {
+                    for (QueryDocumentSnapshot document : Objects.requireNonNull(task.getResult())) {
                         String itemID = document.getId();
                         item_list.put(document.getId(), document.getData());
                         item_categories_name.add((String) document.getData().get("itemCategory"));

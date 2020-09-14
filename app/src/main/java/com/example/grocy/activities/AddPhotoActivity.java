@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -22,6 +23,7 @@ import androidx.core.content.ContextCompat;
 import com.example.grocy.R;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -40,11 +42,15 @@ public class AddPhotoActivity extends AppCompatActivity {
     ProgressDialog progressDialog;
     Button buttonSubmitPhoto;
     String captionData;
+    int photoCount;
     HashMap<String, Object> reviewData = new HashMap<>();
     FirebaseFirestore firebaseFirestore;
     String user_id;
     private Uri getImageUri;
     private StorageReference storageReference;
+    TextView textViewPhotoStoreName;
+    String textShopName, textShopAddress;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,6 +62,7 @@ public class AddPhotoActivity extends AppCompatActivity {
         imageViewAddPhotoImage = findViewById(R.id.addPhotoImage);
         editTextCaption = findViewById(R.id.editCaption);
         buttonSubmitPhoto = findViewById(R.id.btn_submit_photo);
+        textViewPhotoStoreName = findViewById(R.id.photo_storeName);
 
         firebaseFirestore = FirebaseFirestore.getInstance();
         FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
@@ -67,6 +74,20 @@ public class AddPhotoActivity extends AppCompatActivity {
 
         toolbar.setNavigationIcon(R.drawable.icon_back_new);
         toolbar.setNavigationOnClickListener(v -> onBackPressed());
+
+//        Bundle bundle = getIntent().getExtras();
+//        if (bundle!=null){
+//            imageShop = bundle.getInt("storeImage");
+//
+//        }
+        String image1 = getIntent().getStringExtra("storeImage");
+        textShopAddress = getIntent().getStringExtra("storeAddress");
+        textShopName = getIntent().getStringExtra("storeName");
+        textViewPhotoStoreName.setText(textShopName);
+
+        reviewData.put("shopName", textShopName);
+        reviewData.put("shopImage", image1);
+        reviewData.put("shopAddress", textShopAddress);
 
         cardViewAddPhoto.setOnClickListener(v -> {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -113,11 +134,37 @@ public class AddPhotoActivity extends AppCompatActivity {
     private void addPhotoData(String image, String caption) {
         reviewData.put("photoImage", image);
         reviewData.put("photoCaption", caption);
+
+        HashMap<String, Object> hashMapPhotoCount = new HashMap<>();
+        firebaseFirestore.collection("Users").document(user_id).get().addOnCompleteListener(task -> {
+            DocumentSnapshot documentSnapshot = task.getResult();
+            if (documentSnapshot.getData().containsKey("photoCount")) {
+                photoCount = Integer.parseInt("" + documentSnapshot.get("photoCount"));
+                //Toast.makeText(this, "Bookmarks:"+documentSnapshot.get("noOfBookmarks"), Toast.LENGTH_SHORT).show();
+            } else {
+                photoCount = 0;
+            }
+            Toast.makeText(this, "Count: " + photoCount, Toast.LENGTH_SHORT).show();
+        });
+
         firebaseFirestore.collection("Users").document(user_id).collection("Photos").add(reviewData).addOnCompleteListener(task1 -> {
 
             if (task1.isSuccessful()) {
                 progressDialog.dismiss();
+
+                photoCount += 1;
+                hashMapPhotoCount.put("photoCount", photoCount);
+                firebaseFirestore.collection("Users").document(user_id).update(hashMapPhotoCount).addOnCompleteListener(task2 -> {
+                    if (task2.isSuccessful()) {
+                        Toast.makeText(this, "Review Count successfully updated", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(this, "Firestore error!", Toast.LENGTH_SHORT).show();
+
+                    }
+                });
                 Toast.makeText(AddPhotoActivity.this, "Photo is added", Toast.LENGTH_LONG).show();
+                Intent intent = new Intent(AddPhotoActivity.this, UserProfileActivity.class);
+                startActivity(intent);
                 finish();
 
             } else {

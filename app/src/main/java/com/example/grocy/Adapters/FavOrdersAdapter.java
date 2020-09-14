@@ -12,6 +12,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.bumptech.glide.Glide;
 import com.example.grocy.Models.MyOrdersModel;
 import com.example.grocy.R;
@@ -24,9 +27,6 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.HashMap;
 import java.util.Objects;
-
-import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.RecyclerView;
 
 public class FavOrdersAdapter extends FirestoreRecyclerAdapter<MyOrdersModel, FavOrdersAdapter.MyViewHolder> {
 
@@ -55,10 +55,13 @@ public class FavOrdersAdapter extends FirestoreRecyclerAdapter<MyOrdersModel, Fa
         favOrders.put("shopName", model.getShopName());
         favOrders.put("orderDateTime", model.getDateTime());
         favOrders.put("shopImage", model.getShopImage());
+        favOrders.put("shopAddress", model.getShopAddress());
         favOrders.put("deliveryStatus", model.getDeliveryStatus());
         favOrders.put("orderAmount", model.getOrderAmount());
         favOrders.put("userAddress", model.getUserAddress());
         favOrders.put("orderPaymentMode", model.getOrderPaymentMode());
+        favOrders.put("taxAmount", model.getTaxAmount());
+        favOrders.put("itemAmount", model.getItemAmount());
 
         ScaleAnimation scaleAnimation = new ScaleAnimation(0.7f, 1.0f, 0.7f, 1.0f, Animation.RELATIVE_TO_SELF, 0.7f, Animation.RELATIVE_TO_SELF, 0.7f);
         scaleAnimation.setDuration(500);

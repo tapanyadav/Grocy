@@ -3,45 +3,47 @@ package com.example.grocy.Models;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
-
 public class MyOrdersModel implements Serializable {
-import java.sql.Timestamp;
-import java.util.Date;
-
-public class MyOrdersModel {
 
     public String shopName, deliveryStatus;
-    public double orderAmount;
+    public double orderAmount, taxAmount, itemAmount;
+    public String shopAddress;
     public String shopImage;
     public boolean favOrder;
+    public boolean bookmarkStatus;
     public String orderId;
     public String userAddress;
     public String orderPaymentMode;
-    ArrayList<HashMap<String, Object>> items = new ArrayList();
-    public Date dateTime;
+    public String dateTime;
+    ArrayList<HashMap<String, Object>> items = new ArrayList<>();
+
 
     public MyOrdersModel() {
     }
 
-    public MyOrdersModel(String shopName, String dateTime, String deliveryStatus, double orderAmount, String shopImage, boolean favOrder, String orderId, String userAddress, String orderPaymentMode, ArrayList<HashMap<String, Object>> items) {
-    public MyOrdersModel(String shopName, Timestamp dateTime, String deliveryStatus, double orderAmount, String shopImage, boolean favOrder, String orderId, String userAddress, String orderPaymentMode) {
+
+    public MyOrdersModel(String shopName, String deliveryStatus, double orderAmount, double taxAmount, double itemAmount, String shopAddress, String shopImage, boolean favOrder, String orderId, String userAddress, String orderPaymentMode, ArrayList<HashMap<String, Object>> items, String dateTime, boolean bookmarkStatus) {
         this.shopName = shopName;
-        this.dateTime = dateTime;
         this.deliveryStatus = deliveryStatus;
         this.orderAmount = orderAmount;
+        this.taxAmount = taxAmount;
+        this.itemAmount = itemAmount;
+        this.shopAddress = shopAddress;
         this.shopImage = shopImage;
         this.favOrder = favOrder;
         this.orderId = orderId;
         this.userAddress = userAddress;
         this.orderPaymentMode = orderPaymentMode;
+        this.items = items;
+        this.dateTime = dateTime;
+        this.bookmarkStatus = bookmarkStatus;
     }
-
 
     public String getShopName() {
         return shopName;
     }
 
-    public Date getDateTime() {
+    public String getDateTime() {
         return dateTime;
     }
 
@@ -75,5 +77,21 @@ public class MyOrdersModel {
 
     public ArrayList<HashMap<String, Object>> getItems() {
         return items;
+    }
+
+    public String getShopAddress() {
+        return shopAddress;
+    }
+
+    public double getTaxAmount() {
+        return taxAmount;
+    }
+
+    public double getItemAmount() {
+        return itemAmount;
+    }
+
+    public boolean isBookmarkStatus() {
+        return bookmarkStatus;
     }
 }

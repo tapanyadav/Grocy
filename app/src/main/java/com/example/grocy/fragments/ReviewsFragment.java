@@ -21,9 +21,9 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 public class ReviewsFragment extends Fragment {
-
 
     FirebaseFirestore firebaseFirestore;
     RecyclerView review_recycler;
@@ -56,7 +56,7 @@ public class ReviewsFragment extends Fragment {
 
         user_id = (String) MainActivity.proile_activity_data.get("userId");
 
-        String user_id_new = getActivity().getIntent().getStringExtra("usersDocumentId");
+        String user_id_new = Objects.requireNonNull(getActivity()).getIntent().getStringExtra("usersDocumentId");
 
         if (user_id_new != null) {
             Id = user_id_new;
@@ -69,7 +69,7 @@ public class ReviewsFragment extends Fragment {
 
         query.get().addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
-                for (QueryDocumentSnapshot document : task.getResult()) {
+                for (QueryDocumentSnapshot document : Objects.requireNonNull(task.getResult())) {
                     hm.put(document.getId(), document.getData());
                 }
                 setAdapter(view);
@@ -106,12 +106,13 @@ public class ReviewsFragment extends Fragment {
             reviewModel.setNumberOfLikes((Long) item.get("numberOfLikes"));
             reviewModel.setNumberOfComments((Long) item.get("numberOfComments"));
             reviewModel.setReviewId((String) key);
+            reviewModel.setShopImage((String) item.get("shopImage"));
+            reviewModel.setShopName((String) item.get("shopName"));
+            reviewModel.setShopAddress((String) item.get("shopAddress"));
 
             arrayList.add(reviewModel);
 
         }
-
         reviewAdapter.notifyDataSetChanged();
-
     }
 }

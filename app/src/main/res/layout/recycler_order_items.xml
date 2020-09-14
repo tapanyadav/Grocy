@@ -60,6 +60,7 @@
                     android:textStyle="bold" />
 
                 <ToggleButton
+                    android:id="@+id/button_bookmark"
                     android:layout_width="24dp"
                     android:layout_height="24dp"
                     android:layout_gravity="center_vertical"
@@ -179,7 +180,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="end"
                     android:layout_marginStart="16dp"
-                    android:layout_marginTop="6dp"
+                    android:layout_marginTop="8dp"
                     android:background="@drawable/back_text_all"
                     android:padding="4dp"
                     android:text="Order details"

@@ -24,7 +24,7 @@
             <ImageView
                 android:id="@+id/imageShopMain"
                 android:layout_width="match_parent"
-                android:layout_height="180dp"
+                android:layout_height="240dp"
                 android:scaleType="centerCrop"
                 android:src="@drawable/back_image_new" />
 

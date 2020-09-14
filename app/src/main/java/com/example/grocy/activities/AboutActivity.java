@@ -28,7 +28,7 @@ public class AboutActivity extends AppCompatActivity {
         @Override
         public void run() {
             viewPager2About.setCurrentItem(viewPager2About.getCurrentItem() + 1);
-            viewPager2Vision.setCurrentItem(viewPager2About.getCurrentItem() + 1);
+            viewPager2Vision.setCurrentItem(viewPager2Vision.getCurrentItem() + 1);
         }
     };
 

@@ -12,6 +12,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.bumptech.glide.Glide;
 import com.example.grocy.Models.MyOrdersModel;
 import com.example.grocy.R;
@@ -22,16 +25,15 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.HashMap;
 import java.util.Objects;
 
-import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.RecyclerView;
-
 public class MyOrdersAdapter extends FirestoreRecyclerAdapter<MyOrdersModel, MyOrdersAdapter.MyViewHolder> {
 
+    int noOfBookmark;
     public MyOrdersAdapter(@NonNull FirestoreRecyclerOptions<MyOrdersModel> options) {
         super(options);
     }
@@ -51,10 +53,13 @@ public class MyOrdersAdapter extends FirestoreRecyclerAdapter<MyOrdersModel, MyO
         favOrders.put("shopName", model.getShopName());
         favOrders.put("orderDateTime", model.getDateTime());
         favOrders.put("shopImage", model.getShopImage());
+        favOrders.put("shopAddress", model.getShopAddress());
         favOrders.put("deliveryStatus", model.getDeliveryStatus());
         favOrders.put("orderAmount", model.getOrderAmount());
         favOrders.put("userAddress", model.getUserAddress());
         favOrders.put("orderPaymentMode", model.getOrderPaymentMode());
+        favOrders.put("taxAmount", model.getTaxAmount());
+        favOrders.put("itemAmount", model.getItemAmount());
         //favOrders.put("items",model.getItems());
 
         holder.name.setText(model.getShopName());
@@ -67,6 +72,8 @@ public class MyOrdersAdapter extends FirestoreRecyclerAdapter<MyOrdersModel, MyO
         scaleAnimation.setDuration(500);
         BounceInterpolator bounceInterpolator = new BounceInterpolator();
         scaleAnimation.setInterpolator(bounceInterpolator);
+
+
         if (model.isFavOrder()) {
             holder.toggleButtonFav.setChecked(true);
             holder.favText.setText("Added to favourite");
@@ -76,6 +83,16 @@ public class MyOrdersAdapter extends FirestoreRecyclerAdapter<MyOrdersModel, MyO
             holder.favText.setText("Mark as favourite");
 
         }
+
+
+        if (model.isBookmarkStatus()) {
+            holder.toggleButtonBookmark.setChecked(true);
+
+        } else {
+            holder.toggleButtonBookmark.setChecked(false);
+
+        }
+
 
 //        holder.toggleButtonFav.setOnCheckedChangeListener((compoundButton, isChecked) -> {
 //            //animation
@@ -124,6 +141,47 @@ public class MyOrdersAdapter extends FirestoreRecyclerAdapter<MyOrdersModel, MyO
                     }
                 }
             });
+
+        });
+        documentReference.get().addOnCompleteListener(task -> {
+            DocumentSnapshot document = task.getResult();
+            if (document.getData().containsKey("noOfBookmarks")) {
+                noOfBookmark = Integer.parseInt("" + document.get("noOfBookmarks"));
+                //Toast.makeText(this, "Bookmarks:"+document.get("noOfBookmarks"), Toast.LENGTH_SHORT).show();
+            } else {
+                noOfBookmark = 0;
+            }
+        });
+
+        holder.toggleButtonBookmark.setOnClickListener(v -> {
+
+
+            HashMap<String, Object> bookmarkHashMap = new HashMap<>();
+            holder.toggleButtonBookmark.startAnimation(scaleAnimation);
+            holder.toggleButtonBookmark.setChecked(true);
+            updateFavStatus.put("bookmarkStatus", true);
+            bookmarkHashMap.put("noOfBookmarks", noOfBookmark += 1);
+            documentReference.collection("myOrders").document(documentId).update(updateFavStatus).addOnCompleteListener(new OnCompleteListener<Void>() {
+                @Override
+                public void onComplete(@NonNull Task<Void> task) {
+                    if (task.isSuccessful()) {
+                        Toast.makeText(holder.itemView.getContext(), "Store added to bookmarks", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(holder.itemView.getContext(), "Error", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
+            documentReference.update(bookmarkHashMap).addOnCompleteListener(new OnCompleteListener<Void>() {
+                @Override
+                public void onComplete(@NonNull Task<Void> task) {
+                    if (task.isSuccessful()) {
+                        Toast.makeText(holder.itemView.getContext(), "no. of bookmarks updated", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(holder.itemView.getContext(), "Error", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
+
         });
 
 
@@ -164,7 +222,8 @@ public class MyOrdersAdapter extends FirestoreRecyclerAdapter<MyOrdersModel, MyO
 
         TextView name, amount, deliveryStatus, dateTime, favText, textViewOrderDetails;
         ImageView image;
-        ToggleButton toggleButtonFav;
+        ToggleButton toggleButtonFav, toggleButtonBookmark;
+
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -177,6 +236,8 @@ public class MyOrdersAdapter extends FirestoreRecyclerAdapter<MyOrdersModel, MyO
             toggleButtonFav = itemView.findViewById(R.id.button_favorite);
             favText = itemView.findViewById(R.id.text_fav);
             textViewOrderDetails = itemView.findViewById(R.id.my_order_details);
+            toggleButtonBookmark = itemView.findViewById(R.id.button_bookmark);
+
         }
     }
 }

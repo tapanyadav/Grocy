@@ -14,6 +14,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RatingBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -27,6 +28,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -43,8 +45,8 @@ public class AddReviewActivity extends AppCompatActivity {
     ImageView imageViewAddReviewPhotoOne;
     CardView cardViewImagePicker;
     CardView cardViewFirst;
-    Chip chipLike1, chipLike2, chipLike3, chipLike4, chipLike5, chipLike6;
-    Chip chipNotLike1, chipNotLike2, chipNotLike3, chipNotLike4, chipNotLike5;
+    int reviewCount;
+    TextView textViewReviewStoreName;
     ChipGroup chipGroupNotLike;
     Button buttonSubmitReview;
     EditText editTextDetailReview;
@@ -53,8 +55,11 @@ public class AddReviewActivity extends AppCompatActivity {
     HashMap<String, Object> chipData = new HashMap<>();
     FirebaseFirestore firebaseFirestore;
     String user_id;
+    String textShopName, textShopAddress;
     private StorageReference storageReference;
     private Uri mainImageURI;
+    private Chip chipLike1, chipLike2, chipLike3, chipLike4, chipLike5, chipLike6;
+    private Chip chipNotLike1, chipNotLike2, chipNotLike3, chipNotLike4, chipNotLike5;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,6 +75,7 @@ public class AddReviewActivity extends AppCompatActivity {
         storageReference = FirebaseStorage.getInstance().getReference();
         ratingBar = findViewById(R.id.rating_bar);
         editTextDetailReview = findViewById(R.id.detailedReview);
+        textViewReviewStoreName = findViewById(R.id.review_storeName);
 
         user_id = (String) MainActivity.proile_activity_data.get("userId");
 
@@ -78,6 +84,17 @@ public class AddReviewActivity extends AppCompatActivity {
 
         toolbar.setNavigationIcon(R.drawable.icon_back_new);
         toolbar.setNavigationOnClickListener(v -> onBackPressed());
+
+        String image1 = getIntent().getStringExtra("storeImage");
+        textShopAddress = getIntent().getStringExtra("storeAddress");
+        textShopName = getIntent().getStringExtra("storeName");
+
+
+        textViewReviewStoreName.setText(textShopName);
+
+        chipData.put("shopName", textShopName);
+        chipData.put("shopImage", image1);
+        chipData.put("shopAddress", textShopAddress);
         //cardViewImagePicker.setOnClickListener(v -> getPickImageIntent());
         cardViewImagePicker.setOnClickListener(v -> {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -178,7 +195,7 @@ public class AddReviewActivity extends AppCompatActivity {
 
             } else {
                 progressDialog.dismiss();
-                if (ratingReview != 0.0) {
+                if (ratingReview == 0.0) {
                     Toast.makeText(this, "Rating is required", Toast.LENGTH_SHORT).show();
                 } else {
                     Toast.makeText(this, "Please enter detailed review", Toast.LENGTH_SHORT).show();
@@ -193,11 +210,35 @@ public class AddReviewActivity extends AppCompatActivity {
 
         chipData.put("reviewImage", image);
 
+        HashMap<String, Object> hashMapReviewCount = new HashMap<>();
+        firebaseFirestore.collection("Users").document(user_id).get().addOnCompleteListener(task -> {
+            DocumentSnapshot documentSnapshot = task.getResult();
+            if (documentSnapshot.getData().containsKey("reviewCount")) {
+                reviewCount = Integer.parseInt("" + documentSnapshot.get("reviewCount"));
+                //Toast.makeText(this, "Bookmarks:"+documentSnapshot.get("noOfBookmarks"), Toast.LENGTH_SHORT).show();
+            } else {
+                reviewCount = 0;
+            }
+            Toast.makeText(this, "Count: " + reviewCount, Toast.LENGTH_SHORT).show();
+        });
+
         firebaseFirestore.collection("Users").document(user_id).collection("Reviews").add(chipData).addOnCompleteListener(task1 -> {
 
             if (task1.isSuccessful()) {
                 progressDialog.dismiss();
+                reviewCount += 1;
+                hashMapReviewCount.put("reviewCount", reviewCount);
+                firebaseFirestore.collection("Users").document(user_id).update(hashMapReviewCount).addOnCompleteListener(task2 -> {
+                    if (task2.isSuccessful()) {
+                        Toast.makeText(this, "Review Count successfully updated", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(this, "Firestore error!", Toast.LENGTH_SHORT).show();
+
+                    }
+                });
                 Toast.makeText(AddReviewActivity.this, "Review is added", Toast.LENGTH_LONG).show();
+                Intent intent = new Intent(AddReviewActivity.this, UserProfileActivity.class);
+                startActivity(intent);
                 finish();
 
             } else {
@@ -282,8 +323,8 @@ public class AddReviewActivity extends AppCompatActivity {
     void chipCloseListener(Chip chipClose) {
         chipClose.setCloseIconVisible(false);
         chipClose.setChecked(false);
-        chipClose.setTextColor(getResources().getColor(R.color.black));
-        chipClose.setChipBackgroundColor(ColorStateList.valueOf(ContextCompat.getColor(this, R.color.light)));
+        chipClose.setTextColor(getResources().getColor(R.color.colorPrimary));
+        chipClose.setChipBackgroundColor(ColorStateList.valueOf(ContextCompat.getColor(this, R.color.white)));
     }
 
     private void showProgress() {

@@ -5,9 +5,11 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -15,16 +17,14 @@ import com.bumptech.glide.Glide;
 import com.example.grocy.Adapters.MyOrderDetailItemsAdapter;
 import com.example.grocy.Models.MyOrdersModel;
 import com.example.grocy.R;
-import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.Query;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Objects;
-
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 
 public class MyOrderDetailsActivity extends AppCompatActivity {
 
@@ -34,6 +34,10 @@ public class MyOrderDetailsActivity extends AppCompatActivity {
     MyOrderDetailItemsAdapter myOrderDetailItemsAdapter;
     FirebaseFirestore firebaseFirestore;
     FirebaseAuth firebaseAuth;
+    ArrayList<HashMap<String, Object>> arrayList = new ArrayList<>();
+    ArrayList<MyOrdersModel> myOrdersModelArrayList = new ArrayList<>();
+    TextView textViewItemsDetailTaxAmount, textViewItemsAmount, textViewTotalAmount;
+    CardView cardViewAddPhotoDetails, cardViewAddReviewDetails;
 
 
     @Override
@@ -51,18 +55,11 @@ public class MyOrderDetailsActivity extends AppCompatActivity {
         firebaseFirestore = FirebaseFirestore.getInstance();
         recyclerViewDetailsItem = findViewById(R.id.recycler_details_items);
         firebaseAuth = FirebaseAuth.getInstance();
-
-
-        Query query = firebaseFirestore.collection("Users").document(firebaseAuth.getCurrentUser().getUid()).collection("myOrders");
-
-        FirestoreRecyclerOptions<MyOrdersModel> modelFirestoreRecyclerOptions = new FirestoreRecyclerOptions.Builder<MyOrdersModel>()
-                .setQuery(query, MyOrdersModel.class).build();
-
-        myOrderDetailItemsAdapter = new MyOrderDetailItemsAdapter(modelFirestoreRecyclerOptions);
-        recyclerViewDetailsItem.setHasFixedSize(true);
-        recyclerViewDetailsItem.setLayoutManager(new LinearLayoutManager(this));
-        recyclerViewDetailsItem.setAdapter(myOrderDetailItemsAdapter);
-        myOrderDetailItemsAdapter.notifyDataSetChanged();
+        textViewItemsDetailTaxAmount = findViewById(R.id.tax_details_amount);
+        textViewItemsAmount = findViewById(R.id.items_amount);
+        textViewTotalAmount = findViewById(R.id.total_amount);
+        cardViewAddPhotoDetails = findViewById(R.id.card_addPhotoDetails);
+        cardViewAddReviewDetails = findViewById(R.id.card_addReviewDetails);
 
 
         Toolbar toolbar = findViewById(R.id.my_order_details_toolbar);
@@ -83,6 +80,9 @@ public class MyOrderDetailsActivity extends AppCompatActivity {
         textViewOrderDateTime.setText("" + hashMapMyOrders.get("orderDateTime"));
         textViewOrderAddress.setText((String) hashMapMyOrders.get("userAddress"));
         textViewOrderPayment.setText((String) hashMapMyOrders.get("orderPaymentMode"));
+        textViewItemsDetailTaxAmount.setText("" + hashMapMyOrders.get("taxAmount"));
+        textViewItemsAmount.setText("" + hashMapMyOrders.get("itemAmount"));
+        textViewTotalAmount.setText("" + hashMapMyOrders.get("orderAmount"));
         Glide.with(this).load(hashMapMyOrders.get("shopImage")).into(imageViewOrderImage);
         if (Objects.equals(hashMapMyOrders.get("deliveryStatus"), "Delivered")) {
             textViewStatusDelivered.setText((String) hashMapMyOrders.get("deliveryStatus"));
@@ -95,17 +95,56 @@ public class MyOrderDetailsActivity extends AppCompatActivity {
             textViewStatusDelivered.setVisibility(View.INVISIBLE);
         }
 
+        assert orderID != null;
+        DocumentReference documentReference = firebaseFirestore.collection("Users").document(Objects.requireNonNull(firebaseAuth.getCurrentUser()).getUid())
+                .collection("myOrders").document(orderID);
+
+        documentReference.get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                DocumentSnapshot document = task.getResult();
+                arrayList = (ArrayList<HashMap<String, Object>>) document.getData().get("items");
+                setAdapter();
+            }
+        });
+
+        cardViewAddReviewDetails.setOnClickListener(v -> {
+            Intent intent1 = new Intent(this, AddReviewActivity.class);
+
+            intent1.putExtra("storeName", (String) hashMapMyOrders.get("shopName"));
+            intent1.putExtra("storeImage", (String) hashMapMyOrders.get("shopImage"));
+            intent1.putExtra("storeAddress", (String) hashMapMyOrders.get("shopAddress"));
+
+            Toast.makeText(this, "Name: " + (String) hashMapMyOrders.get("shopName"), Toast.LENGTH_SHORT).show();
+            startActivity(intent1);
+        });
+        cardViewAddPhotoDetails.setOnClickListener(v -> {
+            Intent intent1 = new Intent(this, AddPhotoActivity.class);
+            intent1.putExtra("storeName", (String) hashMapMyOrders.get("shopName"));
+            intent1.putExtra("storeImage", (String) hashMapMyOrders.get("shopImage"));
+            intent1.putExtra("storeAddress", (String) hashMapMyOrders.get("shopAddress"));
+            startActivity(intent1);
+        });
+
     }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-        myOrderDetailItemsAdapter.startListening();
+    private void setAdapter() {
+
+        myOrderDetailItemsAdapter = new MyOrderDetailItemsAdapter(this, arrayList);
+        recyclerViewDetailsItem.setHasFixedSize(true);
+        recyclerViewDetailsItem.setLayoutManager(new LinearLayoutManager(this));
+        recyclerViewDetailsItem.setAdapter(myOrderDetailItemsAdapter);
+        myOrderDetailItemsAdapter.notifyDataSetChanged();
     }
 
-    @Override
-    protected void onStop() {
-        super.onStop();
-        myOrderDetailItemsAdapter.stopListening();
-    }
+//    @Override
+//    protected void onStart() {
+//        super.onStart();
+//        myOrderDetailItemsAdapter.startListening();
+//    }
+//
+//    @Override
+//    protected void onStop() {
+//        super.onStop();
+//        myOrderDetailItemsAdapter.stopListening();
+//    }
 }

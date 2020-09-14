@@ -148,6 +148,7 @@
                         android:textColor="#000" />
 
                     <TextView
+                        android:id="@+id/text_bookmark_count"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="2dp"
@@ -192,6 +193,7 @@
                         android:textColor="#000" />
 
                     <TextView
+                        android:id="@+id/text_user_level"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="2dp"
@@ -507,6 +509,8 @@
         <com.example.grocy.helper.CustomViewPager
             android:id="@+id/viewPager"
             android:layout_width="match_parent"
+            android:isScrollContainer="true"
+            android:nestedScrollingEnabled="true"
             android:layout_height="match_parent" />
     </LinearLayout>
 </androidx.core.widget.NestedScrollView>

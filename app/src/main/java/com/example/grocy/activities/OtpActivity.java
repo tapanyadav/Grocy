@@ -43,7 +43,7 @@ public class OtpActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private FirebaseUser mCurrentUser;
     HashMap hm;
-
+    String emailUserId;
     private String mVerificationId;
     ProgressDialog progressDialog;
 
@@ -109,8 +109,9 @@ public class OtpActivity extends AppCompatActivity {
         tvResend = findViewById(R.id.textViewResend);
 
         mAuth = FirebaseAuth.getInstance();
-        mCurrentUser=mAuth.getCurrentUser();
-         hm=(HashMap)getIntent().getSerializableExtra("hm");
+        mCurrentUser = mAuth.getCurrentUser();
+        emailUserId = Objects.requireNonNull(mAuth.getCurrentUser()).getUid();
+        hm = (HashMap) getIntent().getSerializableExtra("hm");
 
         PhoneAuthProvider.OnVerificationStateChangedCallbacks mCallbacks = new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
             @Override
@@ -218,6 +219,7 @@ public class OtpActivity extends AppCompatActivity {
                         mCurrentUser = Objects.requireNonNull(task.getResult()).getUser();
 
                         Intent intent=new Intent(OtpActivity.this, StartLocationActivity.class);
+                        intent.putExtra("userStartId", emailUserId);
                         startActivity(intent);
                         finish();
                         // ...

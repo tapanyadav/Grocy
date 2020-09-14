@@ -8,6 +8,11 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
+import androidx.fragment.app.FragmentActivity;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.bumptech.glide.Glide;
 import com.example.grocy.Models.ReviewModel;
 import com.example.grocy.R;
@@ -15,10 +20,6 @@ import com.example.grocy.activities.AddReviewDetailActivity;
 import com.example.grocy.helper.ExpandableTextView;
 
 import java.util.ArrayList;
-
-import androidx.annotation.NonNull;
-import androidx.fragment.app.FragmentActivity;
-import androidx.recyclerview.widget.RecyclerView;
 
 public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ReviewViewHolder> {
 
@@ -44,15 +45,23 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ReviewView
         holder.review_rating.setText(String.valueOf(reviewModel.getRating()));
         holder.no_of_likes.setText("" + reviewModel.getNumberOfLikes());
         holder.no_of_comments.setText("" + reviewModel.getNumberOfComments());
-        Glide.with(holder.image_review.getContext())
-                .load(reviewModel.getReviewImage())
-                .into(holder.image_review);
+        if (reviewModel.getReviewImage() != null) {
+            holder.cardViewReviewImage.setVisibility(View.VISIBLE);
+            Glide.with(holder.image_review.getContext())
+                    .load(reviewModel.getReviewImage())
+                    .into(holder.image_review);
+        }
+
 
         holder.frag_review_details.setOnClickListener(v -> {
             Intent intent = new Intent(context, AddReviewDetailActivity.class);
             intent.putExtra("review_data", reviewModel);
             context.startActivity(intent);
         });
+
+        holder.textViewReviewShopAddress.setText(reviewModel.getShopAddress());
+        holder.textViewReviewShopName.setText(reviewModel.getShopName());
+        Glide.with(holder.imageViewReviewShopImage.getContext()).load(reviewModel.getShopImage()).into(holder.imageViewReviewShopImage);
 
     }
 
@@ -67,6 +76,9 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ReviewView
         TextView no_of_likes;
         TextView no_of_comments;
         TextView review_rating;
+        ImageView imageViewReviewShopImage;
+        TextView textViewReviewShopName, textViewReviewShopAddress;
+        CardView cardViewReviewImage;
 
         public ReviewViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -75,6 +87,10 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ReviewView
             no_of_likes = itemView.findViewById(R.id.no_of_likes);
             no_of_comments = itemView.findViewById(R.id.no_of_comments);
             review_rating = itemView.findViewById(R.id.review_rating);
+            cardViewReviewImage = itemView.findViewById(R.id.cardImageReview);
+            imageViewReviewShopImage = itemView.findViewById(R.id.image_shopReviewPhoto);
+            textViewReviewShopName = itemView.findViewById(R.id.text_shopReviewName);
+            textViewReviewShopAddress = itemView.findViewById(R.id.text_shop_ReviewAddress);
         }
     }
 }
